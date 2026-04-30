@@ -10,7 +10,17 @@ import {
   type FormEvent,
 } from "react";
 import { ease } from "@/lib/motion";
+import {
+  buildLead,
+  submitLead,
+  type Lead,
+  type LeadContactMethod,
+} from "@/lib/leads";
 import type { Service } from "@/lib/services";
+import {
+  LeadSuccessPanel,
+  ServiceRequestForm,
+} from "./ServiceRequestForm";
 
 /**
  * Action Centre tab keys. They double as URL hash values so external
@@ -441,35 +451,15 @@ function Acknowledgment({
    Panel 01 — Request Service (SERVICE_REQUEST)
    ────────────────────────────────────────────────────────────────── */
 
+/**
+ * Request Service tab — uses the canonical reusable
+ * `<ServiceRequestForm />` so the same form (with the same Lead
+ * shape, validation, and success state) renders here, on `/contact`,
+ * and anywhere else that needs a service-scoped intake. The
+ * service-detail page passes its `Service` so the lead carries the
+ * right `serviceName` + `serviceCode` automatically.
+ */
 function RequestServicePanel({ service }: { service: Service }) {
-  const id = useId();
-  const [submitted, setSubmitted] = useState(false);
-
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // UI placeholder only — backend wiring lands later.
-    setSubmitted(true);
-  };
-
-  if (submitted) {
-    return (
-      <>
-        <PanelHeader
-          code="SERVICE_REQUEST"
-          title="Request received."
-          description={`Your request for ${service.title} has been captured locally. The OMEGA team will be in touch when the request flow is connected to the platform.`}
-        />
-        <div className="mt-6">
-          <Acknowledgment
-            code="SERVICE_REQUEST"
-            message="Thanks. We've captured the details for this module. The next step in the OMEGA process — Review & Diagnose — kicks in as soon as the team picks it up."
-            onReset={() => setSubmitted(false)}
-          />
-        </div>
-      </>
-    );
-  }
-
   return (
     <>
       <PanelHeader
@@ -477,173 +467,13 @@ function RequestServicePanel({ service }: { service: Service }) {
         title="Request this service."
         description={`Share a few details about your property and what you need. We'll match the request to ${service.title} and the right OMEGA team.`}
       />
-
-      <form onSubmit={onSubmit} className="mt-7 space-y-5" noValidate>
-        {/* Two-col grid for short fields */}
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6">
-          <label htmlFor={`${id}-name`} className="block">
-            <FieldLabel>Full Name</FieldLabel>
-            <input
-              id={`${id}-name`}
-              name="name"
-              type="text"
-              autoComplete="name"
-              placeholder="e.g. Sara Al Hammadi"
-              className={fieldClass}
-            />
-          </label>
-
-          <label htmlFor={`${id}-phone`} className="block">
-            <FieldLabel>Phone / WhatsApp</FieldLabel>
-            <input
-              id={`${id}-phone`}
-              name="phone"
-              type="tel"
-              autoComplete="tel"
-              placeholder="+971 50 000 0000"
-              className={fieldClass}
-            />
-          </label>
-
-          <label htmlFor={`${id}-property-type`} className="block">
-            <FieldLabel>Property Type</FieldLabel>
-            <select
-              id={`${id}-property-type`}
-              name="propertyType"
-              defaultValue=""
-              className={fieldClass}
-            >
-              <option value="" disabled>
-                Select a property type
-              </option>
-              <option value="villa">Villa</option>
-              <option value="apartment">Apartment</option>
-              <option value="townhouse">Townhouse</option>
-              <option value="commercial">Commercial unit</option>
-              <option value="other">Other</option>
-            </select>
-          </label>
-
-          <label htmlFor={`${id}-location`} className="block">
-            <FieldLabel>Location / Area</FieldLabel>
-            <input
-              id={`${id}-location`}
-              name="location"
-              type="text"
-              autoComplete="address-level2"
-              placeholder="e.g. Al Reem, Abu Dhabi"
-              className={fieldClass}
-            />
-          </label>
-        </div>
-
-        {/* Description full width */}
-        <label htmlFor={`${id}-description`} className="block">
-          <FieldLabel>Brief Description</FieldLabel>
-          <textarea
-            id={`${id}-description`}
-            name="description"
-            rows={4}
-            placeholder={`Tell us briefly what you need from ${service.title}.`}
-            className={fieldClass}
-          />
-        </label>
-
-        {/* Upload + contact preference row */}
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6">
-          {/* Upload placeholder */}
-          <div className="block">
-            <FieldLabel>Upload Photos</FieldLabel>
-            <div
-              role="button"
-              tabIndex={0}
-              aria-label="Upload photos placeholder"
-              data-action="UPLOAD_PHOTOS"
-              className="mt-2 flex flex-col items-center justify-center gap-2 rounded-[12px] border border-dashed border-line bg-warmwhite/60 px-5 py-6 text-center transition-colors duration-500 ease-elegant hover:border-graphite/30"
-            >
-              <span
-                aria-hidden
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-graphite/15 text-graphite/60"
-              >
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 14 14"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M7 11V3m0 0L3 7m4-4 4 4" />
-                </svg>
-              </span>
-              {" "}
-              <span className="text-[0.9rem] text-graphite/85">
-                Drop photos here or browse files
-              </span>
-              {" "}
-              <span className="font-mono text-[0.66rem] uppercase tracking-[0.14em] text-muted">
-                Up to 6 images · jpg, png · 8 MB each
-              </span>
-            </div>
-          </div>
-
-          {/* Contact preference */}
-          <fieldset className="block">
-            <FieldLabel>Preferred Contact Method</FieldLabel>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {[
-                { key: "whatsapp", label: "WhatsApp" },
-                { key: "call", label: "Call" },
-                { key: "email", label: "Email" },
-              ].map((opt, i) => (
-                <Fragment key={opt.key}>
-                  {i > 0 && " "}
-                  <label className="group/contact inline-flex cursor-pointer items-center gap-2 rounded-full border border-line/85 bg-warmwhite px-4 py-2 text-[0.8rem] text-graphite/85 transition-colors duration-500 ease-elegant has-[:checked]:border-graphite/60 has-[:checked]:bg-graphite has-[:checked]:text-warmwhite hover:border-graphite/30">
-                    <input
-                      type="radio"
-                      name="contactMethod"
-                      value={opt.key}
-                      defaultChecked={opt.key === "whatsapp"}
-                      className="peer sr-only"
-                    />
-                    <span
-                      aria-hidden
-                      className="inline-block h-1.5 w-1.5 rounded-full bg-omega/50 transition-colors duration-500 ease-elegant peer-checked:bg-omega"
-                    />
-                    {" "}
-                    <span>{opt.label}</span>
-                  </label>
-                </Fragment>
-              ))}
-            </div>
-          </fieldset>
-        </div>
-
-        {/* Preferred visit time — optional */}
-        <label htmlFor={`${id}-visit`} className="block">
-          <FieldLabel>Preferred Visit Time · optional</FieldLabel>
-          <input
-            id={`${id}-visit`}
-            name="preferredVisit"
-            type="text"
-            placeholder="e.g. Wednesday morning, between 9 and 11 am"
-            className={fieldClass}
-          />
-        </label>
-
-        {/* Submit row */}
-        <div className="flex flex-wrap items-center gap-3 pt-1">
-          <PrimaryButton type="submit" dataAction="SERVICE_REQUEST">
-            Submit Request
-          </PrimaryButton>
-          {" "}
-          <p className="font-mono text-[0.66rem] uppercase tracking-[0.14em] text-muted">
-            Action · SERVICE_REQUEST · {service.appActionType}
-          </p>
-        </div>
-      </form>
+      <div className="mt-7">
+        <ServiceRequestForm
+          actionType="service_request"
+          service={{ name: service.title, code: service.slug }}
+          sourceRoute={`/service-hub/${service.slug}`}
+        />
+      </div>
     </>
   );
 }
@@ -654,7 +484,7 @@ function RequestServicePanel({ service }: { service: Service }) {
 
 function StartDiagnosisPanel({ service }: { service: Service }) {
   const id = useId();
-  const [submitted, setSubmitted] = useState(false);
+  const [submittedLead, setSubmittedLead] = useState<Lead | null>(null);
   const [issueType, setIssueType] = useState<string>("");
   const [urgency, setUrgency] = useState<string>("medium");
 
@@ -671,28 +501,46 @@ function StartDiagnosisPanel({ service }: { service: Service }) {
     return map[issueType] ?? `${service.title} · diagnosis flow`;
   })();
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmitted(true);
+    // Build canonical Lead (`actionType: diagnosis`) so this submit
+    // produces the same shape as the standalone `/diagnosis` flow
+    // and the future backend / CRM ingests one taxonomy.
+    const formData = new FormData(e.currentTarget);
+    const lead = buildLead({
+      route: `/service-hub/${service.slug}`,
+      actionType: "diagnosis",
+      serviceName: service.title,
+      serviceCode: service.slug,
+      message: String(formData.get("issue") ?? "").trim(),
+      propertyType: String(formData.get("propertyType") ?? "") || null,
+      extra: {
+        issueType,
+        urgency,
+        suggestedRoute,
+      },
+    });
+    const { ok } = await submitLead(lead);
+    if (ok) setSubmittedLead(lead);
   };
 
-  if (submitted) {
+  if (submittedLead) {
     return (
       <>
         <PanelHeader
           code="START_DIAGNOSIS"
           title="Diagnosis captured."
-          description="Your description is saved on this device. When the diagnostics flow is wired up the AI will route this to the most relevant OMEGA module."
+          description={
+            suggestedRoute
+              ? `Suggested route: ${suggestedRoute}. OMEGA confirms scope after review.`
+              : "OMEGA confirms scope after review."
+          }
         />
         <div className="mt-6">
-          <Acknowledgment
-            code="START_DIAGNOSIS"
-            message={
-              suggestedRoute
-                ? `Suggested route: ${suggestedRoute}. The OMEGA AI Property Diagnostics module will refine this further once it's connected.`
-                : "The OMEGA AI Property Diagnostics module will refine this further once it's connected."
-            }
-            onReset={() => setSubmitted(false)}
+          <LeadSuccessPanel
+            lead={submittedLead}
+            sourceRoute={`/service-hub/${service.slug}`}
+            onAnother={() => setSubmittedLead(null)}
           />
         </div>
       </>
@@ -872,34 +720,64 @@ function StartDiagnosisPanel({ service }: { service: Service }) {
 
 function SpeakToTeamPanel({ service }: { service: Service }) {
   const id = useId();
-  const [submitted, setSubmitted] = useState(false);
+  const [submittedLead, setSubmittedLead] = useState<Lead | null>(null);
   const [channel, setChannel] = useState<string>("whatsapp");
 
   const channels = [
-    { key: "whatsapp", label: "WhatsApp", meta: "Fastest response" },
-    { key: "callback", label: "Request Callback", meta: "Same-day return call" },
+    { key: "whatsapp", label: "WhatsApp", meta: "Quick chat" },
+    { key: "callback", label: "Request Callback", meta: "Phone return call" },
     { key: "email", label: "Email", meta: "Detailed enquiries" },
     { key: "schedule", label: "Schedule Discussion", meta: "30 min · video or in person" },
   ];
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setSubmitted(true);
+  /**
+   * Map the EAC's four channel options onto the canonical
+   * `LeadContactMethod` taxonomy (WhatsApp / Call / Email). Both
+   * `callback` and `schedule` collapse to "Call" since they both
+   * imply a voice connection — the human-readable label is preserved
+   * in `extra.channelLabel` for the operations team.
+   */
+  const channelMethod: Record<string, LeadContactMethod> = {
+    whatsapp: "WhatsApp",
+    callback: "Call",
+    email: "Email",
+    schedule: "Call",
   };
 
-  if (submitted) {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const lead = buildLead({
+      route: `/service-hub/${service.slug}`,
+      actionType: "contact_team",
+      serviceName: service.title,
+      serviceCode: service.slug,
+      fullName: String(formData.get("name") ?? "").trim(),
+      phone: String(formData.get("phone") ?? "").trim(),
+      message: String(formData.get("message") ?? "").trim(),
+      preferredContactMethod: channelMethod[channel] ?? null,
+      extra: {
+        channelLabel:
+          channels.find((c) => c.key === channel)?.label ?? channel,
+      },
+    });
+    const { ok } = await submitLead(lead);
+    if (ok) setSubmittedLead(lead);
+  };
+
+  if (submittedLead) {
     return (
       <>
         <PanelHeader
           code="CONTACT_TEAM"
           title="The team will be in touch."
-          description={`We've noted your message about ${service.title} and your preferred channel. The OMEGA contact flow will route this to the right specialist as soon as it's wired up.`}
+          description={`We've noted your message about ${service.title} and your preferred channel.`}
         />
         <div className="mt-6">
-          <Acknowledgment
-            code="CONTACT_TEAM"
-            message="Thanks. The team will reach out via your preferred channel. In the meantime you can browse the Service Hub or run a quick diagnosis."
-            onReset={() => setSubmitted(false)}
+          <LeadSuccessPanel
+            lead={submittedLead}
+            sourceRoute={`/service-hub/${service.slug}`}
+            onAnother={() => setSubmittedLead(null)}
           />
         </div>
       </>

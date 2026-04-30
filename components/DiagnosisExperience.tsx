@@ -6,9 +6,11 @@ import {
   initialDiagnosisSession,
   deriveRecommendedAction,
   deriveSuggestedRoute,
+  suggestedRouteHref,
   type DiagnosisSession,
   type StepCode,
 } from "@/lib/diagnosis";
+import { buildLead, submitLead, type Lead } from "@/lib/leads";
 import { DiagnosisStep } from "./DiagnosisStep";
 import { DiagnosisStepper } from "./DiagnosisStepper";
 import { DiagnosisSummaryPanel } from "./DiagnosisSummaryPanel";
@@ -42,7 +44,7 @@ export function DiagnosisExperience() {
   const [session, setSession] =
     useState<DiagnosisSession>(initialDiagnosisSession);
   const [stepIndex, setStepIndex] = useState(0);
-  const [submitted, setSubmitted] = useState(false);
+  const [submittedLead, setSubmittedLead] = useState<Lead | null>(null);
   const [completedSteps, setCompletedSteps] = useState<Set<StepCode>>(
     new Set()
   );
@@ -130,25 +132,50 @@ export function DiagnosisExperience() {
     [stepIndex, completedSteps]
   );
 
-  const handleSubmit = useCallback(() => {
-    // Frontend-only for now. The whole `session` object is the
-    // payload a backend / CRM / mobile app would receive.
-    // eslint-disable-next-line no-console
-    console.info("[OMEGA Diagnosis] Submitted session", session);
-    setSubmitted(true);
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        document
-          .getElementById("diagnosis-flow")
-          ?.scrollIntoView({ behavior: "smooth", block: "start" });
-      });
+  const handleSubmit = useCallback(async () => {
+    // Build the canonical `Lead` from the session so backend / CRM /
+    // mobile app see the same shape every form on the site produces.
+    // The diagnosis-specific fields (urgency, suggestedRoute, etc.)
+    // are folded into `extra` so the top-level shape stays clean.
+    const route = deriveSuggestedRoute(session);
+    const lead = buildLead({
+      route: "/diagnosis",
+      actionType: "diagnosis",
+      serviceName: route ?? null,
+      serviceCode: route ? suggestedRouteHref(route).split("/").pop() ?? null : null,
+      propertyType: session.propertyType,
+      location: session.location,
+      message: session.description,
+      uploadedFiles: session.uploadedPhotoNames,
+      extra: {
+        issueCategory: session.issueCategory,
+        urgency: session.urgency,
+        recurringIssue: session.recurringIssue,
+        accessAvailable: session.accessAvailable,
+        affectedAreas: session.affectedAreas,
+        hasWaterLeakage: session.hasWaterLeakage,
+        hasPowerIssue: session.hasPowerIssue,
+        hasACShutdown: session.hasACShutdown,
+        suggestedRoute: route,
+      },
     });
+    const { ok } = await submitLead(lead);
+    if (ok) {
+      setSubmittedLead(lead);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          document
+            .getElementById("diagnosis-flow")
+            ?.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      });
+    }
   }, [session]);
 
   const handleRestart = useCallback(() => {
     setSession(initialDiagnosisSession);
     setStepIndex(0);
-    setSubmitted(false);
+    setSubmittedLead(null);
     setCompletedSteps(new Set());
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
@@ -203,7 +230,7 @@ export function DiagnosisExperience() {
             {activeStep.code === "SUGGESTED_PATH" ? (
               <SuggestedPathCard
                 session={session}
-                submitted={submitted}
+                submittedLead={submittedLead}
                 onSubmit={handleSubmit}
                 onRestart={handleRestart}
               />
@@ -268,7 +295,13 @@ export function DiagnosisExperience() {
         inline action row is comfortably reachable.
       */}
       {activeStep.code !== "SUGGESTED_PATH" && (
-        <div className="lg:hidden fixed bottom-20 left-1/2 z-30 -translate-x-1/2">
+        // `bottom-28` (112 px) sits clearly above the
+        // DiagnosisFloatingDock (~74 px from the bottom), so the two
+        // pinned pills never visually compete on mobile. `bottom-20`
+        // (the previous value) put them only 6 px apart in some
+        // states. `z-30` keeps the bar below the floating dock
+        // (`z-50`) — if a stack ever happens, the dock wins.
+        <div className="lg:hidden fixed bottom-28 left-1/2 z-30 -translate-x-1/2">
           <div className="flex items-center gap-2 rounded-full border border-line/70 bg-warmwhite/90 px-2 py-1.5 shadow-dock backdrop-blur-xl">
             <button
               type="button"

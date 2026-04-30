@@ -101,15 +101,15 @@ export function DiagnosisCTA() {
 
         {/* CTA row */}
         <div className="mt-8 flex flex-wrap items-stretch gap-3 md:gap-4">
-          <a
-            href="/#contact"
+          <Link
+            href="/contact"
             data-action="CONTACT_TEAM"
             className="inline-flex items-center justify-center gap-2 rounded-full bg-graphite px-7 py-3.5 text-sm font-medium text-warmwhite transition-all duration-500 ease-elegant hover:-translate-y-px hover:bg-graphite/90"
           >
             <span>Speak to Our Team</span>
             {" "}
             <Arrow />
-          </a>
+          </Link>
           {" "}
           <Link
             href="/service-hub"

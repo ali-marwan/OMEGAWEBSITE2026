@@ -41,7 +41,7 @@ const items = [
     aria: "Speak to Our Team",
     desktopLabel: "Speak to Our Team",
     mobileLabel: "Contact",
-    href: "/#contact",
+    href: "/contact",
     icon: TalkIcon,
   },
 ];

@@ -29,7 +29,7 @@ const actions: Action[] = [
   {
     code: "CONTACT_TEAM",
     label: "Speak to Our Team",
-    href: "/#contact",
+    href: "/contact",
     variant: "ghost",
   },
 ];

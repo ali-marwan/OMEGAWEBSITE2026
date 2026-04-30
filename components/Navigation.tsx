@@ -44,6 +44,20 @@ export function Navigation() {
     pathname === SERVICE_HUB_HREF ||
     pathname?.startsWith(`${SERVICE_HUB_HREF}/`);
 
+  /**
+   * Route-based active-state helper for the inline nav links.
+   *
+   * Hash-anchor entries (System / Services etc. — `/#system`,
+   * `/#services`) always return false because they're scroll
+   * positions on the homepage, not destinations the visitor "is on".
+   * Route entries (Studio → `/studio`, OMEGA AI → `/diagnosis`)
+   * highlight when the user is on that route or any sub-route.
+   */
+  const isRouteActive = (href: string) => {
+    if (!href.startsWith("/") || href.includes("#")) return false;
+    return pathname === href || pathname?.startsWith(`${href}/`);
+  };
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
     onScroll(); // initial state
@@ -104,17 +118,37 @@ export function Navigation() {
               first nav link in DOM textContent. */}
           {" "}
           <nav className="hidden md:flex items-center gap-7" aria-label="Primary navigation">
-            {links.map((l, i) => (
-              <Fragment key={l.href}>
-                {i > 0 && " "}
-                <Link
-                  href={l.href}
-                  className="text-[0.85rem] text-muted hover:text-graphite transition-colors duration-500 ease-elegant"
-                >
-                  {l.label}
-                </Link>
-              </Fragment>
-            ))}
+            {links.map((l, i) => {
+              // Route-based active-state for /studio and /diagnosis;
+              // hash anchors stay muted regardless. Active state =
+              // a small omega dot before the label + non-muted text,
+              // mirroring the Service Hub CTA's active treatment so
+              // the navigation reads consistently.
+              const active = isRouteActive(l.href);
+              return (
+                <Fragment key={l.href}>
+                  {i > 0 && " "}
+                  <Link
+                    href={l.href}
+                    aria-current={active ? "page" : undefined}
+                    className={`inline-flex items-center gap-1.5 text-[0.85rem] transition-colors duration-500 ease-elegant ${
+                      active
+                        ? "text-graphite"
+                        : "text-muted hover:text-graphite"
+                    }`}
+                  >
+                    {active && (
+                      <span
+                        aria-hidden
+                        className="inline-block h-1 w-1 rounded-full bg-omega shadow-[0_0_6px_rgba(242,106,27,0.6)]"
+                      />
+                    )}
+                    {active && " "}
+                    <span>{l.label}</span>
+                  </Link>
+                </Fragment>
+              );
+            })}
             {" "}
             {/* OMEGA Service Hub CTA. When the user is already on
                 /service-hub the button surfaces an active-state
@@ -182,20 +216,38 @@ export function Navigation() {
           }`}
         >
           <ul className="flex flex-col p-3">
-            {links.map((l, i) => (
-              <Fragment key={l.href}>
-                {i > 0 && " "}
-                <li>
-                  <Link
-                    href={l.href}
-                    onClick={() => setOpen(false)}
-                    className="block rounded-[12px] px-4 py-3 text-[0.95rem] text-graphite/85 transition-colors duration-500 ease-elegant hover:bg-warmwhite hover:text-graphite"
-                  >
-                    {l.label}
-                  </Link>
-                </li>
-              </Fragment>
-            ))}
+            {links.map((l, i) => {
+              // Same route-based active-state as the desktop bar —
+              // mobile drawer entries surface a small omega dot when
+              // the user is on the matching route.
+              const active = isRouteActive(l.href);
+              return (
+                <Fragment key={l.href}>
+                  {i > 0 && " "}
+                  <li>
+                    <Link
+                      href={l.href}
+                      aria-current={active ? "page" : undefined}
+                      onClick={() => setOpen(false)}
+                      className={`flex items-center gap-2 rounded-[12px] px-4 py-3 text-[0.95rem] transition-colors duration-500 ease-elegant ${
+                        active
+                          ? "bg-warmwhite text-graphite"
+                          : "text-graphite/85 hover:bg-warmwhite hover:text-graphite"
+                      }`}
+                    >
+                      {active && (
+                        <span
+                          aria-hidden
+                          className="inline-block h-1.5 w-1.5 rounded-full bg-omega shadow-[0_0_6px_rgba(242,106,27,0.6)]"
+                        />
+                      )}
+                      {active && " "}
+                      <span>{l.label}</span>
+                    </Link>
+                  </li>
+                </Fragment>
+              );
+            })}
             <li className="mt-2 border-t border-line/70 pt-3">
               <Link
                 href={SERVICE_HUB_HREF}

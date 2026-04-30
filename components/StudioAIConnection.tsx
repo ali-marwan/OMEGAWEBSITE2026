@@ -16,7 +16,7 @@ export function StudioAIConnection() {
   return (
     <section
       id="ai-connection"
-      className="relative bg-warmwhite pt-12 pb-12 md:pt-16 md:pb-16"
+      className="relative bg-warmwhite pt-8 pb-9 md:pt-12 md:pb-12"
     >
       {/* Subtle architectural grid backdrop */}
       <div
@@ -80,7 +80,7 @@ export function StudioAIConnection() {
         </div>
 
         {/* Bottom architectural rule */}
-        <div className="mt-12 h-px arch-rule" />
+        <div className="mt-9 h-px arch-rule" />
       </div>
     </section>
   );

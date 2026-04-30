@@ -231,7 +231,7 @@ export function Hero() {
             >
               Integrated property solutions across the UAE — from home
               services and property health reports to renovation,
-              engineering support, and AI-guided service assistance.
+              engineering support, and AI-guided intake and routing.
             </motion.p>
 
             {/* CTA group — staggered children. A literal whitespace
@@ -352,7 +352,16 @@ function Arrow() {
  */
 function LogoStage() {
   return (
-    <div className="relative mx-auto aspect-square w-full max-w-[500px]">
+    // Mobile-first sizing: cap at 280px on the smallest viewports so
+    // the static OmegaMark fallback stays decorative — never bigger
+    // than the column of headline + paragraph above it. Above sm
+    // (640 px) the cap relaxes to 380 px, then to the full 500 px on
+    // md+ where the hero's right column actually has room. Without
+    // this clamp, the `aspect-square w-full` rule produces a 375 ×
+    // 375 stage on a 375 px viewport — visually dominant on small
+    // screens. The `lg:max-w-[500px]` retains the original sizing
+    // for the GLB stage where the journey overlay takes over.
+    <div className="relative mx-auto aspect-square w-full max-w-[280px] sm:max-w-[380px] md:max-w-[500px]">
       {/* Layered warm radial halo — only visible on <lg (the desktop
           overlay carries its own halo). */}
       <div

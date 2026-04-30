@@ -9,6 +9,7 @@ import {
   suggestedRouteRationale,
   type DiagnosisSession,
 } from "@/lib/diagnosis";
+import type { Lead } from "@/lib/leads";
 
 /**
  * Result panel — shown when the user reaches Step 05.
@@ -32,15 +33,17 @@ import {
  */
 export function SuggestedPathCard({
   session,
-  submitted,
+  submittedLead,
   onSubmit,
   onRestart,
 }: {
   session: DiagnosisSession;
-  submitted: boolean;
+  /** Non-null after successful `submitLead`. Drives the success state. */
+  submittedLead: Lead | null;
   onSubmit: () => void;
   onRestart: () => void;
 }) {
+  const submitted = submittedLead !== null;
   const route = deriveSuggestedRoute(session);
   const action = deriveRecommendedAction(route);
   const routeHref = route ? suggestedRouteHref(route) : "/service-hub";
@@ -151,25 +154,25 @@ export function SuggestedPathCard({
             data-action="DIAGNOSIS_SUBMIT"
             className="inline-flex items-center justify-center gap-2 rounded-full bg-graphite px-7 py-3.5 text-sm font-medium text-warmwhite transition-all duration-500 ease-elegant hover:-translate-y-px hover:bg-graphite/90"
           >
-            <span>Submit to OMEGA</span>
+            <span>Submit Diagnosis</span>
             {" "}
             <Arrow />
           </button>
           {" "}
-          <a
-            href="/#contact"
+          <Link
+            href="/contact"
             data-action="CONTACT_TEAM"
             className="inline-flex items-center justify-center gap-2 rounded-full border border-graphite/15 bg-transparent px-7 py-3.5 text-sm font-medium text-graphite transition-all duration-500 ease-elegant hover:-translate-y-px hover:border-graphite/40"
           >
             <span>Speak to Team</span>
-          </a>
+          </Link>
           {" "}
           <Link
             href={route ? routeHref : "/service-hub"}
             data-action={route ? "OPEN_SUGGESTED_ROUTE" : "OPEN_SERVICE_HUB"}
             className="inline-flex items-center justify-center gap-2 rounded-full border border-graphite/15 bg-transparent px-7 py-3.5 text-sm font-medium text-graphite transition-all duration-500 ease-elegant hover:-translate-y-px hover:border-graphite/40"
           >
-            <span>Open Related Service</span>
+            <span>View Suggested Service</span>
           </Link>
         </div>
       ) : (
@@ -206,31 +209,54 @@ function SubmittedBlock({
         </p>
       </div>
 
+      {/* Standardised success CTAs — Speak to Team (primary route to
+          /contact), Back to Service Hub (catalog), and the
+          contextually-suggested service (only if the router resolved
+          a route — null falls back to the Hub). "Start Diagnosis" is
+          intentionally omitted since we're already on /diagnosis. A
+          quiet "Start a New Diagnosis" reset sits below as a soft
+          tertiary action. */}
       <div className="mt-6 flex flex-wrap items-stretch gap-3 md:gap-4">
-        <a
-          href="/#contact"
+        <Link
+          href="/contact"
+          data-action="CONTACT_TEAM"
           className="inline-flex items-center justify-center gap-2 rounded-full bg-graphite px-7 py-3.5 text-sm font-medium text-warmwhite transition-all duration-500 ease-elegant hover:-translate-y-px hover:bg-graphite/90"
         >
           <span>Speak to Team</span>
           {" "}
           <Arrow />
-        </a>
-        {" "}
-        <Link
-          href={routeHref}
-          className="inline-flex items-center justify-center gap-2 rounded-full border border-graphite/15 bg-transparent px-7 py-3.5 text-sm font-medium text-graphite transition-all duration-500 ease-elegant hover:-translate-y-px hover:border-graphite/40"
-        >
-          <span>Open Related Service</span>
         </Link>
         {" "}
-        <button
-          type="button"
-          onClick={onRestart}
+        <Link
+          href="/service-hub"
+          data-action="OPEN_SERVICE_HUB"
           className="inline-flex items-center justify-center gap-2 rounded-full border border-graphite/15 bg-transparent px-7 py-3.5 text-sm font-medium text-graphite transition-all duration-500 ease-elegant hover:-translate-y-px hover:border-graphite/40"
         >
-          <span>Start a New Diagnosis</span>
-        </button>
+          <span>Back to Service Hub</span>
+        </Link>
+        {" "}
+        {route && (
+          <Link
+            href={routeHref}
+            data-action="OPEN_SUGGESTED_ROUTE"
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-graphite/15 bg-transparent px-7 py-3.5 text-sm font-medium text-graphite transition-all duration-500 ease-elegant hover:-translate-y-px hover:border-graphite/40"
+          >
+            <span>View Suggested Service</span>
+          </Link>
+        )}
       </div>
+
+      {/* Soft tertiary reset — set apart visually so it doesn't
+          compete with the three forward CTAs above. */}
+      <button
+        type="button"
+        onClick={onRestart}
+        className="mt-5 inline-flex items-center gap-2 text-[0.85rem] font-medium text-graphite/70 transition-colors duration-500 ease-elegant hover:text-omega"
+      >
+        <span aria-hidden>↻</span>
+        {" "}
+        <span>Start a new diagnosis</span>
+      </button>
     </div>
   );
 }

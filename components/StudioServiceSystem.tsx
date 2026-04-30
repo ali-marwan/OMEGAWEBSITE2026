@@ -56,7 +56,7 @@ const studioServices: readonly StudioService[] = [
   {
     index: "05",
     title: "Engineering Solutions",
-    body: "Drawings, design coordination, technical review, and authority approvals.",
+    body: "Drawings, design coordination, technical review, MEP coordination, and authority-related support where applicable.",
     href: "/service-hub/engineering-solutions",
   },
 ] as const;
@@ -67,7 +67,7 @@ export function StudioServiceSystem() {
   return (
     <section
       id="services"
-      className="relative bg-warmwhite pt-12 pb-12 md:pt-16 md:pb-16"
+      className="relative bg-warmwhite pt-8 pb-9 md:pt-12 md:pb-12"
     >
       <div className="relative mx-auto max-w-page px-6 lg:px-10">
         {/* Section eyebrow */}
@@ -165,7 +165,7 @@ export function StudioServiceSystem() {
                     </p>
                   </div>
                   <span className="inline-flex items-center gap-2 self-start rounded-full border border-graphite/15 bg-warmwhite/70 px-4 py-2 text-[0.82rem] font-medium text-graphite transition-all duration-500 ease-elegant group-hover:-translate-y-px group-hover:border-graphite/40">
-                    <span>Open Service</span>
+                    <span>View Details</span>
                     {" "}
                     <Arrow />
                   </span>

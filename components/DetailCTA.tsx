@@ -84,7 +84,7 @@ export function DetailCTA({ service }: { service: Service }) {
             <span className="block font-semibold">Ready to move forward?</span>
             {" "}
             <span className="mt-1.5 block font-light text-muted">
-              Pick a route — without leaving the page.
+              Choose your next step — without leaving the page.
             </span>
           </h2>
           {" "}

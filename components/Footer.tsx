@@ -62,11 +62,14 @@ export function Footer() {
         }}
       />
 
-      {/* Bottom padding (`pb-32`) keeps the copyright row clear of
-          the floating dock — the dock sits ~80 px from the page edge
-          (24 px offset + ~50 px height + soft shadow). 8 rem of
-          footer bottom padding leaves a comfortable buffer above it. */}
-      <div className="relative mx-auto max-w-page px-6 lg:px-10 pt-16 pb-32 md:pt-20 md:pb-32">
+      {/* Bottom padding keeps the copyright row clear of the floating
+          dock — the dock sits ~74 px from the page edge (24 px offset
+          + ~50 px pill height). On mobile the previous `pb-32` (128
+          px) created ~54 px of dead space below the copyright; `pb-20`
+          (80 px) gives the dock a clean ~6 px buffer with no excess.
+          Desktop keeps `pb-32` for editorial comfort under wider
+          line-lengths. */}
+      <div className="relative mx-auto max-w-page px-6 lg:px-10 pt-16 pb-20 md:pt-20 md:pb-32">
         {/* Top architectural rule — sets the closing layer apart from
             the ClosingPaths section without shouting. */}
         <div className="h-px arch-rule" />
@@ -173,10 +176,10 @@ export function Footer() {
             id="contact"
             label="Connect"
             items={[
-              { label: "Speak to Our Team", href: "#contact" },
+              { label: "Speak to Our Team", href: "/contact" },
               { label: "OMEGA Service Hub", href: "/service-hub" },
-              { label: "WhatsApp", href: "#contact" },
-              { label: "Email", href: "mailto:contact@omega-ae.example" },
+              { label: "WhatsApp", href: "/contact" },
+              { label: "Email", href: "/contact" },
             ]}
             className="col-span-12 md:col-span-2"
           />

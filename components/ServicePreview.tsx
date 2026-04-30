@@ -56,9 +56,9 @@ const services: Service[] = [
     index: "05",
     category: "ENGINEER",
     title: "OMEGA Engineering Solutions",
-    subtitle: "Drawings, Design & Authority Approvals",
+    subtitle: "Drawings, Design & Authority Coordination",
     description:
-      "Drawings, design coordination, and authority approval support.",
+      "Drawings, design coordination, MEP coordination, and authority-related support where applicable.",
     tier: "support",
   },
 ];

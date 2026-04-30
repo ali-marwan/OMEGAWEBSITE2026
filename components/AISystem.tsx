@@ -104,8 +104,9 @@ export function AISystem() {
             delay={0.15}
             className="col-span-12 lg:col-span-4 text-base text-muted leading-relaxed"
           >
-            Diagnose issues. Understand solutions. Take the right action
-            — guided by OMEGA expertise in the UAE.
+            Describe issues. Get routed to the right OMEGA path.
+            Confirmed by the team where required — guided by OMEGA's
+            UAE property experience.
           </Reveal>
         </div>
 
@@ -251,7 +252,7 @@ function DiagnosticCanvas() {
           previous fake telemetry (model code, lat/lon) so the canvas
           reads as a real diagnostic tool, not a sci-fi dashboard. */}
       <div className="absolute top-5 left-5 font-mono text-[0.65rem] uppercase tracking-technical text-muted">
-        OMEGA AI · Diagnostic Canvas
+        OMEGA AI · Property Intake Canvas
       </div>
       <div className="absolute top-5 right-5 flex items-center gap-2 font-mono text-[0.65rem] uppercase tracking-technical text-muted">
         <span className="inline-block h-1.5 w-1.5 rounded-full bg-omega shadow-[0_0_8px_rgba(242,106,27,0.6)]" />

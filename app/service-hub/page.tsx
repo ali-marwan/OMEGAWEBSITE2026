@@ -9,7 +9,7 @@ import { FloatingDock } from "@/components/FloatingDock";
 export const metadata = {
   title: "OMEGA Service Hub — Property Solutions for the UAE",
   description:
-    "Browse structured property services, understand what you need, and move into the right OMEGA path — care, repair, assessment, renovation, or engineering.",
+    "Five service modules — care, repair, assessment, renovation, and engineering. Find the right OMEGA path for your UAE property.",
 };
 
 /**

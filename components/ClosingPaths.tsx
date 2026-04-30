@@ -38,7 +38,7 @@ const paths: Path[] = [
     title: "Speak to Our Team",
     description: "For direct support and project discussions.",
     cta: "Contact Team",
-    href: "#contact",
+    href: "/contact",
   },
 ];
 

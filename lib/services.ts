@@ -235,7 +235,7 @@ export const services: readonly Service[] = [
     title: "OMEGA Property Care System",
     descriptor: "Annual Maintenance & Ongoing Property Support",
     description:
-      "Structured annual maintenance and ongoing property care for residential and commercial properties.",
+      "Annual maintenance and ongoing support for residential and commercial properties.",
     category: "Property Care",
     priority: 1,
     useCases: [
@@ -289,7 +289,7 @@ export const services: readonly Service[] = [
     title: "OMEGA Home Services",
     descriptor: "On-Demand Repairs & Property Support",
     description:
-      "Fast response for everyday property issues, faults, repairs, and service needs.",
+      "On-demand response for everyday property issues, faults, repairs, and minor service needs.",
     category: "Home Services",
     priority: 2,
     useCases: [
@@ -322,7 +322,7 @@ export const services: readonly Service[] = [
     ],
     whenToUse: [
       "Something has stopped working and you need a competent team on site quickly.",
-      "You need urgent same-day or next-day support for a residential issue.",
+      "You need prompt support — same-day or next-day where possible.",
       "You want one trusted contact instead of calling a different trade each time.",
       "You're a tenant or owner-occupier and need an accountable repair record.",
       "You need help with everyday property issues without a long contract.",
@@ -343,7 +343,7 @@ export const services: readonly Service[] = [
     title: "OMEGA Property Health Report",
     descriptor: "Property Assessment & Technical Report",
     description:
-      "A structured property assessment to identify condition, risks, required actions, and improvement priorities.",
+      "Structured property assessment to identify condition, risks, required actions, and improvement priorities.",
     category: "Health Report",
     priority: 3,
     useCases: [
@@ -397,7 +397,7 @@ export const services: readonly Service[] = [
     title: "OMEGA Renovation",
     descriptor: "Upgrades, Fit-Out & Property Enhancements",
     description:
-      "Controlled renovation and fit-out improvements for existing spaces, villas, apartments, and commercial units.",
+      "Controlled renovation and fit-out improvements for villas, apartments, and commercial spaces.",
     category: "Renovation",
     priority: 4,
     useCases: [
@@ -449,9 +449,9 @@ export const services: readonly Service[] = [
     slug: "engineering-solutions",
     index: "05",
     title: "OMEGA Engineering Solutions",
-    descriptor: "Drawings, Design & Authority Approvals",
+    descriptor: "Drawings, Design & Authority Coordination",
     description:
-      "Engineering drawings, design coordination, technical review, and authority approval support.",
+      "Drawings, design coordination, technical review, MEP coordination, and authority-related support where applicable.",
     category: "Engineering",
     priority: 5,
     useCases: [

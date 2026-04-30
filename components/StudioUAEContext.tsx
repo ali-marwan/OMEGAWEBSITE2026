@@ -54,7 +54,7 @@ export function StudioUAEContext() {
   return (
     <section
       id="uae-context"
-      className="relative bg-warmwhite pt-12 pb-12 md:pt-16 md:pb-16"
+      className="relative bg-warmwhite pt-8 pb-9 md:pt-12 md:pb-12"
     >
       <div className="relative mx-auto max-w-page px-6 lg:px-10">
         {/* Section eyebrow */}

@@ -2,21 +2,23 @@ import Link from "next/link";
 import { Fragment } from "react";
 
 /**
- * `/studio` — Section 01: Hero.
+ * `/contact` — Section 01: Hero.
  *
  * Mirrors the architectural language of every other OMEGA hero
  * (mono eyebrow row, large display headline, descriptor strap,
- * supporting paragraph + secondary line, CTA row, top + bottom
- * arch-rule) so the Studio page reads as a peer of /service-hub and
- * /diagnosis — not a different marketing layer.
+ * supporting paragraph, chip strip, CTA row, top + bottom arch-rule)
+ * so the contact page reads as a peer of Service Hub / Diagnosis /
+ * Studio — not a generic contact form.
  *
- * The two CTAs match the brief: "Open Service Hub" routes to the
- * catalog and "Start Diagnosis" routes to /diagnosis (the OMEGA AI
- * Property Diagnostics module). Both are real Next.js routes — the
- * Diagnosis CTA does NOT use a hash anchor here because there is no
- * in-page diagnosis experience on the Studio page.
+ * Both CTAs route to in-page anchors:
+ *   - "Start enquiry"  → #contact-form (scrolls to the form below)
+ *   - "Start Diagnosis" → /diagnosis (separate route)
+ *
+ * Plain `<a>` is used for the in-page anchor so the global smooth
+ * scroll + 140px scroll-margin-top resolves cleanly without Next's
+ * Link swallowing the hashchange.
  */
-export function StudioHero() {
+export function ContactHero() {
   return (
     <section
       id="top"
@@ -56,7 +58,7 @@ export function StudioHero() {
           {" "}
           <span aria-hidden>·</span>
           {" "}
-          <span className="text-omega">Studio</span>
+          <span className="text-omega">Contact</span>
         </nav>
 
         {/* Eyebrow row — instrument-panel cue per the brief */}
@@ -66,55 +68,46 @@ export function StudioHero() {
             className="inline-block h-1.5 w-1.5 rounded-full bg-omega"
           />
           {" "}
-          <span>Studio</span>
-          {" "}
-          <span aria-hidden className="h-3 w-px bg-line" />
-          {" "}
-          <span>OMEGA</span>
+          <span>Contact</span>
           {" "}
           <span aria-hidden className="h-3 w-px bg-line" />
           {" "}
           <span>UAE</span>
+          {" "}
+          <span aria-hidden className="h-3 w-px bg-line" />
+          {" "}
+          <span>Property Solutions</span>
         </div>
 
         {/* Headline */}
         <h1 className="mt-6 max-w-4xl font-sans font-bold text-[2.2rem] md:text-[2.9rem] lg:text-[3.5rem] leading-[1.04] tracking-tightest text-graphite">
-          Engineering-led property solutions.
+          Speak to the right OMEGA team.
         </h1>
 
         {/* Descriptor — mono caps */}
         <p className="mt-3 max-w-3xl font-mono text-[0.78rem] uppercase tracking-[0.14em] text-muted">
-          One coordinated system · UAE
+          Operational intake · Routed to the right specialist
         </p>
 
-        {/* Subtitle + supporting line */}
-        <div className="mt-6 max-w-3xl space-y-4 text-base md:text-lg leading-[1.7] text-muted">
-          <p>
-            OMEGA brings property care, home services, assessments,
-            renovation, and engineering support into one coordinated
-            system for UAE properties.
-          </p>
-          {"\n"}
-          <p>
-            Built for clients who need clear responsibility, technical
-            judgment, and organized execution.
-          </p>
-        </div>
+        {/* Subheadline */}
+        <p className="mt-6 max-w-3xl text-base md:text-lg leading-[1.7] text-muted">
+          Tell us what you need — care, repair, assessment, renovation,
+          or engineering support. We route the request to the right
+          team.
+        </p>
 
-        {/* What-you-get strip — quiet trust cues, mono chips. Mirrors
-            the chip strip on /service-hub and /diagnosis so the page
-            inherits the same product family. */}
+        {/* Trust strip — what happens after the form */}
         <div className="mt-7">
           <div className="font-mono text-[0.66rem] uppercase tracking-[0.14em] text-graphite/70">
-            How OMEGA Operates
+            What Happens Next
           </div>
           {" "}
           <ul className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-2">
             {[
-              "Engineering-led",
-              "Coordinated execution",
-              "Clear responsibility",
-              "Long-term value",
+              "Routed to the right team",
+              "Reviewed by OMEGA",
+              "Site visit if required",
+              "Direct response",
             ].map((c, i) => (
               <Fragment key={c}>
                 {i > 0 && " "}
@@ -131,16 +124,17 @@ export function StudioHero() {
           </ul>
         </div>
 
-        {/* CTA row — Open Service Hub (primary) + Start Diagnosis */}
+        {/* CTA row — Start enquiry (primary, in-page) + Start Diagnosis */}
         <div className="mt-9 flex flex-wrap items-stretch gap-3 md:gap-4">
-          <Link
-            href="/service-hub"
+          <a
+            href="#contact-form"
+            data-action="START_ENQUIRY"
             className="inline-flex items-center justify-center gap-2 rounded-full bg-graphite px-7 py-3.5 text-sm font-medium text-warmwhite transition-all duration-500 ease-elegant hover:-translate-y-px hover:bg-graphite/90"
           >
-            <span>Open Service Hub</span>
+            <span>Start enquiry</span>
             {" "}
             <Arrow />
-          </Link>
+          </a>
           {" "}
           <Link
             href="/diagnosis"

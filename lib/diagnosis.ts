@@ -253,7 +253,7 @@ export function deriveRecommendedAction(
     case "DIY Guidance":
       return "Try basic self-checks before booking a service visit.";
     case "OMEGA Home Services":
-      return "Book a same-day or next-day technician visit.";
+      return "Arrange a technician visit — same-day or next-day where possible.";
     case "OMEGA Property Care System":
       return "Move recurring upkeep onto a structured care plan.";
     case "OMEGA Property Health Report":
@@ -263,7 +263,7 @@ export function deriveRecommendedAction(
     case "OMEGA Engineering Solutions":
       return "Engage OMEGA's engineering team for review or approvals.";
     case "Speak to Team":
-      return "A specialist will contact you to handle this directly.";
+      return "Contact OMEGA directly so a specialist can review the situation.";
   }
 }
 
@@ -287,7 +287,7 @@ export function suggestedRouteHref(route: SuggestedRoute): string {
     case "OMEGA Engineering Solutions":
       return "/service-hub/engineering-solutions";
     case "Speak to Team":
-      return "/#contact";
+      return "/contact";
   }
 }
 
@@ -310,6 +310,6 @@ export function suggestedRouteRationale(route: SuggestedRoute): string {
     case "OMEGA Engineering Solutions":
       return "What you described needs engineering — drawings, authority approvals, or technical review. OMEGA's engineering team handles this directly.";
     case "Speak to Team":
-      return "Critical issues skip the form. A specialist will make contact and triage the situation immediately.";
+      return "For active leaks, electrical hazards, fire/life safety risks, or urgent property risk, contact OMEGA directly so a specialist can review the situation.";
   }
 }

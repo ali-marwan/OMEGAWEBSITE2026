@@ -96,8 +96,9 @@ export function ServiceHubHero() {
           }}
           className="mt-6 max-w-2xl text-base md:text-lg leading-[1.75] text-muted"
         >
-          Browse structured property services, understand what you
-          need, and move into the right OMEGA path.
+          Five service modules covering care, repair, assessment,
+          renovation, and engineering — find the right OMEGA path
+          for your property.
         </motion.p>
 
         {/* Primary actions */}
@@ -147,7 +148,7 @@ export function ServiceHubHero() {
             }}
           >
             <Link
-              href="/#contact"
+              href="/contact"
               className="inline-flex items-center justify-center gap-2 rounded-full border border-graphite/15 bg-transparent px-7 py-3.5 text-sm font-medium text-graphite transition-all duration-500 ease-elegant hover:-translate-y-px hover:border-graphite/40"
             >
               Speak to Our Team

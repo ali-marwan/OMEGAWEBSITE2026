@@ -42,9 +42,8 @@ const buttons: CtaButton[] = [
   },
   {
     label: "Speak to Team",
-    href: "/#contact",
+    href: "/contact",
     variant: "ghost",
-    hashOnly: true,
     dataAction: "CONTACT_TEAM",
   },
 ];
@@ -53,7 +52,7 @@ export function StudioCTA() {
   return (
     <section
       id="studio-cta"
-      className="relative overflow-hidden bg-warmwhite pt-10 pb-14 md:pt-14 md:pb-16"
+      className="relative overflow-hidden bg-warmwhite pt-8 pb-8 md:pt-10 md:pb-10"
     >
       {/* Soft warm radial closing accent */}
       <div
@@ -86,9 +85,9 @@ export function StudioCTA() {
           </h2>
           {" "}
           <p className="col-span-12 lg:col-span-5 text-base text-muted leading-[1.75]">
-            Browse the service system, run a guided diagnosis, or
-            speak directly with the team. Every route lands on a real
-            person — no dead ends.
+            Explore the service system, run a guided diagnosis, or
+            speak directly with the team. Every route reaches the
+            OMEGA team for review.
           </p>
         </div>
 
@@ -133,7 +132,7 @@ export function StudioCTA() {
         </div>
 
         {/* Bottom architectural rule */}
-        <div className="mt-10 h-px arch-rule" />
+        <div className="mt-8 h-px arch-rule" />
       </div>
     </section>
   );

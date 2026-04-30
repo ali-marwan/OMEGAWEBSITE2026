@@ -62,10 +62,10 @@ export function ServiceCatalog() {
           delay={0.1}
           className="col-span-12 lg:col-span-7 text-[1.85rem] md:text-[2.4rem] leading-[1.06] tracking-tightest text-graphite"
         >
-          <span className="block font-semibold">Browse the system.</span>
+          <span className="block font-semibold">Explore OMEGA services.</span>
           {" "}
           <span className="mt-1.5 block font-light text-muted">
-            Pick the path that fits.
+            Select the module that matches your property need.
           </span>
         </Reveal>
         <Reveal
