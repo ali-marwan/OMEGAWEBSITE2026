@@ -2,15 +2,18 @@ import { Navigation } from "@/components/Navigation";
 import { ServiceHubHero } from "@/components/ServiceHubHero";
 import { ServiceCatalog } from "@/components/ServiceCatalog";
 import { GuidedPathSection } from "@/components/GuidedPathSection";
+import type { Metadata } from "next";
 import { ServiceHubCTA } from "@/components/ServiceHubCTA";
 import { Footer } from "@/components/Footer";
 import { FloatingDock } from "@/components/FloatingDock";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata = {
-  title: "OMEGA Service Hub — Property Solutions for the UAE",
+export const metadata: Metadata = buildPageMetadata({
+  title: "OMEGA Service Hub | Property Services in the UAE",
   description:
-    "Five service modules — care, repair, assessment, renovation, and engineering. Find the right OMEGA path for your UAE property.",
-};
+    "Browse OMEGA's structured property services, including property care, home services, health reports, renovation, and engineering solutions.",
+  path: "/service-hub",
+});
 
 /**
  * /service-hub — the practical service marketplace layer.

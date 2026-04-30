@@ -255,9 +255,40 @@ export function HeroJourney() {
             during the AI section, footer, and any scroll past
             Service System. */}
         {canvasMounted && (
+          /*
+           * Performance choices on this Canvas:
+           *
+           *   dpr={[1, 1.5]}
+           *     Caps the rendered resolution at 1.5× device pixel
+           *     ratio (was 2.0×). On high-DPI displays this is a
+           *     direct ~44 % reduction in shaded fragments per
+           *     frame for visually indistinguishable output at the
+           *     model's matte-graphite material settings. The 1.0
+           *     floor still guarantees crisp output on standard
+           *     displays.
+           *
+           *   shadows omitted
+           *     `castShadow` / `receiveShadow` are disabled per-
+           *     mesh in `<OmegaLogo3D />` — `mix-blend-mode:
+           *     multiply` produces the visual depth that shadows
+           *     would, at zero GPU cost.
+           *
+           *   no <Stats /> or debug helpers
+           *     Avoids any debug-time render passes leaking into
+           *     production.
+           *
+           *   canvasMounted gating
+           *     Once the user scrolls past `#services bottom`, this
+           *     entire Canvas unmounts and the GPU stops drawing
+           *     frames. Scrolling back up remounts cleanly because
+           *     `useGLTF.preload` keeps the GLB warm in cache.
+           *     This is the single biggest runtime win — the AI
+           *     section, footer, and any path past the service hub
+           *     pay zero GPU cost for the journey.
+           */
           <Canvas
-            dpr={[1, 2]}
-            gl={{ antialias: true, alpha: true }}
+            dpr={[1, 1.5]}
+            gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
             camera={{ position: [0, 0, 4], fov: 35 }}
             className="absolute inset-0"
             style={{

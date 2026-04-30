@@ -469,7 +469,7 @@ function RequestServicePanel({ service }: { service: Service }) {
       />
       <div className="mt-7">
         <ServiceRequestForm
-          actionType="service_request"
+          actionType="SERVICE_REQUEST"
           service={{ name: service.title, code: service.slug }}
           sourceRoute={`/service-hub/${service.slug}`}
         />
@@ -509,9 +509,9 @@ function StartDiagnosisPanel({ service }: { service: Service }) {
     const formData = new FormData(e.currentTarget);
     const lead = buildLead({
       route: `/service-hub/${service.slug}`,
-      actionType: "diagnosis",
+      actionType: "START_DIAGNOSIS",
       serviceName: service.title,
-      serviceCode: service.slug,
+      serviceCode: service.serviceCode,
       message: String(formData.get("issue") ?? "").trim(),
       propertyType: String(formData.get("propertyType") ?? "") || null,
       extra: {
@@ -520,8 +520,8 @@ function StartDiagnosisPanel({ service }: { service: Service }) {
         suggestedRoute,
       },
     });
-    const { ok } = await submitLead(lead);
-    if (ok) setSubmittedLead(lead);
+    const result = await submitLead(lead);
+    if (result.ok) setSubmittedLead(result.lead);
   };
 
   if (submittedLead) {
@@ -749,9 +749,9 @@ function SpeakToTeamPanel({ service }: { service: Service }) {
     const formData = new FormData(e.currentTarget);
     const lead = buildLead({
       route: `/service-hub/${service.slug}`,
-      actionType: "contact_team",
+      actionType: "CONTACT_TEAM",
       serviceName: service.title,
-      serviceCode: service.slug,
+      serviceCode: service.serviceCode,
       fullName: String(formData.get("name") ?? "").trim(),
       phone: String(formData.get("phone") ?? "").trim(),
       message: String(formData.get("message") ?? "").trim(),
@@ -761,8 +761,8 @@ function SpeakToTeamPanel({ service }: { service: Service }) {
           channels.find((c) => c.key === channel)?.label ?? channel,
       },
     });
-    const { ok } = await submitLead(lead);
-    if (ok) setSubmittedLead(lead);
+    const result = await submitLead(lead);
+    if (result.ok) setSubmittedLead(result.lead);
   };
 
   if (submittedLead) {

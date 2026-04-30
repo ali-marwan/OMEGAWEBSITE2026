@@ -5,6 +5,7 @@ import { DiagnosisHero } from "@/components/DiagnosisHero";
 import { DiagnosisExperience } from "@/components/DiagnosisExperience";
 import { DiagnosisCTA } from "@/components/DiagnosisCTA";
 import { DiagnosisFloatingDock } from "@/components/DiagnosisFloatingDock";
+import { buildPageMetadata } from "@/lib/seo";
 
 /**
  * `/diagnosis` — OMEGA AI Property Diagnostics.
@@ -24,12 +25,12 @@ import { DiagnosisFloatingDock } from "@/components/DiagnosisFloatingDock";
  * `<DiagnosisExperience />`, which is a client component — that
  * boundary keeps the rest of the page static-rendered.
  */
-export const metadata: Metadata = {
-  title:
-    "OMEGA AI Property Diagnostics — Diagnose issues, understand solutions, take the right action.",
+export const metadata: Metadata = buildPageMetadata({
+  title: "OMEGA AI Property Diagnostics | Guided Property Diagnosis",
   description:
-    "Describe the issue, upload photos, and get guided toward the right OMEGA path. AI-supported property intelligence built on OMEGA's UAE service experience.",
-};
+    "Describe property issues, upload photos, and get routed to the right OMEGA service path through guided AI property diagnostics.",
+  path: "/diagnosis",
+});
 
 export default function DiagnosisPage() {
   return (

@@ -2,8 +2,8 @@
 
 import { useCallback, useMemo, useState } from "react";
 import {
+  createDiagnosisSession,
   diagnosisSteps,
-  initialDiagnosisSession,
   deriveRecommendedAction,
   deriveSuggestedRoute,
   suggestedRouteHref,
@@ -41,8 +41,14 @@ import { SuggestedPathCard } from "./SuggestedPathCard";
  * full `<SuggestedPathCard />`.
  */
 export function DiagnosisExperience() {
+  // `createDiagnosisSession()` generates a fresh `id` + `createdAt`
+  // so this `<DiagnosisExperience />` instance is a distinct,
+  // backend-trackable session from first render. Every form on the
+  // site that emits a `LeadPayload` from this session sets
+  // `lead.diagnosisSessionId = session.id` so the CRM can stitch
+  // the lead back to the session it came from.
   const [session, setSession] =
-    useState<DiagnosisSession>(initialDiagnosisSession);
+    useState<DiagnosisSession>(() => createDiagnosisSession());
   const [stepIndex, setStepIndex] = useState(0);
   const [submittedLead, setSubmittedLead] = useState<Lead | null>(null);
   const [completedSteps, setCompletedSteps] = useState<Set<StepCode>>(
@@ -133,20 +139,27 @@ export function DiagnosisExperience() {
   );
 
   const handleSubmit = useCallback(async () => {
-    // Build the canonical `Lead` from the session so backend / CRM /
-    // mobile app see the same shape every form on the site produces.
-    // The diagnosis-specific fields (urgency, suggestedRoute, etc.)
-    // are folded into `extra` so the top-level shape stays clean.
+    // Build the canonical `LeadPayload` from the session so backend
+    // / CRM / mobile app see the same shape every form on the site
+    // produces. The diagnosis-specific fields (urgency,
+    // suggestedRoute, etc.) are folded into `extra` so the top-
+    // level shape stays clean.
     const route = deriveSuggestedRoute(session);
     const lead = buildLead({
       route: "/diagnosis",
-      actionType: "diagnosis",
+      actionType: "START_DIAGNOSIS",
       serviceName: route ?? null,
-      serviceCode: route ? suggestedRouteHref(route).split("/").pop() ?? null : null,
+      // Convert the suggested route's slug into the UPPERCASE
+      // service code so the lead matches the canonical taxonomy.
+      // "Speak to Team" / "DIY Guidance" return null (no service).
+      serviceCode: route
+        ? suggestedRouteHref(route).split("/").pop()?.toUpperCase().replace(/-/g, "_") ?? null
+        : null,
+      diagnosisSessionId: session.id,
       propertyType: session.propertyType,
       location: session.location,
       message: session.description,
-      uploadedFiles: session.uploadedPhotoNames,
+      uploadedFiles: session.uploadedPhotos,
       extra: {
         issueCategory: session.issueCategory,
         urgency: session.urgency,
@@ -159,9 +172,14 @@ export function DiagnosisExperience() {
         suggestedRoute: route,
       },
     });
-    const { ok } = await submitLead(lead);
-    if (ok) {
-      setSubmittedLead(lead);
+    const result = await submitLead(lead);
+    if (result.ok) {
+      // Use the lead returned by `submitLead` — it carries the
+      // SUBMITTED status. Also flip the local session state to
+      // SUBMITTED_TO_OMEGA so any future re-render sees the right
+      // lifecycle.
+      setSubmittedLead(result.lead);
+      setSession((prev) => ({ ...prev, status: "SUBMITTED_TO_OMEGA" }));
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           document
@@ -173,7 +191,10 @@ export function DiagnosisExperience() {
   }, [session]);
 
   const handleRestart = useCallback(() => {
-    setSession(initialDiagnosisSession);
+    // `createDiagnosisSession()` produces a fresh `id` + timestamp
+    // so a "Start a new diagnosis" reset behaves like a brand-new
+    // visit (a new CRM row, a new session, no carry-over).
+    setSession(createDiagnosisSession());
     setStepIndex(0);
     setSubmittedLead(null);
     setCompletedSteps(new Set());

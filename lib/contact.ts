@@ -100,17 +100,21 @@ export const enquiryTypes = [
 export type EnquiryType = (typeof enquiryTypes)[number];
 
 /**
- * Map an enquiry-type label to the matching service slug used as
- * `Lead.serviceCode`. Returns null for "General enquiry" and the
- * "OMEGA AI / Diagnosis" choice (which maps to a different
- * actionType, not a service code).
+ * Map an enquiry-type label to the matching UPPERCASE service code
+ * used as `LeadPayload.serviceCode`. Returns null for "General
+ * enquiry" and the "OMEGA AI / Diagnosis" choice (which maps to a
+ * different actionType, not a service code).
+ *
+ * Mobile-app alignment: the values match `SERVICE_CODES` in
+ * `lib/services.ts` so the lead can flow through CRM and into the
+ * mobile app's service router without taxonomy translation.
  */
 export const enquiryTypeToServiceCode: Record<EnquiryType, string | null> = {
-  "Property Care System": "property-care-system",
-  "Home Services": "home-services",
-  "Property Health Report": "property-health-report",
-  Renovation: "renovation",
-  "Engineering Solutions": "engineering-solutions",
+  "Property Care System": "PROPERTY_CARE_SYSTEM",
+  "Home Services": "HOME_SERVICES",
+  "Property Health Report": "PROPERTY_HEALTH_REPORT",
+  Renovation: "RENOVATION",
+  "Engineering Solutions": "ENGINEERING_SOLUTIONS",
   "OMEGA AI / Diagnosis": null,
   "General enquiry": null,
 };

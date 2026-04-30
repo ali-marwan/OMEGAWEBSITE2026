@@ -140,7 +140,7 @@ function IssueDescriptionStep({
   const handleFiles = (files: FileList | null) => {
     if (!files) return;
     const names = Array.from(files).map((f) => f.name);
-    patch({ uploadedPhotoNames: [...session.uploadedPhotoNames, ...names] });
+    patch({ uploadedPhotos: [...session.uploadedPhotos, ...names] });
   };
 
   return (
@@ -198,9 +198,9 @@ function IssueDescriptionStep({
             />
           </div>
 
-          {session.uploadedPhotoNames.length > 0 && (
+          {session.uploadedPhotos.length > 0 && (
             <ul className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-2">
-              {session.uploadedPhotoNames.map((name, i) => (
+              {session.uploadedPhotos.map((name, i) => (
                 <Fragment key={`${name}-${i}`}>
                   {i > 0 && " "}
                   <li className="inline-flex items-center gap-2 rounded-full border border-line/80 bg-warmwhite/80 px-3 py-1.5 font-mono text-[0.7rem] uppercase tracking-[0.12em] text-graphite/80">

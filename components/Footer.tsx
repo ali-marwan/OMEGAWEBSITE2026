@@ -177,6 +177,7 @@ export function Footer() {
             label="Connect"
             items={[
               { label: "Speak to Our Team", href: "/contact" },
+              { label: "OMEGA Insights", href: "/insights" },
               { label: "OMEGA Service Hub", href: "/service-hub" },
               { label: "WhatsApp", href: "/contact" },
               { label: "Email", href: "/contact" },

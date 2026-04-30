@@ -130,7 +130,7 @@ export function ServiceHubCard({
 
       {/* Description */}
       <p className="mt-4 text-[0.92rem] leading-[1.65] text-muted">
-        {service.description}
+        {service.shortDescription}
       </p>
 
       {/* Use cases */}

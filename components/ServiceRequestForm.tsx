@@ -101,10 +101,10 @@ const propertyTypes = [
 const contactMethods: LeadContactMethod[] = ["WhatsApp", "Call", "Email"];
 
 const defaultSubmitLabels: Record<LeadActionType, string> = {
-  service_request: "Submit Request",
-  diagnosis: "Submit Diagnosis",
-  contact_team: "Submit Enquiry",
-  general_enquiry: "Submit Enquiry",
+  SERVICE_REQUEST: "Submit Request",
+  START_DIAGNOSIS: "Submit Diagnosis",
+  CONTACT_TEAM: "Submit Enquiry",
+  GENERAL_ENQUIRY: "Submit Enquiry",
 };
 
 export function ServiceRequestForm({
@@ -196,11 +196,15 @@ export function ServiceRequestForm({
         preferredContactMethod: state.preferredContactMethod,
         uploadedFiles: state.uploadedFileNames,
       });
-      const { ok } = await submitLead(lead);
+      // Use the lead returned by `submitLead` — it carries the
+      // SUBMITTED status, while the locally-built `lead` is still
+      // DRAFT. The CRM cares about the status flag, so we always
+      // hand on the post-submit version.
+      const result = await submitLead(lead);
       setSubmitting(false);
-      if (ok) {
-        setSubmittedLead(lead);
-        onSubmitted?.(lead);
+      if (result.ok) {
+        setSubmittedLead(result.lead);
+        onSubmitted?.(result.lead);
       }
     },
     [actionType, errors, onSubmitted, service, sourceRoute, state]
@@ -337,11 +341,11 @@ export function ServiceRequestForm({
         label="Brief description"
         htmlFor={`${id}-message`}
         helper={
-          actionType === "general_enquiry"
+          actionType === "GENERAL_ENQUIRY"
             ? "Tell us what you need."
             : "Anything we should know about the request."
         }
-        required={actionType === "general_enquiry"}
+        required={actionType === "GENERAL_ENQUIRY"}
         error={showError("message") ? errors.message : undefined}
       >
         <textarea
@@ -486,17 +490,13 @@ export function ServiceRequestForm({
   );
 }
 
+/**
+ * The action codes are already UPPERCASE in the canonical taxonomy
+ * — `actionTypeLabel` is now a pass-through. Kept as a function so
+ * future per-action label customisation has a hook point.
+ */
 function actionTypeLabel(t: LeadActionType): string {
-  switch (t) {
-    case "service_request":
-      return "SERVICE_REQUEST";
-    case "diagnosis":
-      return "DIAGNOSIS";
-    case "contact_team":
-      return "CONTACT_TEAM";
-    case "general_enquiry":
-      return "GENERAL_ENQUIRY";
-  }
+  return t;
 }
 
 /* ── Reusable success panel ──────────────────────────────────────── */
@@ -536,18 +536,21 @@ export function LeadSuccessPanel({
         <span>Request Received</span>
       </div>
 
+      {/* Headline + body copy match the brief's exact wording so
+          every form on the site shows the same standardised
+          confirmation. */}
       <h3 className="mt-4 text-[1.6rem] md:text-[2rem] leading-[1.1] tracking-tightest font-semibold text-graphite">
-        OMEGA team will review and contact you.
+        Request received.
       </h3>
 
       <p className="mt-3 max-w-xl text-base leading-[1.7] text-muted">
-        Thanks{lead.fullName ? `, ${lead.fullName}` : ""}. We've
-        received your request and will reach out
+        OMEGA team will review the details and contact you
         {lead.preferredContactMethod
-          ? ` via ${lead.preferredContactMethod}`
-          : ""}
-        . For active leaks, electrical hazards, fire/life safety
-        risks, or urgent property risk, contact OMEGA directly.
+          ? ` through ${lead.preferredContactMethod}`
+          : " through your preferred method"}
+        {lead.fullName ? `, ${lead.fullName}` : ""}. For active
+        leaks, electrical hazards, fire/life safety risks, or urgent
+        property risk, contact OMEGA directly.
       </p>
 
       {/* Recap chips — selected service + preferred channel */}

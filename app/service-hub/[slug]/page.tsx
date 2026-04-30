@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
@@ -12,7 +13,10 @@ import { DetailCTA } from "@/components/DetailCTA";
 import {
   getAllServiceSlugs,
   getServiceBySlug,
+  type Service,
 } from "@/lib/services";
+import { JsonLd } from "@/components/JsonLd";
+import { buildPageMetadata, serviceJsonLd } from "@/lib/seo";
 
 /**
  * Pre-render every known service slug at build time. Keeps the
@@ -29,20 +33,42 @@ export function generateStaticParams() {
 
 type Params = { params: Promise<{ slug: string }> };
 
-export async function generateMetadata({ params }: Params) {
+/**
+ * Per-service title pattern matches the brief's spec:
+ *   "OMEGA Property Care System | Annual Maintenance & Property Support"
+ *
+ * The `descriptor` field already carries the right secondary phrase
+ * for every service, so we compose `<title> | <descriptor>` rather
+ * than maintaining a separate per-slug map. Editors update one
+ * `lib/services.ts` field; the SEO title stays in sync.
+ */
+function buildServiceTitle(service: Service): string {
+  return `${service.title} | ${service.descriptor}`;
+}
+
+export async function generateMetadata({
+  params,
+}: Params): Promise<Metadata> {
   const { slug } = await params;
   const service = getServiceBySlug(slug);
   if (!service) {
-    return {
-      title: "Service Not Found · OMEGA Service Hub",
+    return buildPageMetadata({
+      title: "Service Not Found | OMEGA Service Hub",
       description:
         "The OMEGA service module you requested could not be located.",
-    };
+      path: `/service-hub/${slug}`,
+      noindex: true,
+    });
   }
-  return {
-    title: `${service.title} — OMEGA Service Hub`,
-    description: service.description,
-  };
+  return buildPageMetadata({
+    title: buildServiceTitle(service),
+    description: service.fullDescription,
+    path: service.route,
+    // `article` framing is closer to a service description than a
+    // generic website page — gives crawlers a slightly richer
+    // signal for rich-result generation.
+    ogType: "article",
+  });
 }
 
 /**
@@ -85,6 +111,11 @@ export default async function ServiceDetailPage({ params }: Params) {
 
   return (
     <main className="relative">
+      {/* Per-service Service schema — adds rich-result eligibility
+          for service cards in search. Site-wide Organization schema
+          is injected once in `app/layout.tsx`; this is the
+          per-page complement. */}
+      <JsonLd data={serviceJsonLd(service)} />
       <Navigation />
       <ServiceDetailHero service={service} />
       <WhatThisCovers service={service} />

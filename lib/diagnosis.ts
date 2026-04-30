@@ -142,12 +142,41 @@ export const diagnosisSteps: readonly StepDef[] = [
 
 /* ── Session shape (the object backend / AI API / CRM will see) ──── */
 
+/**
+ * Lifecycle status for a diagnosis session. Web sets:
+ *   IN_PROGRESS         → user is filling out the multi-step flow
+ *   COMPLETED           → user reached step 5 (Suggested Route) but
+ *                         hasn't pressed submit yet
+ *   SUBMITTED_TO_OMEGA  → user pressed submit; a Lead has been
+ *                         emitted and the session is closed
+ *
+ * Mobile-app alignment: the same three values drive the app's
+ * DiagnosisSession state machine and the CRM's session-list view.
+ */
+export type DiagnosisSessionStatus =
+  | "IN_PROGRESS"
+  | "COMPLETED"
+  | "SUBMITTED_TO_OMEGA";
+
+/**
+ * Mobile-app alignment: this `DiagnosisSession` matches the
+ * eventual app's `DiagnosisSession` model. `id` is generated
+ * client-side (uuid) so the same object can round-trip through the
+ * CRM and link back to the `LeadPayload` it produced via
+ * `Lead.diagnosisSessionId === DiagnosisSession.id`.
+ */
 export type DiagnosisSession = {
+  /** UUID generated client-side. Stable across the session's lifetime. */
+  id: string;
   propertyType: PropertyType | null;
   issueCategory: IssueCategory | null;
   description: string;
-  /** File names only — frontend-only placeholder. No upload happens yet. */
-  uploadedPhotoNames: string[];
+  /**
+   * File names only — frontend-only placeholder. No upload happens
+   * yet. The eventual app + backend will store File / Blob refs
+   * with the same key name.
+   */
+  uploadedPhotos: string[];
   urgency: Urgency | null;
   location: string;
   recurringIssue: YesNo | null;
@@ -160,13 +189,71 @@ export type DiagnosisSession = {
   suggestedRoute: SuggestedRoute | null;
   /** Computed by `deriveRecommendedAction` from the route. */
   recommendedAction: string | null;
+  /** ISO timestamp at the moment the session was created. */
+  createdAt: string;
+  /** Lifecycle status — see `DiagnosisSessionStatus`. */
+  status: DiagnosisSessionStatus;
 };
 
+/**
+ * Browser-safe UUID generator — same shape as the helper inside
+ * `lib/leads.ts`. Duplicated here so the diagnosis layer can stay
+ * self-contained (no cross-module dep just for an id).
+ */
+function generateSessionId(): string {
+  if (
+    typeof crypto !== "undefined" &&
+    typeof (crypto as Crypto & { randomUUID?: () => string }).randomUUID ===
+      "function"
+  ) {
+    return (crypto as Crypto & { randomUUID: () => string }).randomUUID();
+  }
+  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+/**
+ * Build a fresh diagnosis session with default values. Generates a
+ * new id + createdAt every call, so each `<DiagnosisExperience />`
+ * instance starts a distinct session.
+ */
+export function createDiagnosisSession(): DiagnosisSession {
+  return {
+    id: generateSessionId(),
+    propertyType: null,
+    issueCategory: null,
+    description: "",
+    uploadedPhotos: [],
+    urgency: null,
+    location: "",
+    recurringIssue: null,
+    accessAvailable: null,
+    affectedAreas: "",
+    hasWaterLeakage: false,
+    hasPowerIssue: false,
+    hasACShutdown: false,
+    suggestedRoute: null,
+    recommendedAction: null,
+    createdAt: new Date().toISOString(),
+    status: "IN_PROGRESS",
+  };
+}
+
+/**
+ * Initial / default session shape. Provided for callers that need a
+ * stable reference (e.g. `useState` initial value). Calling
+ * `createDiagnosisSession()` is the right move when starting a new
+ * session for a real user — that path generates a fresh id +
+ * timestamp every time.
+ *
+ * @deprecated Prefer `createDiagnosisSession()` for new sessions.
+ *   Kept as a constant for back-compat with existing callers.
+ */
 export const initialDiagnosisSession: DiagnosisSession = {
+  id: "",
   propertyType: null,
   issueCategory: null,
   description: "",
-  uploadedPhotoNames: [],
+  uploadedPhotos: [],
   urgency: null,
   location: "",
   recurringIssue: null,
@@ -177,6 +264,8 @@ export const initialDiagnosisSession: DiagnosisSession = {
   hasACShutdown: false,
   suggestedRoute: null,
   recommendedAction: null,
+  createdAt: "",
+  status: "IN_PROGRESS",
 };
 
 /* ── Routing logic ───────────────────────────────────────────────── */

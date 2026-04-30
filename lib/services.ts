@@ -1,5 +1,5 @@
 /**
- * OMEGA Service Hub — centralized service data model.
+ * OMEGA Service Hub — centralised service data model.
  *
  * Single source of truth for everything the Service Hub renders. The
  * card grid, the filter bar, the guided path section, and the
@@ -9,6 +9,10 @@
  * Design intent:
  *   - One platform layer that frontend, future backend, and a future
  *     mobile app can all share.
+ *   - Every service exposes a stable UPPERCASE `serviceCode`
+ *     (PROPERTY_CARE_SYSTEM, HOME_SERVICES, ...) — the same code the
+ *     mobile app router and CRM consume. Slug + code are kept
+ *     parallel: slug for URLs, code for system identity.
  *   - `appActionType` tags every service with the dominant flow it
  *     belongs to in the eventual app (SERVICE_REQUEST,
  *     ASSESSMENT_REQUEST, RENOVATION_REQUEST, ENGINEERING_REQUEST,
@@ -18,14 +22,42 @@
  *     (SERVICE_REQUEST, START_DIAGNOSIS, CONTACT_TEAM, BACK_TO_HUB)
  *     so the same UI maps to identical app screens / API endpoints
  *     when the mobile client and backend are wired up.
- *   - The detail page reads four per-service fields:
- *       useCases       → short chip-style labels (catalog grid + hero)
- *       whatThisCovers → 4 module cards with a one-line summary each
- *       whenToUse      → 4–5 client-facing scenarios
- *       relatedSlugs   → curated 2–3 related modules
- *     Plus the constant `omegaProcess` (the same 4 steps for every
- *     service). New services only need a single entry in `services`.
+ *   - Per-service fields the detail page reads:
+ *       useCases             → short chip-style labels (catalog grid + hero)
+ *       whatThisCovers       → 4 module cards with a one-line summary each
+ *       whenToUse            → 4–5 client-facing scenarios
+ *       processSteps         → 4-step OMEGA process (currently shared)
+ *       relatedServiceSlugs  → curated 2–3 related modules
+ *     New services only need a single entry in `services`.
+ *
+ * Mobile-app alignment:
+ *   - `Service` is the same record the mobile app's `Service` model
+ *     consumes. `serviceCode` is the stable identifier used in deep
+ *     links, push payloads, and CRM rows.
+ *   - `processSteps` is per-service so individual modules can later
+ *     diverge (e.g. Engineering may add an authority-coordination
+ *     step) without forking the data model.
  */
+
+/* ── Stable service codes ────────────────────────────────────────── */
+
+/**
+ * UPPERCASE service codes — match the eventual app/CRM router. The
+ * one place new services are registered. The slug (lowercase, used
+ * in URLs) is parallel; both stay in sync via the `services` array
+ * below.
+ */
+export const SERVICE_CODES = [
+  "PROPERTY_CARE_SYSTEM",
+  "HOME_SERVICES",
+  "PROPERTY_HEALTH_REPORT",
+  "RENOVATION",
+  "ENGINEERING_SOLUTIONS",
+] as const;
+
+export type ServiceCode = (typeof SERVICE_CODES)[number];
+
+/* ── Categories ──────────────────────────────────────────────────── */
 
 /** Top-level service categories the user can filter by. */
 export type ServiceCategory =
@@ -38,11 +70,20 @@ export type ServiceCategory =
 /** Filter values exposed to the UI ("All" + every category). */
 export type ServiceFilter = "All" | ServiceCategory;
 
+/* ── Action codes (per-service CTAs) ─────────────────────────────── */
+
 /**
  * Stable action codes shared between web and the future mobile app.
  * Adding a new action here is the only place you have to touch — the
  * card UI iterates the array and a future router maps the code to a
  * concrete app screen.
+ *
+ * Note: this `ActionCode` is the per-service action set (used on
+ * service catalog cards + detail page CTAs). The site-wide CTA
+ * taxonomy lives in `lib/actions.ts` (`ACTION_CODES`) — there's
+ * overlap (START_DIAGNOSIS / CONTACT_TEAM exist in both) but the two
+ * sets are kept separate so service-card actions can evolve
+ * independently of the global navigation taxonomy.
  */
 export type ActionCode =
   | "VIEW_DETAILS"
@@ -79,14 +120,70 @@ export type CoverageItem = {
   summary: string;
 };
 
+/**
+ * The OMEGA standard intake process — same four steps for every
+ * service module today. Surfaced on every detail page via
+ * `<OmegaProcess />`. Per-service `processSteps` defaults to this
+ * constant, but a service can later override its own steps without
+ * forking the data model.
+ */
+export type ProcessStep = {
+  code: string;
+  title: string;
+  description: string;
+};
+
+export const omegaProcess: readonly ProcessStep[] = [
+  {
+    code: "01",
+    title: "Submit Request",
+    description: "Share your requirement, issue, or property need.",
+  },
+  {
+    code: "02",
+    title: "Review & Diagnose",
+    description:
+      "OMEGA reviews the request and identifies the right technical path.",
+  },
+  {
+    code: "03",
+    title: "Scope Confirmation",
+    description:
+      "If required, the team confirms site details, scope, and service requirements.",
+  },
+  {
+    code: "04",
+    title: "Execution & Support",
+    description:
+      "OMEGA proceeds with the appropriate service, support, or next action.",
+  },
+] as const;
+
+/* ── Service shape ───────────────────────────────────────────────── */
+
 export type Service = {
+  /** Stable identifier (matches slug today, kept separate for clarity). */
   id: string;
+  /** URL slug (e.g. `home-services`). */
   slug: string;
+  /** UPPERCASE service code (e.g. `HOME_SERVICES`). System taxonomy. */
+  serviceCode: ServiceCode;
   /** Two-digit display index ("01", "02", ...). */
   index: string;
   title: string;
+  /** Mono-caps strap line under the title on detail page hero. */
   descriptor: string;
-  description: string;
+  /**
+   * One-sentence summary used on catalog cards + hero. Renamed from
+   * `description` — the brief specifies `shortDescription`.
+   */
+  shortDescription: string;
+  /**
+   * Longer paragraph used on detail page metadata + future SEO /
+   * social share / mobile-app feature card. Falls back to
+   * `shortDescription` when no longer copy is needed.
+   */
+  fullDescription: string;
   category: ServiceCategory;
   /** Lower number = higher priority, used to sort the grid. */
   priority: number;
@@ -108,12 +205,21 @@ export type Service = {
    */
   whenToUse: readonly string[];
   /**
+   * 4-step OMEGA process for this service. Defaults to the shared
+   * `omegaProcess` constant — services can override later if their
+   * intake flow diverges.
+   */
+  processSteps: readonly ProcessStep[];
+  /**
    * Slugs of related services rendered in the detail page's
    * "Related services" section. Curated per service rather than
    * computed from the category, so an editor can show the most
    * useful neighbours regardless of taxonomy match.
+   *
+   * Renamed from `relatedSlugs` — the brief specifies
+   * `relatedServiceSlugs`.
    */
-  relatedSlugs: readonly string[];
+  relatedServiceSlugs: readonly string[];
   availableActions: readonly ServiceAction[];
   /** Detail page route. */
   route: string;
@@ -122,6 +228,8 @@ export type Service = {
   /** App flow tag — see AppActionType for semantics. */
   appActionType: AppActionType;
 };
+
+/* ── Action builders ─────────────────────────────────────────────── */
 
 /**
  * Hub-card actions — the four standardised action codes every service
@@ -180,62 +288,30 @@ export const buildDetailActions = (slug: string): ServiceAction[] => [
   },
   {
     code: "CONTACT_TEAM",
-    label: "Speak to Our Team",
+    label: "Speak to Team",
     href: `/service-hub/${slug}#contact`,
   },
   {
     code: "BACK_TO_HUB",
-    label: "Return to Service Hub",
+    label: "Back to Service Hub",
     href: "/service-hub",
   },
 ];
 
-/**
- * The OMEGA standard intake process — same four steps for every
- * service module. Surfaced on every detail page via `<OmegaProcess />`.
- */
-export type ProcessStep = {
-  code: string;
-  title: string;
-  description: string;
-};
-
-export const omegaProcess: readonly ProcessStep[] = [
-  {
-    code: "01",
-    title: "Submit Request",
-    description:
-      "Share your requirement, issue, or property need.",
-  },
-  {
-    code: "02",
-    title: "Review & Diagnose",
-    description:
-      "OMEGA reviews the request and identifies the right technical path.",
-  },
-  {
-    code: "03",
-    title: "Scope Confirmation",
-    description:
-      "If required, the team confirms site details, scope, and service requirements.",
-  },
-  {
-    code: "04",
-    title: "Execution & Support",
-    description:
-      "OMEGA proceeds with the appropriate service, support, or next action.",
-  },
-] as const;
+/* ── Service catalogue ───────────────────────────────────────────── */
 
 export const services: readonly Service[] = [
   {
     id: "property-care-system",
     slug: "property-care-system",
+    serviceCode: "PROPERTY_CARE_SYSTEM",
     index: "01",
     title: "OMEGA Property Care System",
     descriptor: "Annual Maintenance & Ongoing Property Support",
-    description:
+    shortDescription:
       "Annual maintenance and ongoing support for residential and commercial properties.",
+    fullDescription:
+      "A structured care programme for properties across the UAE — scheduled maintenance, preventive checks, and priority response between visits, all run through a single OMEGA point of contact.",
     category: "Property Care",
     priority: 1,
     useCases: [
@@ -273,7 +349,12 @@ export const services: readonly Service[] = [
       "You want one structured system for care, repairs, and follow-up.",
       "You want technical oversight before issues become costly.",
     ],
-    relatedSlugs: ["home-services", "property-health-report", "engineering-solutions"],
+    processSteps: omegaProcess,
+    relatedServiceSlugs: [
+      "home-services",
+      "property-health-report",
+      "engineering-solutions",
+    ],
     availableActions: buildStandardActions("property-care-system"),
     route: "/service-hub/property-care-system",
     primaryCta: {
@@ -285,11 +366,14 @@ export const services: readonly Service[] = [
   {
     id: "home-services",
     slug: "home-services",
+    serviceCode: "HOME_SERVICES",
     index: "02",
     title: "OMEGA Home Services",
     descriptor: "On-Demand Repairs & Property Support",
-    description:
+    shortDescription:
       "On-demand response for everyday property issues, faults, repairs, and minor service needs.",
+    fullDescription:
+      "Single-call response for everyday property problems — AC faults, plumbing leaks, electrical issues, and general repairs handled by qualified OMEGA technicians, with a clean repair record per visit.",
     category: "Home Services",
     priority: 2,
     useCases: [
@@ -327,7 +411,8 @@ export const services: readonly Service[] = [
       "You're a tenant or owner-occupier and need an accountable repair record.",
       "You need help with everyday property issues without a long contract.",
     ],
-    relatedSlugs: ["property-care-system", "renovation"],
+    processSteps: omegaProcess,
+    relatedServiceSlugs: ["property-care-system", "renovation"],
     availableActions: buildStandardActions("home-services"),
     route: "/service-hub/home-services",
     primaryCta: {
@@ -339,11 +424,14 @@ export const services: readonly Service[] = [
   {
     id: "property-health-report",
     slug: "property-health-report",
+    serviceCode: "PROPERTY_HEALTH_REPORT",
     index: "03",
     title: "OMEGA Property Health Report",
     descriptor: "Property Assessment & Technical Report",
-    description:
+    shortDescription:
       "Structured property assessment to identify condition, risks, required actions, and improvement priorities.",
+    fullDescription:
+      "An independent technical view of a property — area-by-area condition scoring, photographed evidence, and a clear action list, useful before buying, renting, renovating, or committing to repairs.",
     category: "Health Report",
     priority: 3,
     useCases: [
@@ -381,7 +469,12 @@ export const services: readonly Service[] = [
       "You need a clean report you can share with a landlord, buyer, or contractor.",
       "You want a periodic check-up to track your property's condition over time.",
     ],
-    relatedSlugs: ["property-care-system", "engineering-solutions", "renovation"],
+    processSteps: omegaProcess,
+    relatedServiceSlugs: [
+      "property-care-system",
+      "engineering-solutions",
+      "renovation",
+    ],
     availableActions: buildStandardActions("property-health-report"),
     route: "/service-hub/property-health-report",
     primaryCta: {
@@ -393,11 +486,14 @@ export const services: readonly Service[] = [
   {
     id: "renovation",
     slug: "renovation",
+    serviceCode: "RENOVATION",
     index: "04",
     title: "OMEGA Renovation",
     descriptor: "Upgrades, Fit-Out & Property Enhancements",
-    description:
+    shortDescription:
       "Controlled renovation and fit-out improvements for villas, apartments, and commercial spaces.",
+    fullDescription:
+      "End-to-end renovation delivered on a controlled programme — kitchens, bathrooms, full refurbishments, and commercial fit-outs, with engineering input where structure or services are touched.",
     category: "Renovation",
     priority: 4,
     useCases: [
@@ -435,7 +531,12 @@ export const services: readonly Service[] = [
       "You want engineering input where structure or services are touched.",
       "You need a clear programme, not an open-ended building site.",
     ],
-    relatedSlugs: ["engineering-solutions", "property-health-report", "home-services"],
+    processSteps: omegaProcess,
+    relatedServiceSlugs: [
+      "engineering-solutions",
+      "property-health-report",
+      "home-services",
+    ],
     availableActions: buildStandardActions("renovation"),
     route: "/service-hub/renovation",
     primaryCta: {
@@ -447,11 +548,14 @@ export const services: readonly Service[] = [
   {
     id: "engineering-solutions",
     slug: "engineering-solutions",
+    serviceCode: "ENGINEERING_SOLUTIONS",
     index: "05",
     title: "OMEGA Engineering Solutions",
     descriptor: "Drawings, Design & Authority Coordination",
-    description:
+    shortDescription:
       "Drawings, design coordination, technical review, MEP coordination, and authority-related support where applicable.",
+    fullDescription:
+      "Engineering-led support for projects that need drawings, MEP coordination, technical review, or authority coordination — independent judgement on unusual property issues, and submission support where works require sign-off.",
     category: "Engineering",
     priority: 5,
     useCases: [
@@ -474,7 +578,7 @@ export const services: readonly Service[] = [
       {
         title: "Authority approvals",
         summary:
-          "Submission, follow-up, and review-response support through to sign-off.",
+          "Submission, follow-up, and review-response support where applicable.",
       },
       {
         title: "Technical problem solving",
@@ -489,7 +593,8 @@ export const services: readonly Service[] = [
       "You need authority sign-off on works that touch structure, MEP, or facade.",
       "You want a second technical opinion before committing significant budget.",
     ],
-    relatedSlugs: ["renovation", "property-health-report"],
+    processSteps: omegaProcess,
+    relatedServiceSlugs: ["renovation", "property-health-report"],
     availableActions: buildStandardActions("engineering-solutions"),
     route: "/service-hub/engineering-solutions",
     primaryCta: {
@@ -499,6 +604,8 @@ export const services: readonly Service[] = [
     appActionType: "ENGINEERING_REQUEST",
   },
 ] as const;
+
+/* ── Helper functions ────────────────────────────────────────────── */
 
 /** Categories in display order (matches grid + filter order). */
 export const categories: readonly ServiceCategory[] = [
@@ -523,11 +630,22 @@ export function filterServices(
   return services.filter((s) => s.category === filter);
 }
 
-/** Look up a single service by its url slug. Returns undefined when
- *  no match — callers (e.g. the [slug] detail page) should treat
- *  undefined as a 404. */
+/**
+ * Look up a single service by its url slug. Returns undefined when
+ * no match — callers (e.g. the [slug] detail page) should treat
+ * undefined as a 404.
+ */
 export function getServiceBySlug(slug: string): Service | undefined {
   return services.find((s) => s.slug === slug);
+}
+
+/**
+ * Look up a single service by its UPPERCASE service code. Useful for
+ * the future mobile app + CRM, which carry the code (not the slug)
+ * in their data layers.
+ */
+export function getServiceByCode(code: ServiceCode): Service | undefined {
+  return services.find((s) => s.serviceCode === code);
 }
 
 /** All slugs for `generateStaticParams` in the [slug] detail page. */
@@ -537,17 +655,24 @@ export function getAllServiceSlugs(): string[] {
 
 /**
  * Resolve the related-services list for a given service. Reads
- * `relatedSlugs` from the service entry and returns the matching
- * Service objects in declaration order, skipping any unknown slug
- * silently (so the detail page renders cleanly even if the data is
- * mid-edit).
+ * `relatedServiceSlugs` from the service entry and returns the
+ * matching Service objects in declaration order, skipping any
+ * unknown slug silently (so the detail page renders cleanly even if
+ * the data is mid-edit).
  */
-export function getRelatedServices(
-  slug: string
-): readonly Service[] {
+export function getRelatedServices(slug: string): readonly Service[] {
   const service = getServiceBySlug(slug);
   if (!service) return [];
-  return service.relatedSlugs
+  return service.relatedServiceSlugs
     .map((s) => getServiceBySlug(s))
     .filter((s): s is Service => Boolean(s));
+}
+
+/**
+ * Map a slug to its UPPERCASE serviceCode. Useful when emitting a
+ * Lead from a context that only knows the slug (e.g. an embedded
+ * action centre on a detail page).
+ */
+export function slugToServiceCode(slug: string): ServiceCode | null {
+  return getServiceBySlug(slug)?.serviceCode ?? null;
 }

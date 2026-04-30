@@ -13,7 +13,7 @@ import type { Service } from "@/lib/services";
  *   eyebrow          (●  {index} | {category} | {appActionType})
  *   title            (h1 — service.title)
  *   descriptor       (mono caps — service.descriptor)
- *   description      (paragraph — service.description)
+ *   description      (paragraph — service.shortDescription)
  *   use-cases row    (mono chips — service.useCases)
  *   CTA row          (Request Service · Start Diagnosis · Speak to Team)
  *   ──── arch-rule ────
@@ -120,7 +120,7 @@ export function ServiceDetailHero({ service }: { service: Service }) {
 
         {/* Description */}
         <p className="mt-6 max-w-3xl text-base md:text-lg leading-[1.7] text-muted">
-          {service.description}
+          {service.shortDescription}
         </p>
 
         {/*

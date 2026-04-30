@@ -9,6 +9,7 @@ import { StudioWhyEngineering } from "@/components/StudioWhyEngineering";
 import { StudioUAEContext } from "@/components/StudioUAEContext";
 import { StudioAIConnection } from "@/components/StudioAIConnection";
 import { StudioCTA } from "@/components/StudioCTA";
+import { buildPageMetadata } from "@/lib/seo";
 
 /**
  * `/studio` — OMEGA's credibility and company narrative page.
@@ -32,12 +33,12 @@ import { StudioCTA } from "@/components/StudioCTA";
  * narrative page, not the diagnostic experience that gets its own
  * dock variant).
  */
-export const metadata: Metadata = {
-  title:
-    "OMEGA Studio — Engineering-led property solutions for UAE properties.",
+export const metadata: Metadata = buildPageMetadata({
+  title: "OMEGA Studio | Engineering-Led Property Solutions",
   description:
-    "OMEGA combines property care, home services, assessments, renovation, and engineering support into one coordinated property system. Built for clients who need clear responsibility, technical judgment, and organized execution.",
-};
+    "Learn how OMEGA connects property care, home services, assessments, renovation, engineering support, and AI diagnostics into one UAE property system.",
+  path: "/studio",
+});
 
 export default function StudioPage() {
   return (

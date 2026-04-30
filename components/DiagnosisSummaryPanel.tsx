@@ -150,13 +150,13 @@ export function DiagnosisSummaryPanel({
           {" "}
           <dd
             className={`text-right text-[0.86rem] leading-[1.5] ${
-              session.uploadedPhotoNames.length > 0
+              session.uploadedPhotos.length > 0
                 ? "text-graphite/90"
                 : "text-graphite/30"
             }`}
           >
-            {session.uploadedPhotoNames.length > 0
-              ? `${session.uploadedPhotoNames.length} attached`
+            {session.uploadedPhotos.length > 0
+              ? `${session.uploadedPhotos.length} attached`
               : "—"}
           </dd>
         </div>

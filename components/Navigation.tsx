@@ -30,6 +30,7 @@ const links = [
   { label: "Services", href: "/#services" },
   { label: "OMEGA AI", href: "/diagnosis" },
   { label: "Studio", href: "/studio" },
+  { label: "Insights", href: "/insights" },
 ];
 
 const SERVICE_HUB_HREF = "/service-hub";
@@ -105,19 +106,32 @@ export function Navigation() {
               OMEGA
             </span>
             {" "}
+            {/*
+              Strapline + separator only render on lg+ now (was md+).
+              At md (768 px) the inline nav has 5 items + the OMEGA
+              Service Hub CTA — adding a 200 px+ strapline would push
+              the row past the available space. lg (1024 px) has
+              comfortable room for both.
+            */}
             <span
               aria-hidden
-              className="hidden md:inline-block h-3 w-px bg-line"
+              className="hidden lg:inline-block h-3 w-px bg-line"
             />
             {" "}
-            <span className="hidden md:inline-block font-mono text-[0.68rem] uppercase tracking-technical text-muted">
+            <span className="hidden lg:inline-block font-mono text-[0.68rem] uppercase tracking-technical text-muted">
               UAE · Engineering-led Property Solutions
             </span>
           </Link>
           {/* Whitespace separator so brand strapline doesn't join the
               first nav link in DOM textContent. */}
           {" "}
-          <nav className="hidden md:flex items-center gap-7" aria-label="Primary navigation">
+          {/*
+            Inline primary nav. Tighter `gap-5` at md so the 5
+            inline links (System / Services / OMEGA AI / Studio /
+            Insights) plus the Service Hub CTA fit comfortably at
+            768 px. Returns to `gap-7` at lg+ where there's room.
+          */}
+          <nav className="hidden md:flex items-center gap-5 lg:gap-7" aria-label="Primary navigation">
             {links.map((l, i) => {
               // Route-based active-state for /studio and /diagnosis;
               // hash anchors stay muted regardless. Active state =

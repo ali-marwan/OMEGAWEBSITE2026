@@ -59,27 +59,27 @@ function deriveActionAndService(
 } {
   if (!enquiryType) {
     return {
-      actionType: "general_enquiry",
+      actionType: "GENERAL_ENQUIRY",
       serviceName: null,
       serviceCode: null,
     };
   }
   if (enquiryType === "OMEGA AI / Diagnosis") {
     return {
-      actionType: "diagnosis",
+      actionType: "START_DIAGNOSIS",
       serviceName: enquiryType,
       serviceCode: null,
     };
   }
   if (enquiryType === "General enquiry") {
     return {
-      actionType: "general_enquiry",
+      actionType: "GENERAL_ENQUIRY",
       serviceName: null,
       serviceCode: null,
     };
   }
   return {
-    actionType: "service_request",
+    actionType: "SERVICE_REQUEST",
     serviceName: enquiryType,
     serviceCode: enquiryTypeToServiceCode[enquiryType],
   };
@@ -220,10 +220,10 @@ export function ContactExperience() {
           enquiryType: submission.enquiryType,
         },
       });
-      const { ok } = await submitLead(lead);
+      const result = await submitLead(lead);
       setSubmitting(false);
-      if (ok) {
-        setSubmittedLead(lead);
+      if (result.ok) {
+        setSubmittedLead(result.lead);
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
             document
@@ -441,7 +441,7 @@ export function ContactExperience() {
                   <FieldShell
                     label="Brief description"
                     htmlFor="contact-description"
-                    required={actionType === "general_enquiry"}
+                    required={actionType === "GENERAL_ENQUIRY"}
                     error={showError("message") ? errors.message : undefined}
                   >
                     <textarea

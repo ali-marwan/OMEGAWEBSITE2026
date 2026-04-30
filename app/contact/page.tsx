@@ -5,6 +5,7 @@ import { FloatingDock } from "@/components/FloatingDock";
 import { ContactHero } from "@/components/ContactHero";
 import { ContactRouteCards } from "@/components/ContactRouteCards";
 import { ContactExperience } from "@/components/ContactExperience";
+import { buildPageMetadata } from "@/lib/seo";
 
 /**
  * `/contact` — the OMEGA contact / Speak to Our Team intake page.
@@ -28,12 +29,12 @@ import { ContactExperience } from "@/components/ContactExperience";
  * `<ContactExperience />` (client component) — that boundary keeps
  * the rest of the page static-rendered.
  */
-export const metadata: Metadata = {
-  title:
-    "Speak to the OMEGA team — Care, repairs, assessments, renovation, engineering.",
+export const metadata: Metadata = buildPageMetadata({
+  title: "Contact OMEGA | Speak to the Right Team",
   description:
-    "Tell us what you need — care, repair, assessment, renovation, or engineering support. OMEGA routes the request to the right team.",
-};
+    "Contact OMEGA for property care, home services, property assessment, renovation, engineering support, or guided diagnosis.",
+  path: "/contact",
+});
 
 export default function ContactPage() {
   return (
