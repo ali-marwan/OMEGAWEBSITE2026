@@ -5,6 +5,7 @@ import {
   UAE_COVERAGE,
   URGENT_RESPONSE_NOTE,
   emailHref,
+  isContactConfigured,
   phoneHref,
   whatsappHref,
 } from "@/lib/contact";
@@ -14,44 +15,78 @@ import { Fragment } from "react";
  * `/contact` — Direct contact panel (right-side column on desktop,
  * stacked below the form on mobile).
  *
- * Renders the four direct-contact channels (WhatsApp · Email · Phone)
+ * Renders three direct-contact channels (WhatsApp · Email · Phone)
  * plus the UAE coverage strip and the urgent-issue response note.
  *
- * Placeholder discipline: every contact value reads from the
- * `TODO_*` constants in `lib/contact.ts`. Nothing here invents a
- * real phone number, email, or WhatsApp link — the operations team
- * substitutes the constants in one place when production values are
- * configured. Until then, the rendered hrefs (`tel:TODO_PHONE`,
- * `mailto:TODO_EMAIL`, `TODO_WHATSAPP_LINK`) are intentionally
- * non-functional and visually surface the placeholder text.
+ * Configuration discipline:
+ *   - Every contact value reads from env vars via `lib/omegaConfig.ts`
+ *     with `TODO_*` placeholder fallbacks.
+ *   - When a channel is configured (env var set to a real value), the
+ *     row renders as a clickable link with the real value visible.
+ *   - When unconfigured (env var still the placeholder), the row
+ *     renders as a quiet, non-interactive label that says
+ *     "To be added before launch" / "To be configured before
+ *     launch" — never the literal "TODO_PHONE" string. Visitors
+ *     never see scaffolding text; the operations team still sees
+ *     which channels are pending in the launch-readiness footer.
+ *
+ * Replacing values for launch:
+ *   1. Set `NEXT_PUBLIC_CONTACT_PHONE` in Vercel env settings
+ *   2. Set `NEXT_PUBLIC_CONTACT_EMAIL`
+ *   3. Set `NEXT_PUBLIC_WHATSAPP_LINK` (and / or `NEXT_PUBLIC_WHATSAPP_NUMBER`)
+ *   4. Redeploy. Each channel that has a real value flips to live;
+ *      remaining placeholders stay as "To be added before launch"
+ *      until their env var is set.
  */
+type Channel = {
+  code: "WHATSAPP" | "EMAIL" | "PHONE";
+  label: string;
+  /** The raw value (env var content or `TODO_*` fallback). */
+  rawValue: string;
+  /** Friendly fallback shown when `rawValue` is still a placeholder. */
+  fallbackLabel: string;
+  /** Computed href when configured. */
+  href: string;
+  external: boolean;
+  Icon: () => React.ReactElement;
+};
+
+const channels: Channel[] = [
+  {
+    code: "WHATSAPP",
+    label: "WhatsApp",
+    rawValue: TODO_WHATSAPP_LINK,
+    fallbackLabel: "To be configured before launch",
+    href: whatsappHref(),
+    external: true,
+    Icon: WhatsAppIcon,
+  },
+  {
+    code: "EMAIL",
+    label: "Email",
+    rawValue: TODO_EMAIL,
+    fallbackLabel: "To be added before launch",
+    href: emailHref(),
+    external: false,
+    Icon: EmailIcon,
+  },
+  {
+    code: "PHONE",
+    label: "Phone",
+    rawValue: TODO_PHONE,
+    fallbackLabel: "To be added before launch",
+    href: phoneHref(),
+    external: false,
+    Icon: PhoneIcon,
+  },
+];
+
 export function ContactDirectPanel() {
-  const channels = [
-    {
-      code: "WHATSAPP" as const,
-      label: "WhatsApp",
-      value: TODO_WHATSAPP_LINK,
-      href: whatsappHref(),
-      icon: WhatsAppIcon,
-      external: true,
-    },
-    {
-      code: "EMAIL" as const,
-      label: "Email",
-      value: TODO_EMAIL,
-      href: emailHref(),
-      icon: EmailIcon,
-      external: false,
-    },
-    {
-      code: "PHONE" as const,
-      label: "Phone",
-      value: TODO_PHONE,
-      href: phoneHref(),
-      icon: PhoneIcon,
-      external: false,
-    },
-  ];
+  // How many channels are pending real values? Surfaced in the
+  // panel footnote so launch readiness is visible at a glance.
+  const pendingCount = channels.filter(
+    (c) => !isContactConfigured(c.rawValue)
+  ).length;
 
   return (
     <aside
@@ -79,42 +114,15 @@ export function ContactDirectPanel() {
         responds on any of the channels below.
       </p>
 
-      {/* Channels list */}
+      {/* Channels list — one row per channel. Configured channels are
+          rendered as clickable <a>; unconfigured channels render as
+          a quiet labelled <div>. */}
       <ul className="mt-6 space-y-3">
         {channels.map((c, i) => (
           <Fragment key={c.code}>
             {i > 0 && " "}
             <li>
-              <a
-                href={c.href}
-                data-action={`CONTACT_${c.code}`}
-                target={c.external ? "_blank" : undefined}
-                rel={c.external ? "noopener noreferrer" : undefined}
-                className="group/channel flex items-center gap-4 rounded-[14px] border border-line/70 bg-warmwhite/85 p-4 transition-all duration-500 ease-elegant hover:-translate-y-px hover:border-graphite/30"
-              >
-                <span
-                  aria-hidden
-                  className="inline-flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-line/80 bg-warmwhite/90 text-graphite/70 transition-colors duration-500 ease-elegant group-hover/channel:text-graphite"
-                >
-                  <c.icon />
-                </span>
-                {" "}
-                <div className="min-w-0 flex-1">
-                  <div className="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-muted">
-                    {c.label}
-                  </div>
-                  <div className="mt-0.5 truncate text-[0.95rem] font-medium text-graphite/90 transition-colors duration-500 ease-elegant group-hover/channel:text-graphite">
-                    {c.value}
-                  </div>
-                </div>
-                {" "}
-                <span
-                  aria-hidden
-                  className="flex-shrink-0 text-graphite/40 transition-colors duration-500 ease-elegant group-hover/channel:text-graphite/80"
-                >
-                  <Arrow />
-                </span>
-              </a>
+              <ChannelRow channel={c} />
             </li>
           </Fragment>
         ))}
@@ -148,11 +156,92 @@ export function ContactDirectPanel() {
         </p>
       </div>
 
-      {/* Operational note — frontend-only placeholder reminder */}
-      <p className="mt-5 font-mono text-[0.6rem] uppercase tracking-[0.14em] text-muted">
-        Placeholders pending operational sign-off
-      </p>
+      {/* Operational footnote — surfaces only when at least one
+          channel is still pending. Once all three env vars are set,
+          this footnote disappears. */}
+      {pendingCount > 0 && (
+        <p className="mt-5 font-mono text-[0.6rem] uppercase tracking-[0.14em] text-muted">
+          {pendingCount} of {channels.length} channels pending
+          operational sign-off
+        </p>
+      )}
     </aside>
+  );
+}
+
+/**
+ * One channel row — adapts its rendering based on whether the
+ * channel is configured. Configured rows are clickable <a> elements
+ * with the real value visible. Unconfigured rows are quiet,
+ * non-interactive labels with reduced opacity.
+ */
+function ChannelRow({ channel }: { channel: Channel }) {
+  const configured = isContactConfigured(channel.rawValue);
+  const value = configured ? channel.rawValue : channel.fallbackLabel;
+  const Icon = channel.Icon;
+
+  if (configured) {
+    return (
+      <a
+        href={channel.href}
+        data-action={`CONTACT_${channel.code}`}
+        target={channel.external ? "_blank" : undefined}
+        rel={channel.external ? "noopener noreferrer" : undefined}
+        className="group/channel flex items-center gap-4 rounded-[14px] border border-line/70 bg-warmwhite/85 p-4 transition-all duration-500 ease-elegant hover:-translate-y-px hover:border-graphite/30"
+      >
+        <span
+          aria-hidden
+          className="inline-flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-line/80 bg-warmwhite/90 text-graphite/70 transition-colors duration-500 ease-elegant group-hover/channel:text-graphite"
+        >
+          <Icon />
+        </span>
+        {" "}
+        <div className="min-w-0 flex-1">
+          <div className="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-muted">
+            {channel.label}
+          </div>
+          <div className="mt-0.5 truncate text-[0.95rem] font-medium text-graphite/90 transition-colors duration-500 ease-elegant group-hover/channel:text-graphite">
+            {value}
+          </div>
+        </div>
+        {" "}
+        <span
+          aria-hidden
+          className="flex-shrink-0 text-graphite/40 transition-colors duration-500 ease-elegant group-hover/channel:text-graphite/80"
+        >
+          <Arrow />
+        </span>
+      </a>
+    );
+  }
+
+  // Unconfigured row — non-interactive. Reduced opacity so the
+  // pending state is visible without being alarming. No `<a>` tag,
+  // no hover lift, no arrow icon. Carries `aria-disabled="true"`
+  // for screen readers.
+  return (
+    <div
+      role="presentation"
+      aria-disabled="true"
+      data-action={`CONTACT_${channel.code}_PENDING`}
+      className="flex items-center gap-4 rounded-[14px] border border-dashed border-line/70 bg-warmwhite/60 p-4 opacity-75"
+    >
+      <span
+        aria-hidden
+        className="inline-flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-line/80 bg-warmwhite/90 text-graphite/55"
+      >
+        <Icon />
+      </span>
+      {" "}
+      <div className="min-w-0 flex-1">
+        <div className="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-muted">
+          {channel.label}
+        </div>
+        <div className="mt-0.5 text-[0.92rem] italic text-graphite/55">
+          {value}
+        </div>
+      </div>
+    </div>
   );
 }
 

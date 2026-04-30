@@ -149,27 +149,57 @@ export const initialContactSubmission: ContactSubmission = {
   uploadedAttachmentNames: [],
 };
 
-/* ── Direct-contact placeholders ─────────────────────────────────── */
+/* ── Direct-contact placeholders (re-exported from omegaConfig) ──── */
 
 /**
- * Operational contact values. These are intentional placeholders —
- * nothing here is invented. The page renders them inline so the
- * deploy team can search-replace the constants once production
- * values are configured. Do not invent real values here.
+ * Operational contact values. These re-export the env-driven
+ * constants from `lib/omegaConfig.ts` — the single source of truth
+ * for all placeholder/contact data on the site.
+ *
+ * Earlier versions of this module hardcoded their own literal
+ * "TODO_PHONE" / "TODO_EMAIL" / "TODO_WHATSAPP_LINK" strings, which
+ * bypassed the env-var resolution in omegaConfig. Re-exporting keeps
+ * existing `import { TODO_* } from "@/lib/contact"` callers working
+ * while ensuring they get the env-driven values.
  */
-export const TODO_PHONE = "TODO_PHONE";
-export const TODO_EMAIL = "TODO_EMAIL";
-export const TODO_WHATSAPP_LINK = "TODO_WHATSAPP_LINK";
+export {
+  TODO_PHONE,
+  TODO_EMAIL,
+  TODO_WHATSAPP_LINK,
+  TODO_WHATSAPP_NUMBER,
+} from "./omegaConfig";
+
+import {
+  TODO_PHONE as _TODO_PHONE,
+  TODO_EMAIL as _TODO_EMAIL,
+  TODO_WHATSAPP_LINK as _TODO_WHATSAPP_LINK,
+} from "./omegaConfig";
 
 /**
  * Convenience builders so every consumer renders the same href
  * structure. The mailto:/tel: prefixes mean a future swap to real
  * values doesn't require touching the rendering components.
  */
-export const phoneHref = (phone: string = TODO_PHONE) => `tel:${phone}`;
-export const emailHref = (email: string = TODO_EMAIL) => `mailto:${email}`;
+export const phoneHref = (phone: string = _TODO_PHONE) => `tel:${phone}`;
+export const emailHref = (email: string = _TODO_EMAIL) => `mailto:${email}`;
 /** WhatsApp link — frontend-only; the placeholder href is intentionally non-functional. */
-export const whatsappHref = (link: string = TODO_WHATSAPP_LINK) => link;
+export const whatsappHref = (link: string = _TODO_WHATSAPP_LINK) => link;
+
+/* ── Configuration detection ─────────────────────────────────────── */
+
+/**
+ * Returns `true` when a contact value has been swapped from its
+ * placeholder string to a real configured value (i.e. the env var
+ * has been set, or the operations team has substituted the
+ * fallback). Components use this to gracefully render
+ * "To be added before launch" labels for unconfigured channels.
+ */
+export function isContactConfigured(value: string): boolean {
+  if (!value) return false;
+  // Reject values that still match the literal TODO_* placeholder.
+  if (value.startsWith("TODO_")) return false;
+  return true;
+}
 
 /* ── Page-level constants ────────────────────────────────────────── */
 

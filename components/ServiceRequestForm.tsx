@@ -12,6 +12,7 @@ import {
 import {
   buildLead,
   buildWhatsAppLink,
+  isWhatsAppConfigured,
   submitLead,
   validateLead,
   type Lead,
@@ -520,8 +521,16 @@ export function LeadSuccessPanel({
   onAnother?: () => void;
   sourceRoute: string;
 }) {
+  // Only surface the "Continue on WhatsApp" affordance when:
+  //   1. The user actually picked WhatsApp as their preferred channel
+  //   2. The WhatsApp env vars are configured to real values
+  // If WhatsApp isn't configured yet, the button is hidden entirely
+  // — no broken `wa.me/TODO_WHATSAPP_NUMBER` URLs ever reach a real
+  // user. The form's success message still mentions WhatsApp as the
+  // channel they picked, so they know it's coming via that route
+  // even without the inline shortcut.
   const whatsappLink =
-    lead.preferredContactMethod === "WhatsApp"
+    lead.preferredContactMethod === "WhatsApp" && isWhatsAppConfigured()
       ? buildWhatsAppLink(lead)
       : null;
 

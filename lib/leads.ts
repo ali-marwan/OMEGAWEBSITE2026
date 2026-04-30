@@ -347,6 +347,25 @@ export { TODO_WHATSAPP_NUMBER, TODO_WHATSAPP_LINK };
 export const OMEGA_WHATSAPP_NUMBER = TODO_WHATSAPP_NUMBER;
 
 /**
+ * Returns `true` when the WhatsApp channel has a real configured
+ * value (env-set number or branded link override). Components use
+ * this to gate "Continue on WhatsApp" affordances — when WhatsApp
+ * isn't configured, the button is hidden entirely so users never
+ * click into a broken `wa.me/TODO_WHATSAPP_NUMBER` URL.
+ *
+ * Configuration sources (any one is enough):
+ *   - `NEXT_PUBLIC_WHATSAPP_NUMBER` is set to a real E.164 number
+ *   - `NEXT_PUBLIC_WHATSAPP_LINK` is set to a real URL override
+ */
+export function isWhatsAppConfigured(): boolean {
+  const numberConfigured =
+    !!TODO_WHATSAPP_NUMBER && TODO_WHATSAPP_NUMBER !== "TODO_WHATSAPP_NUMBER";
+  const linkConfigured =
+    !!TODO_WHATSAPP_LINK && TODO_WHATSAPP_LINK !== "TODO_WHATSAPP_LINK";
+  return numberConfigured || linkConfigured;
+}
+
+/**
  * Build a `wa.me` deep link with the lead pre-filled in the message
  * body. The pre-fill includes:
  *
@@ -360,7 +379,8 @@ export const OMEGA_WHATSAPP_NUMBER = TODO_WHATSAPP_NUMBER;
  * Returns a string usable as an `<a href>`. If the WhatsApp number
  * is still the placeholder, the URL is intentionally non-functional
  * — the visible href surfaces the placeholder so the QA team sees
- * the gap.
+ * the gap. Callers should use `isWhatsAppConfigured()` to gate
+ * rendering of WhatsApp-specific UI before invoking this.
  *
  * If `TODO_WHATSAPP_LINK` has been swapped to a real link override
  * (e.g. a branded short-link), that takes priority over the wa.me
