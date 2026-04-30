@@ -1,21 +1,29 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { Fragment } from "react";
-import { ease, viewportOnce } from "@/lib/motion";
 import type { Service } from "@/lib/services";
+
+/**
+ * Per-card display state driven by the active filter:
+ *   - "normal":   filter === "All"; baseline appearance
+ *   - "featured": a category is selected and this card matches; gets
+ *                 a subtly stronger border + soft omega ring
+ *   - "dimmed":   a category is selected and this card doesn't match;
+ *                 reduced to ~30% opacity, hover lift suppressed
+ */
+export type ServiceCardState = "normal" | "featured" | "dimmed";
 
 type Props = {
   service: Service;
-  /** Stagger index in the parent grid (used to delay the entrance). */
-  index?: number;
+  state?: ServiceCardState;
+  className?: string;
 };
 
 /**
  * Premium Service Hub card.
  *
- * Visual structure (top → bottom):
+ * Composition (top → bottom):
  *
  *   ●  01 / Property Care                               view →
  *   ──────────
@@ -39,19 +47,30 @@ type Props = {
  *
  *   View Property Care                                       →
  *
- * Hover state: lift via `.module-card:hover`, border tightens, the
+ * Hover: lift via `.module-card:hover`, border tightens, the
  * orange status dot saturates, the accent line grows, the title
- * shifts +0.5 px right, and the arrow disc tints orange. All
- * transitions on the shared 500 ms `ease-elegant` curve.
+ * shifts +0.5 px, and the arrow disc tints orange. Dimmed cards
+ * suppress the lift via `hover:!translate-y-0` so they stay
+ * passive in a filtered view but remain clickable.
  */
-export function ServiceHubCard({ service, index = 0 }: Props) {
+export function ServiceHubCard({
+  service,
+  state = "normal",
+  className = "",
+}: Props) {
+  const stateClasses =
+    state === "dimmed"
+      ? // Quiet but still visible — non-matching card in a filtered view.
+        "opacity-30 hover:opacity-55 hover:!translate-y-0 border-line/85"
+      : state === "featured"
+      ? // Active match — slightly stronger border + soft omega ring.
+        "border-graphite/30 ring-1 ring-omega/15 hover:border-graphite/40"
+      : // Default — base border + normal hover.
+        "border-line/85 hover:border-graphite/25";
+
   return (
-    <motion.article
-      initial={{ opacity: 0, y: 18 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={viewportOnce}
-      transition={{ duration: 0.85, delay: 0.08 * index, ease }}
-      className="group module-card relative flex h-full flex-col overflow-hidden rounded-[20px] border border-line/85 bg-warmwhite p-8 md:p-10 hover:border-graphite/25"
+    <article
+      className={`group module-card relative flex h-full flex-col overflow-hidden rounded-[20px] border bg-warmwhite p-7 md:p-9 transition-[opacity,border-color,box-shadow,transform] duration-500 ease-elegant ${stateClasses} ${className}`}
     >
       {/* Architectural corner ticks */}
       <span
@@ -71,8 +90,7 @@ export function ServiceHubCard({ service, index = 0 }: Props) {
         className="pointer-events-none absolute bottom-0 right-0 h-8 w-px bg-graphite/15"
       />
 
-      {/* Top row: indicator dot + index + category label, plus a
-          quiet "view →" affordance that brightens on hover. */}
+      {/* Top row */}
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
           <span
@@ -101,17 +119,17 @@ export function ServiceHubCard({ service, index = 0 }: Props) {
       />
 
       {/* Title */}
-      <h3 className="mt-6 text-[1.35rem] md:text-[1.5rem] font-semibold leading-tight tracking-tight text-graphite transition-transform duration-500 ease-elegant group-hover:translate-x-0.5">
+      <h3 className="mt-5 text-[1.25rem] md:text-[1.4rem] font-semibold leading-tight tracking-tight text-graphite transition-transform duration-500 ease-elegant group-hover:translate-x-0.5">
         {service.title}
       </h3>
 
-      {/* Descriptor (mono, uppercase, muted) */}
+      {/* Descriptor */}
       <p className="mt-2 font-mono text-[0.7rem] uppercase tracking-[0.12em] text-muted/90">
         {service.descriptor}
       </p>
 
       {/* Description */}
-      <p className="mt-4 text-[0.95rem] leading-[1.7] text-muted">
+      <p className="mt-4 text-[0.92rem] leading-[1.65] text-muted">
         {service.description}
       </p>
 
@@ -121,7 +139,7 @@ export function ServiceHubCard({ service, index = 0 }: Props) {
           Use Cases
         </div>
         {" "}
-        <ul className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5 text-[0.88rem] text-graphite/80">
+        <ul className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5 text-[0.86rem] text-graphite/80">
           {service.useCases.map((c, i) => (
             <Fragment key={c}>
               {i > 0 && " "}
@@ -139,18 +157,15 @@ export function ServiceHubCard({ service, index = 0 }: Props) {
       </div>
 
       {/* Hairline */}
-      <div className="mt-7 h-px w-full bg-line" />
+      <div className="mt-6 h-px w-full bg-line" />
 
-      {/* Available actions — informational mono-text row, not a row of
-          buttons (kept minimal so the primary CTA stays dominant).
-          The list comes from service.availableActions so a future
-          mobile app and the web both render the same flow names. */}
-      <div className="mt-5">
+      {/* Available actions — informational mono-text row */}
+      <div className="mt-4">
         <div className="font-mono text-[0.66rem] uppercase tracking-[0.14em] text-graphite/70">
           Available Actions
         </div>
         {" "}
-        <p className="mt-2 font-mono text-[0.72rem] uppercase tracking-[0.1em] text-muted">
+        <p className="mt-2 font-mono text-[0.7rem] uppercase tracking-[0.1em] text-muted">
           {service.availableActions.map((a, i) => (
             <Fragment key={a.code}>
               {i > 0 && " · "}
@@ -160,18 +175,17 @@ export function ServiceHubCard({ service, index = 0 }: Props) {
         </p>
       </div>
 
-      {/* Spacer so the primary CTA always sits at the bottom of the
-          card regardless of how long the description / use cases run. */}
+      {/* Spacer pushes the primary CTA to the bottom of the card */}
       <div className="flex-1" />
 
       {/* Hairline above the primary CTA */}
-      <div className="mt-7 h-px w-full bg-line" />
+      <div className="mt-6 h-px w-full bg-line" />
 
       {/* Primary CTA */}
       <Link
         href={service.primaryCta.href}
         data-action={service.appActionType}
-        className="mt-5 inline-flex items-center justify-between gap-3 text-[0.93rem] font-medium text-graphite transition-colors duration-500 ease-elegant group-hover:text-omega"
+        className="mt-4 inline-flex items-center justify-between gap-3 text-[0.93rem] font-medium text-graphite transition-colors duration-500 ease-elegant group-hover:text-omega"
       >
         <span>{service.primaryCta.label}</span>
         {" "}
@@ -193,6 +207,6 @@ export function ServiceHubCard({ service, index = 0 }: Props) {
           </svg>
         </span>
       </Link>
-    </motion.article>
+    </article>
   );
 }

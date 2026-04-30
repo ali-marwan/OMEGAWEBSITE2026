@@ -23,6 +23,16 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Anchored sections must clear the fixed header when navigated via
+   #anchor links. The header pill plus its top margin sits ~70-80 px
+   from the page edge; 6 rem (~96 px) gives a comfortable buffer so
+   section eyebrows / titles always land below the chrome. Applies
+   to every element with an id, so we never have to remember to add
+   `scroll-mt-X` per section. */
+[id] {
+  scroll-margin-top: 6rem;
+}
+
 ::selection {
   background: rgba(242, 106, 27, 0.18);
   color: var(--graphite);

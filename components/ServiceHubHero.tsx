@@ -19,7 +19,7 @@ export function ServiceHubHero() {
   return (
     <section
       id="top"
-      className="relative isolate overflow-hidden bg-warmwhite pt-32 pb-24 md:pt-40 md:pb-28"
+      className="relative isolate overflow-hidden bg-warmwhite pt-28 pb-14 md:pt-32 md:pb-16"
     >
       {/* Architectural micro-grid behind the hero */}
       <div className="pointer-events-none absolute inset-0 arch-grid opacity-70" />
@@ -80,7 +80,7 @@ export function ServiceHubHero() {
             delay: heroTimeline.headlineLine1,
             ease,
           }}
-          className="mt-12 md:mt-20 max-w-3xl font-sans font-bold text-[2.6rem] md:text-[3.6rem] lg:text-[4.2rem] leading-[1.04] tracking-tightest text-graphite"
+          className="mt-8 md:mt-10 max-w-3xl font-sans font-bold text-[2.4rem] md:text-[3.2rem] lg:text-[3.8rem] leading-[1.04] tracking-tightest text-graphite"
         >
           OMEGA Service Hub.
         </motion.h1>
@@ -94,7 +94,7 @@ export function ServiceHubHero() {
             delay: heroTimeline.paragraph,
             ease,
           }}
-          className="mt-7 max-w-2xl text-base md:text-lg leading-[1.75] text-muted"
+          className="mt-6 max-w-2xl text-base md:text-lg leading-[1.75] text-muted"
         >
           Browse structured property services, understand what you
           need, and move into the right OMEGA path.
@@ -113,7 +113,7 @@ export function ServiceHubHero() {
               },
             },
           }}
-          className="mt-12 flex flex-wrap items-stretch gap-4"
+          className="mt-9 flex flex-wrap items-stretch gap-4"
         >
           <motion.div
             variants={{

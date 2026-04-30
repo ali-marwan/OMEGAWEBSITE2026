@@ -44,7 +44,11 @@ export function Footer() {
         }}
       />
 
-      <div className="relative mx-auto max-w-page px-6 lg:px-10 py-20 md:py-24">
+      {/* Bottom padding (`pb-32`) keeps the copyright row clear of
+          the floating dock — the dock sits ~80 px from the page edge
+          (24 px offset + ~50 px height + soft shadow). 8 rem of
+          footer bottom padding leaves a comfortable buffer above it. */}
+      <div className="relative mx-auto max-w-page px-6 lg:px-10 pt-16 pb-32 md:pt-20 md:pb-32">
         {/* Top architectural rule — sets the closing layer apart from
             the ClosingPaths section without shouting. */}
         <div className="h-px arch-rule" />

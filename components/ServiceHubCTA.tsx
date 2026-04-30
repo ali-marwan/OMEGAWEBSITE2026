@@ -50,7 +50,7 @@ export function ServiceHubCTA() {
   return (
     <section
       id="cta"
-      className="relative overflow-hidden bg-warmwhite py-28 md:py-36"
+      className="relative overflow-hidden bg-warmwhite pt-16 pb-20 md:pt-20 md:pb-24"
     >
       {/* Soft warm radial — gentle ambient closer */}
       <div
@@ -110,7 +110,7 @@ export function ServiceHubCTA() {
             hidden: {},
             visible: { transition: { staggerChildren: 0.08 } },
           }}
-          className="mt-12 flex flex-wrap items-stretch gap-3 md:gap-4"
+          className="mt-9 flex flex-wrap items-stretch gap-3 md:gap-4"
         >
           {actions.map((action, i) => (
             <Fragment key={action.code}>
@@ -144,7 +144,7 @@ export function ServiceHubCTA() {
         </motion.div>
 
         {/* Bottom architectural rule */}
-        <div className="mt-20 h-px arch-rule" />
+        <div className="mt-16 h-px arch-rule" />
       </div>
     </section>
   );

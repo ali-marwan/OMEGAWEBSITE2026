@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Reveal } from "./Reveal";
 import { ServiceFilterBar } from "./ServiceFilterBar";
 import { ServiceHubGrid } from "./ServiceHubGrid";
-import { filterServices, type ServiceFilter } from "@/lib/services";
+import { services, type ServiceFilter } from "@/lib/services";
 
 /**
  * Service catalog — the interactive shell that wraps the filter bar
@@ -15,15 +15,19 @@ import { filterServices, type ServiceFilter } from "@/lib/services";
  * (`?category=property-care`) without touching the filter bar or
  * the grid components — both are stateless and just receive
  * `value` / `filter` props.
+ *
+ * The grid always renders all five services regardless of the
+ * filter — non-matching cards are dimmed in place rather than
+ * hidden, so the filter behaves as a "highlight on a system map"
+ * and the viewport never collapses to a single isolated card.
  */
 export function ServiceCatalog() {
   const [filter, setFilter] = useState<ServiceFilter>("All");
-  const visibleCount = filterServices(filter).length;
 
   return (
     <section
       id="catalog"
-      className="relative mx-auto max-w-page px-6 lg:px-10 pt-20 md:pt-28"
+      className="relative mx-auto max-w-page px-6 lg:px-10 pt-12 pb-16 md:pt-16 md:pb-20"
     >
       {/* Section eyebrow */}
       <Reveal>
@@ -38,18 +42,18 @@ export function ServiceCatalog() {
           </div>
           {" "}
           <span className="hidden md:inline">
-            {visibleCount} {visibleCount === 1 ? "Module" : "Modules"} ·{" "}
-            {filter === "All" ? "All Categories" : filter}
+            {services.length} Modules ·{" "}
+            {filter === "All" ? "All Categories" : `${filter} Active`}
           </span>
         </div>
       </Reveal>
 
       {/* Title row */}
-      <div className="mt-8 grid grid-cols-12 items-end gap-x-6 gap-y-6">
+      <div className="mt-7 grid grid-cols-12 items-end gap-x-6 gap-y-6">
         <Reveal
           as="h2"
           delay={0.1}
-          className="col-span-12 lg:col-span-7 text-[2rem] md:text-[2.6rem] leading-[1.06] tracking-tightest text-graphite"
+          className="col-span-12 lg:col-span-7 text-[1.85rem] md:text-[2.4rem] leading-[1.06] tracking-tightest text-graphite"
         >
           <span className="block font-semibold">Browse the system.</span>
           {" "}
@@ -62,19 +66,19 @@ export function ServiceCatalog() {
           delay={0.15}
           className="col-span-12 lg:col-span-5 text-base text-muted leading-[1.75]"
         >
-          Filter by category to narrow the system map. Every module
+          Highlight a category on the system map. Every module
           connects to OMEGA AI Diagnostics, direct service requests,
           or a conversation with the team.
         </Reveal>
       </div>
 
       {/* Filter bar */}
-      <Reveal delay={0.2} className="mt-10">
+      <Reveal delay={0.2} className="mt-8">
         <ServiceFilterBar value={filter} onChange={setFilter} />
       </Reveal>
 
       {/* Card grid */}
-      <div className="mt-10">
+      <div className="mt-8 md:mt-10">
         <ServiceHubGrid filter={filter} />
       </div>
     </section>

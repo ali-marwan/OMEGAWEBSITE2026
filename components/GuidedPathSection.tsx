@@ -64,7 +64,7 @@ export function GuidedPathSection() {
   return (
     <section
       id="guided"
-      className="relative overflow-hidden bg-warmwhite py-28 md:py-36"
+      className="relative overflow-hidden bg-warmwhite pt-16 pb-20 md:pt-20 md:pb-24"
     >
       {/* Subtle architectural grid */}
       <div
@@ -127,7 +127,7 @@ export function GuidedPathSection() {
           whileInView="visible"
           viewport={viewportOnce}
           variants={cardContainer}
-          className="mt-14 grid grid-cols-1 gap-6 md:gap-7 md:grid-cols-3"
+          className="mt-10 grid grid-cols-1 gap-6 md:gap-7 md:grid-cols-3"
         >
           {guidedPaths.map((p, i) => (
             <Fragment key={p.code}>
@@ -138,7 +138,7 @@ export function GuidedPathSection() {
         </motion.div>
 
         {/* Bottom architectural rule */}
-        <div className="mt-20 h-px arch-rule" />
+        <div className="mt-16 h-px arch-rule" />
       </div>
     </section>
   );
