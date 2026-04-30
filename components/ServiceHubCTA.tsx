@@ -17,7 +17,7 @@ const actions: Action[] = [
   {
     code: "START_DIAGNOSIS",
     label: "Start Diagnosis",
-    href: "/#ai",
+    href: "/diagnosis",
     variant: "primary",
   },
   {

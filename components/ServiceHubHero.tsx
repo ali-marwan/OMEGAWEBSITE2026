@@ -126,7 +126,8 @@ export function ServiceHubHero() {
             }}
           >
             <Link
-              href="/#ai"
+              href="/diagnosis"
+              data-action="START_DIAGNOSIS"
               className="inline-flex items-center justify-center gap-2 rounded-full bg-graphite px-7 py-3.5 text-sm font-medium text-warmwhite transition-all duration-500 ease-elegant hover:-translate-y-px hover:bg-graphite/90"
             >
               Start Diagnosis

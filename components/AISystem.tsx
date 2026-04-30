@@ -160,13 +160,15 @@ export function AISystem() {
             ))}
 
             {/*
-              Routes to the Property Care detail page's Diagnosis
-              action-centre tab. The previous `#diagnose` target had
-              no matching id anywhere in the codebase, so the click
-              just scrolled the user back to the top of the page.
+              Routes to the dedicated `/diagnosis` page — the OMEGA
+              AI Property Diagnostics module. Replaces the previous
+              link to a service-detail action-centre tab so this CTA
+              opens the full guided diagnostic experience instead of
+              a service-scoped quick form.
             */}
             <motion.a
-              href="/service-hub/property-care-system#diagnosis"
+              href="/diagnosis"
+              data-action="START_DIAGNOSIS"
               variants={stepItem}
               className="group mt-1.5 inline-flex items-center justify-between rounded-full bg-omega px-6 py-4 text-sm font-medium text-warmwhite transition-all duration-500 ease-elegant hover:-translate-y-px hover:bg-omega/90"
             >

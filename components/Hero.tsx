@@ -277,7 +277,8 @@ export function Hero() {
                     transition: { duration: 0.7, ease },
                   },
                 }}
-                href="#ai"
+                href="/diagnosis"
+                data-action="START_DIAGNOSIS"
                 className="inline-flex items-center justify-center gap-2 rounded-full border border-graphite/15 bg-transparent px-7 py-3.5 text-sm font-medium text-graphite hover:border-graphite/40 transition-colors duration-500 ease-elegant"
               >
                 Start Diagnosis

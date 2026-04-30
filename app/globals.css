@@ -21,6 +21,14 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  /* Defensive guard: any wide child element (long mono captions,
+     accidental margins, motion-driven transforms) should never push
+     a horizontal scrollbar onto the page. `overflow-x: clip` is
+     supported across modern browsers and — unlike `hidden` — does
+     not establish a containing block for `position: fixed` children
+     (so the floating dock + sticky header still anchor to the
+     viewport correctly). */
+  overflow-x: clip;
 }
 
 /* Smooth scroll for in-page anchor jumps. The detail page's hero +
@@ -100,6 +108,20 @@ html {
     rgba(216, 207, 194, 0.9) 82%,
     transparent 100%
   );
+}
+
+/* Action Centre tab strip on mobile uses overflow-x scrolling to
+   keep the four tabs on a single row even on a 360 px viewport.
+   These two rules hide the native scrollbar so the row reads as a
+   chip carousel rather than a scrolling box — touch users can still
+   swipe horizontally; pointer users see the tabs settle into place
+   via CSS `snap-x`. */
+.action-tab-scroller {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* old Edge / IE */
+}
+.action-tab-scroller::-webkit-scrollbar {
+  display: none; /* Chrome / Safari */
 }
 
 .tick {

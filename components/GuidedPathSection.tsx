@@ -28,7 +28,7 @@ const guidedPaths: GuidedPath[] = [
     question: "I have an urgent issue.",
     route: "Start Diagnosis · Home Services",
     cta: "Start Diagnosis",
-    href: "/#ai",
+    href: "/diagnosis",
   },
   {
     code: "02",
@@ -117,7 +117,8 @@ export function GuidedPathSection() {
         {/* Lead diagnosis CTA */}
         <Reveal delay={0.2} className="mt-8">
           <Link
-            href="/#ai"
+            href="/diagnosis"
+            data-action="START_DIAGNOSIS"
             className="inline-flex items-center justify-center gap-2 rounded-full bg-graphite px-7 py-3.5 text-sm font-medium text-warmwhite transition-all duration-500 ease-elegant hover:-translate-y-px hover:bg-graphite/90"
           >
             Start Diagnosis

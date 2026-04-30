@@ -210,11 +210,22 @@ export function EmbeddedActionCenter({ service }: { service: Service }) {
           </p>
         </div>
 
-        {/* ── Tab strip ─────────────────────────────────────────── */}
+        {/*
+          Tab strip.
+
+          - Mobile (< md): the tabs sit on a single row that scrolls
+            horizontally. `flex-nowrap` + `overflow-x-auto` +
+            `snap-x snap-mandatory` give a calm chip-scroller, and
+            `-mx-6 px-6` lets the row bleed to the viewport edges so
+            partially-visible tabs hint at scroll. The narrow CSS
+            class `.action-tab-scroller` (defined in globals.css)
+            hides the scrollbar on macOS / iOS.
+          - md and up: tabs wrap as before, no scroll.
+        */}
         <div
           role="tablist"
           aria-label="Action Centre tabs"
-          className="mt-7 flex flex-wrap items-center gap-2 md:gap-3"
+          className="action-tab-scroller mt-7 -mx-6 lg:-mx-10 flex items-center gap-2 overflow-x-auto px-6 lg:px-10 snap-x snap-mandatory md:mx-0 md:flex-wrap md:overflow-visible md:px-0 md:snap-none md:gap-3"
         >
           {tabs.map((tab, i) => {
             const isActive = activeTab === tab.key;
@@ -228,7 +239,7 @@ export function EmbeddedActionCenter({ service }: { service: Service }) {
                   aria-controls={`panel-${tab.key}`}
                   data-action={tab.code}
                   onClick={() => onPickTab(tab.key)}
-                  className={`group/tab inline-flex items-center gap-2.5 rounded-full border px-4 py-2.5 text-[0.82rem] font-medium transition-all duration-500 ease-elegant hover:-translate-y-px ${
+                  className={`group/tab inline-flex flex-shrink-0 snap-start items-center gap-2.5 rounded-full border px-4 py-2.5 text-[0.82rem] font-medium transition-all duration-500 ease-elegant hover:-translate-y-px md:flex-shrink ${
                     isActive
                       ? "border-graphite/90 bg-graphite text-warmwhite shadow-[0_1px_0_rgba(30,30,30,0.04),0_14px_28px_-22px_rgba(30,30,30,0.32)]"
                       : "border-line/80 bg-warmwhite/70 text-graphite/80 hover:border-graphite/30 hover:text-graphite"

@@ -31,7 +31,7 @@ const paths: Path[] = [
     title: "OMEGA AI Property Diagnostics",
     description: "For understanding issues before deciding.",
     cta: "Start Diagnosis",
-    href: "#ai",
+    href: "/diagnosis",
   },
   {
     code: "03",
