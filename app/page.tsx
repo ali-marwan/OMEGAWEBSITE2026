@@ -3,6 +3,7 @@ import { Hero } from "@/components/Hero";
 import { SystemBand } from "@/components/SystemBand";
 import { ServicePreview } from "@/components/ServicePreview";
 import { AISystem } from "@/components/AISystem";
+import { ClosingPaths } from "@/components/ClosingPaths";
 import { Footer } from "@/components/Footer";
 import { FloatingDock } from "@/components/FloatingDock";
 import { HeroJourney } from "@/components/HeroJourney";
@@ -29,6 +30,12 @@ export default function HomePage() {
       <SystemBand />
       <ServicePreview />
       <AISystem />
+      {/* Closing-CTA section — three premium "next steps" (Service
+          Hub · AI Diagnostics · Speak to Our Team) so the page
+          resolves into a clear next action before the footer rather
+          than dropping in abruptly. Section anchor is `#hub`, which
+          matches the existing nav-CTA and floating-dock targets. */}
+      <ClosingPaths />
       <Footer />
       <FloatingDock />
     </main>
