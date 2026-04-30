@@ -168,10 +168,12 @@ export const OmegaLogo3D = forwardRef<OmegaLogo3DHandle, unknown>(
       }
 
       // Apply explode: each mesh travels along its outward vector by
-      // a magnitude proportional to the explode scalar. Calibrated so
-      // even at full explode the parts stay clearly related to the
-      // original logo silhouette — not a particle blast.
-      const explodeMag = explodeRef.current * 0.35;
+      // a refined magnitude. Calibrated to read as the logo "opening"
+      // to reveal the system rather than fracturing — at full explode
+      // the parts have only moved ~0.18 world units (≈ 7 % of the
+      // model's bounding diagonal) so the silhouette stays clearly
+      // recognisable. No chaotic scatter, no debris.
+      const explodeMag = explodeRef.current * 0.18;
       for (const { mesh, base, direction } of parts) {
         mesh.position.x = base.x + direction.x * explodeMag;
         mesh.position.y = base.y + direction.y * explodeMag;
