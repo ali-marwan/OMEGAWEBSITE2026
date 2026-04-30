@@ -9,33 +9,30 @@ import {
 } from "framer-motion";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { OmegaMark } from "./OmegaMark";
-import { SplineScene } from "./SplineScene";
 import { ease, easeAtmospheric, heroTimeline } from "@/lib/motion";
-
-const SPLINE_SCENE =
-  "https://prod.spline.design/cjB0KO5ofNFuzIAU/scene.splinecode";
 
 /**
  * Page-load timeline (orchestrated, total < 1.5s):
- *   eyebrow      → 0.00s
- *   headline /1  → 0.10s
- *   headline /2  → 0.22s
- *   paragraph    → 0.40s
- *   CTA group    → 0.58s (children stagger 0.08s)
- *   Spline stage → 0.70s (after text settles)
+ *   eyebrow       → 0.00s
+ *   headline /1   → 0.10s
+ *   headline /2   → 0.22s
+ *   paragraph     → 0.40s
+ *   CTA group     → 0.58s (children stagger 0.08s)
+ *   Logo stage    → 0.70s (after text settles)
  *
- * Scroll behavior:
- *   - On lg+ (≥1024px) the Spline is owned by the global
- *     <SplineJourney> overlay rendered in `app/page.tsx`. That overlay
- *     pins the logo across Hero → Operating Principles → start of the
- *     Service System. Inside Hero we just reserve the grid slot so the
- *     left/right column ratio stays intact.
- *   - On md to <lg (tablet) the Spline renders inline with a soft
- *     entrance + continuous float, no scroll-driven movement.
- *   - On <md (mobile) we render a static OmegaMark fallback.
+ * 3D logo behavior:
+ *   - On lg+ (≥1024px) the GLB-driven logo is owned by the global
+ *     <HeroJourney> overlay rendered in `app/page.tsx`. That overlay
+ *     pins the logo via GSAP ScrollTrigger across Hero → Operating
+ *     Principles → start of the Service System. Inside Hero we just
+ *     reserve the grid slot so the left/right column ratio stays
+ *     intact regardless of whether the overlay is mounted.
+ *   - On <lg (tablet + mobile) we render a static OmegaMark fallback —
+ *     no R3F, no GSAP pinning, no GPU work — to keep performance
+ *     stable on devices with weaker hardware.
  *
  * Hero text and the architectural grid still respond to scroll —
- * subtle, never punishing. Those are decoupled from the Spline.
+ * subtle, never punishing. Those are decoupled from the logo overlay.
  */
 export function Hero() {
   const heroRef = useRef<HTMLElement>(null);
@@ -57,7 +54,7 @@ export function Hero() {
    * the architectural grid reveal.
    *
    * The Spline is *not* driven from this signal anymore — its journey
-   * is governed by <SplineJourney> against the #services landmark.
+   * is governed by <HeroJourney> against the #services landmark.
    */
   const { scrollY } = useScroll();
   const heroHeight = useMotionValue(1);
@@ -288,11 +285,11 @@ export function Hero() {
             </motion.div>
           </motion.div>
 
-          {/* Right column — Spline stage.
-              On lg+ this is just a layout placeholder (the global
-              <SplineJourney> overlay renders the actual logo). On md
-              to <lg the inline Spline animates in. On <md a static
-              OmegaMark fallback is shown. */}
+          {/* Right column — logo stage placeholder.
+              On lg+ this is just a sized-but-empty box; the global
+              <HeroJourney> overlay renders the GLB. On <lg we show a
+              static OmegaMark fallback. Either way the box reserves
+              the grid slot so the left column keeps its width. */}
           <motion.div
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -312,7 +309,7 @@ export function Hero() {
                 delay: heroTimeline.splineStage + 1.0,
               }}
             >
-              <SplineStage />
+              <LogoStage />
             </motion.div>
           </motion.div>
         </div>
@@ -340,24 +337,23 @@ function Arrow() {
 }
 
 /**
- * Floating 3D stage. The Spline scene is centered with a soft warm
- * radial glow behind it.
+ * Logo stage placeholder for the hero's right column.
  *
  * Breakpoint behavior:
- *   <md (mobile)   → static OmegaMark fallback (no GPU work)
- *    md to <lg     → inline Spline + halo + circular linework
- *   ≥lg (desktop)  → invisible placeholder. The fixed-position
- *                    <SplineJourney> overlay renders the logo and
- *                    pins it across Hero → Principles → Services.
+ *   <lg  → static OmegaMark fallback (no GPU work, no R3F)
+ *   ≥lg  → invisible placeholder. The fixed-position <HeroJourney>
+ *          overlay renders the GLB-driven logo and animates it via
+ *          GSAP ScrollTrigger across Hero → Principles → Services.
  *
- * In all three modes the outer aspect-square box is the same size, so
- * the hero grid keeps the same left/right column ratio whether the
- * journey overlay is active or not.
+ * The outer aspect-square box is identical in size at every
+ * breakpoint, so the hero's left/right column ratio is preserved
+ * regardless of whether the overlay is active.
  */
-function SplineStage() {
+function LogoStage() {
   return (
     <div className="relative mx-auto aspect-square w-full max-w-[500px]">
-      {/* Layered warm radial — hidden on lg (overlay has its own halo) */}
+      {/* Layered warm radial halo — only visible on <lg (the desktop
+          overlay carries its own halo). */}
       <div
         className="pointer-events-none absolute inset-0 lg:hidden"
         style={{
@@ -366,27 +362,15 @@ function SplineStage() {
         }}
       />
 
-      {/* Faint technical circular linework — md+ only, lg overlay owns it */}
-      <div className="pointer-events-none absolute inset-0 hidden md:block lg:hidden">
-        <div className="absolute left-1/2 top-1/2 h-[58%] w-[58%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-line/30" />
-        <div className="absolute left-1/2 top-1/2 h-[82%] w-[82%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-line/15" />
-      </div>
-
-      {/* Mobile fallback — static OMEGA mark, no GPU work */}
-      <div className="absolute inset-0 flex items-center justify-center md:hidden">
+      {/* Static fallback — OMEGA mark + concentric architectural rings.
+          Used on tablet and mobile (and for reduced-motion users). */}
+      <div className="absolute inset-0 flex items-center justify-center lg:hidden">
         <div className="relative flex items-center justify-center">
           <div className="absolute h-[220px] w-[220px] rounded-full border border-line/60" />
           <div className="absolute h-[300px] w-[300px] rounded-full border border-line/35" />
           <OmegaMark size={96} className="text-graphite/85" />
         </div>
       </div>
-
-      {/* Tablet inline — Spline lives here only between md and lg.
-          On lg+ the global <SplineJourney> overlay handles it instead. */}
-      <SplineScene
-        scene={SPLINE_SCENE}
-        className="absolute inset-0 hidden md:block lg:hidden"
-      />
     </div>
   );
 }
