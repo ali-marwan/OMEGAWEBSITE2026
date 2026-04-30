@@ -88,10 +88,13 @@ export function ServicePreview() {
             delay={0.1}
             className="col-span-12 lg:col-span-8 text-[2rem] md:text-[3rem] leading-[1.06] tracking-tightest text-graphite"
           >
-            {/* Two-line headline — `block` forces a hard line break and
-                `mt-1.5 md:mt-2` gives the second line visible breathing
-                room so the two sentences never read as one run-on. */}
+            {/* Two-line headline. `block` forces the line break, `mt-X`
+                supplies visible spacing, and the literal `{" "}` text
+                node between the two spans guarantees the underlying
+                textContent reads "Five Disciplines. One Property
+                System." instead of joining as "Disciplines.One". */}
             <span className="block font-semibold">Five Disciplines.</span>
+            {" "}
             <span className="mt-1.5 md:mt-2 block font-light text-muted">
               One Property System.
             </span>

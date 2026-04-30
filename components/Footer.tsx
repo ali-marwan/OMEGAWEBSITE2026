@@ -1,5 +1,6 @@
 "use client";
 
+import { Fragment } from "react";
 import { OmegaMark } from "./OmegaMark";
 
 export function Footer() {
@@ -44,8 +45,16 @@ export function Footer() {
           />
         </div>
 
-        <div className="mt-16 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-t border-line/80 pt-6 font-mono text-[0.7rem] uppercase tracking-technical text-muted">
+        {/* Copyright row — two distinct stacked lines on every
+            breakpoint so the strapline never reads as one run-on
+            with the date. The `{" "}` text node between siblings
+            also guarantees a real whitespace character lands in the
+            rendered textContent, so copy-paste / screen readers /
+            DOM-textContent audits never see
+            "UAEOne System for Property Care · …". */}
+        <div className="mt-16 flex flex-col items-start gap-2 border-t border-line/80 pt-6 font-mono text-[0.7rem] uppercase tracking-technical text-muted">
           <span>© 2026 OMEGA · UAE</span>
+          {" "}
           <span>One System for Property Care · Elevated by Engineering</span>
         </div>
       </div>
@@ -67,16 +76,25 @@ function FooterCol({
       <div className="font-mono text-[0.68rem] uppercase tracking-technical text-muted">
         {label}
       </div>
+      {/* Each list item is wrapped in a Fragment that prepends a
+          literal " " text node to every entry after the first, so the
+          rendered textContent reads as separate words rather than
+          joining (e.g. "OMEGA Home ServicesOMEGA Property Health
+          Report"). The visual layout stays identical because flex /
+          space-y-3 still provides the on-screen spacing. */}
       <ul className="mt-5 space-y-3">
-        {items.map((it) => (
-          <li key={it}>
-            <a
-              href="#"
-              className="text-[0.92rem] text-graphite/85 hover:text-omega transition-colors duration-500 ease-elegant"
-            >
-              {it}
-            </a>
-          </li>
+        {items.map((it, i) => (
+          <Fragment key={it}>
+            {i > 0 && " "}
+            <li>
+              <a
+                href="#"
+                className="text-[0.92rem] text-graphite/85 hover:text-omega transition-colors duration-500 ease-elegant"
+              >
+                {it}
+              </a>
+            </li>
+          </Fragment>
         ))}
       </ul>
     </div>

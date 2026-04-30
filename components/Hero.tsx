@@ -127,7 +127,12 @@ export function Hero() {
       </div>
 
       <div className="relative mx-auto max-w-page px-6 lg:px-10">
-        {/* Eyebrow row */}
+        {/* Eyebrow row. Each text-bearing element is preceded by a
+            literal " " text node so the rendered textContent reads as
+            "OMEGA / 001 — System Overview v1.0 · Foundation UAE"
+            instead of joining "Foundation" with "UAE" or "Overview"
+            with "v1.0". The decorative dot/bar elements get
+            `aria-hidden` so screen readers ignore them entirely. */}
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -135,15 +140,28 @@ export function Hero() {
           className="flex items-center justify-between"
         >
           <div className="flex items-center gap-3 font-mono text-[0.7rem] uppercase tracking-technical text-muted">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-omega" />
+            <span
+              aria-hidden
+              className="inline-block h-1.5 w-1.5 rounded-full bg-omega"
+            />
+            {" "}
             <span>OMEGA / 001 — System Overview</span>
           </div>
+          {/* Whitespace text node between the eyebrow's left and right
+              groups so "Overview" and "v1.0" don't read as one word. */}
+          {" "}
           <div className="hidden md:flex items-center gap-3 font-mono text-[0.7rem] uppercase tracking-technical text-muted">
             <span>v1.0 · Foundation</span>
-            <span className="h-3 w-px bg-line" />
+            {" "}
+            <span aria-hidden className="h-3 w-px bg-line" />
+            {" "}
             <span>UAE</span>
           </div>
         </motion.div>
+        {/* Whitespace text node so the eyebrow row and the headline
+            never visually concatenate in textContent (e.g. "UAEOne
+            System for Property Care."). */}
+        {" "}
 
         {/* Premium split: 45% text · 55% live 3D */}
         <div className="mt-12 md:mt-20 grid items-center gap-y-16 gap-x-6 lg:grid-cols-[45fr_55fr]">
@@ -152,13 +170,21 @@ export function Hero() {
             style={{ y: textY, opacity: textOpacity }}
             className="relative z-10 will-change-transform"
           >
-            {/* Two-line hero headline.
-                Line 1 — strong (font-bold) primary statement.
-                Line 2 — lighter (font-light, muted) supporting line.
-                The two lines are forced onto separate rows via `block`
-                spans, with an explicit `mt-2 md:mt-3` rhythm so the
-                break is visible at every breakpoint instead of relying
-                on leading alone. */}
+            {/*
+              Two-line hero headline.
+              Line 1 — strong (font-bold) primary statement.
+              Line 2 — lighter (font-light, muted) supporting line.
+
+              The two lines are forced onto separate rows three ways:
+                1. `block` on each span → CSS line break.
+                2. `mt-2 md:mt-3` on the second span → visible spacing.
+                3. The literal `{" "}` text node BETWEEN the spans →
+                   guarantees a whitespace character lands in the
+                   underlying textContent. Without that, copy-paste,
+                   screen readers, and any DOM textContent reader see
+                   "Care.Elevated" as one joined word, even though
+                   the visual layout shows two lines.
+            */}
             <h1 className="font-sans text-[2.6rem] md:text-[3.6rem] lg:text-[4.4rem] leading-[1.04] tracking-tightest text-graphite">
               <motion.span
                 initial={{ opacity: 0, y: 14 }}
@@ -172,6 +198,7 @@ export function Hero() {
               >
                 One System for Property Care.
               </motion.span>
+              {" "}
               <motion.span
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -205,7 +232,11 @@ export function Hero() {
               engineering support, and AI-guided service assistance.
             </motion.p>
 
-            {/* CTA group — staggered children */}
+            {/* CTA group — staggered children. The literal `{" "}` text
+                node between the two anchors guarantees their labels
+                never read as one joined word ("HubStart Diagnosis") in
+                copy-paste or accessibility text. The `flex gap-4`
+                handles the visual spacing. */}
             <motion.div
               initial="hidden"
               animate="visible"
@@ -218,7 +249,7 @@ export function Hero() {
                   },
                 },
               }}
-              className="mt-16 flex flex-wrap items-stretch gap-3"
+              className="mt-16 flex flex-wrap items-stretch gap-4"
             >
               <motion.a
                 variants={{
@@ -235,6 +266,7 @@ export function Hero() {
                 Open OMEGA Service Hub
                 <Arrow />
               </motion.a>
+              {" "}
               <motion.a
                 variants={{
                   hidden: { opacity: 0, y: 10 },

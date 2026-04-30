@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { OmegaMark } from "./OmegaMark";
 import { ease } from "@/lib/motion";
 
@@ -51,21 +51,40 @@ export function Navigation() {
             <span className="text-[0.95rem] tracking-[0.32em] font-medium">
               OMEGA
             </span>
-            <span className="hidden md:inline-block h-3 w-px bg-line" />
+            {" "}
+            <span
+              aria-hidden
+              className="hidden md:inline-block h-3 w-px bg-line"
+            />
+            {" "}
             <span className="hidden md:inline-block font-mono text-[0.68rem] uppercase tracking-technical text-muted">
               UAE · Engineering-led Property Solutions
             </span>
           </a>
+          {/* Whitespace text node so the brand strapline and the first
+              nav link aren't joined ("SolutionsSystem"). */}
+          {" "}
+          {/* Each link is wrapped in a Fragment that prepends a literal
+              " " text node to every link except the first. This keeps
+              `flex` + `gap-7` for the visual layout and ALSO ensures
+              that the underlying textContent reads as
+              "System Services OMEGA AI Studio OMEGA Service Hub"
+              instead of "SystemServicesOMEGA AIStudioOMEGA Service Hub"
+              when the page is read by screen readers, copy-pasted, or
+              audited via DOM textContent. */}
           <nav className="hidden md:flex items-center gap-7">
-            {links.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                className="text-[0.85rem] text-muted hover:text-graphite transition-colors duration-500 ease-elegant"
-              >
-                {l.label}
-              </a>
+            {links.map((l, i) => (
+              <Fragment key={l.href}>
+                {i > 0 && " "}
+                <a
+                  href={l.href}
+                  className="text-[0.85rem] text-muted hover:text-graphite transition-colors duration-500 ease-elegant"
+                >
+                  {l.label}
+                </a>
+              </Fragment>
             ))}
+            {" "}
             <a
               href="#hub"
               className="rounded-full border border-graphite/90 bg-graphite px-4 py-2 text-[0.8rem] font-medium text-warmwhite transition-all duration-500 ease-elegant hover:-translate-y-px hover:bg-graphite/90"
