@@ -24,9 +24,7 @@ const paths: Path[] = [
     title: "OMEGA Service Hub",
     description: "For browsing structured property services.",
     cta: "Open Service Hub",
-    // Anchors back to this section's id for now — the dedicated
-    // marketplace page is intentionally not built yet.
-    href: "#hub",
+    href: "/service-hub",
   },
   {
     code: "02",

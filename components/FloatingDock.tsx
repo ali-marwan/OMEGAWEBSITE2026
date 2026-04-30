@@ -4,20 +4,24 @@ import { motion } from "framer-motion";
 import { Fragment } from "react";
 import { ease, heroTimeline } from "@/lib/motion";
 
+// Hrefs use leading "/" so they work cross-page: from "/" they
+// trigger an in-page hash scroll; from "/service-hub" they navigate
+// back to "/" and then scroll to the anchor. The Service Hub action
+// routes to its dedicated page route.
 const items = [
   {
     label: "Open OMEGA Service Hub",
-    href: "#hub",
+    href: "/service-hub",
     icon: HubIcon,
   },
   {
     label: "Start Diagnosis",
-    href: "#ai",
+    href: "/#ai",
     icon: DiagIcon,
   },
   {
     label: "Speak to Our Team",
-    href: "#contact",
+    href: "/#contact",
     icon: TalkIcon,
   },
 ];
