@@ -7,7 +7,6 @@ const items = [
   {
     label: "Open OMEGA Service Hub",
     href: "#hub",
-    primary: true,
     icon: HubIcon,
   },
   {
@@ -22,6 +21,15 @@ const items = [
   },
 ];
 
+/**
+ * Floating dock — pinned bottom-center action rail.
+ *
+ * Reduced visual weight: tighter padding, stronger glass/blur,
+ * softer border, unified ghost buttons. All three actions are styled
+ * identically; the only hover affordance is a small lift + a faint
+ * sand wash. This keeps the dock present without competing with the
+ * page's primary content.
+ */
 export function FloatingDock() {
   return (
     <motion.div
@@ -30,22 +38,14 @@ export function FloatingDock() {
       transition={{ duration: 0.95, delay: heroTimeline.dockFollows, ease }}
       className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2"
     >
-      <div className="flex items-center gap-1 rounded-full border border-line/45 bg-warmwhite/55 p-1 shadow-dock backdrop-blur-2xl backdrop-saturate-150 transition-all duration-500 ease-elegant hover:-translate-y-0.5">
+      <div className="flex items-center gap-0.5 rounded-full border border-line/30 bg-warmwhite/45 px-1 py-1 shadow-dock backdrop-blur-3xl backdrop-saturate-150 transition-all duration-500 ease-elegant hover:-translate-y-0.5">
         {items.map((item) => (
           <a
             key={item.label}
             href={item.href}
-            className={`group relative flex items-center gap-2 rounded-full px-3.5 py-2 text-[0.78rem] font-medium transition-all duration-500 ease-elegant ${
-              item.primary
-                ? "bg-graphite text-warmwhite hover:bg-graphite/90 hover:-translate-y-px"
-                : "text-graphite hover:bg-sand/70 hover:-translate-y-px"
-            }`}
+            className="group relative flex items-center gap-2 rounded-full px-3 py-1.5 text-[0.74rem] font-medium text-graphite/85 transition-all duration-500 ease-elegant hover:-translate-y-px hover:bg-warmwhite/70 hover:text-graphite"
           >
-            <item.icon
-              className={
-                item.primary ? "text-omega" : "text-graphite/70 group-hover:text-graphite"
-              }
-            />
+            <item.icon className="text-graphite/55 group-hover:text-graphite" />
             <span className="hidden sm:inline-block">{item.label}</span>
           </a>
         ))}

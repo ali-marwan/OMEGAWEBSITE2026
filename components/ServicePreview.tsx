@@ -103,11 +103,13 @@ export function ServicePreview() {
           </Reveal>
         </div>
 
-        {/* System map rail — five module ticks */}
+        {/* System map rail — five module ticks. Acts as the visual
+            "system bus" that the cards below plug into. */}
         <SystemMapRail />
 
-        {/* Asymmetric card grid */}
-        <div className="relative mt-12 grid grid-cols-12 gap-6 md:gap-7">
+        {/* Asymmetric card grid — modules plug into the rail above via
+            short vertical hairlines on each card's top-center port. */}
+        <div className="relative mt-8 grid grid-cols-12 gap-6 md:gap-7">
           {services.map((s, i) => (
             <ServiceCard key={s.index} service={s} index={i} />
           ))}
@@ -209,7 +211,17 @@ function ServiceCard({
       }}
       className={`group relative flex flex-col justify-between overflow-hidden rounded-[22px] border hover:border-graphite/25 ${surfaceClass} ${span} ${padding} ${minHeight}`}
     >
-      {/* System connector — small node port at top-center, brightens on hover */}
+      {/* System bus plug — short vertical hairline rises from the card
+          up toward the SystemMapRail, terminating in a small node port.
+          Reads as "module wired into the bus", makes the grid feel
+          connected rather than independent. */}
+      <span
+        className={`pointer-events-none absolute left-1/2 -top-8 h-8 w-px -translate-x-1/2 transition-opacity duration-500 ease-elegant ${
+          isQuiet
+            ? "bg-line/55 group-hover:bg-line/85"
+            : "bg-line/75 group-hover:bg-line"
+        }`}
+      />
       <span
         className={`pointer-events-none absolute left-1/2 top-0 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full transition-colors duration-500 ease-elegant ${
           isQuiet
@@ -308,8 +320,47 @@ function ServiceCard({
         >
           {service.description}
         </p>
+
+        {/* Primary-only system status strip — subtle instrument-panel
+            metadata. Reads as a live-system module rather than a card. */}
+        {service.tier === "primary" && <PrimaryStatusStrip />}
       </div>
     </motion.article>
+  );
+}
+
+/**
+ * Three small mono-typed status fields rendered as a compact instrument
+ * strip below the primary card description. Reads as live system
+ * metadata — coverage, module count, status — rather than marketing
+ * copy. Each field has a tiny graphite tick as a separator.
+ */
+function PrimaryStatusStrip() {
+  const fields: { label: string; value: string; accent?: boolean }[] = [
+    { label: "status", value: "live", accent: true },
+    { label: "coverage", value: "uae" },
+    { label: "modules", value: "5 / connected" },
+  ];
+
+  return (
+    <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-[0.66rem] uppercase tracking-[0.14em]">
+      {fields.map((f, i) => (
+        <span key={f.label} className="flex items-center gap-2">
+          {i > 0 && <span className="h-2 w-px bg-graphite/20" />}
+          <span className="text-muted/90">{f.label}</span>
+          <span
+            className={`flex items-center gap-1.5 ${
+              f.accent ? "text-omega" : "text-graphite/85"
+            }`}
+          >
+            {f.accent && (
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-omega shadow-[0_0_8px_rgba(242,106,27,0.55)]" />
+            )}
+            {f.value}
+          </span>
+        </span>
+      ))}
+    </div>
   );
 }
 

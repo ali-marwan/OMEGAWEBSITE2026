@@ -5,10 +5,15 @@ import { useEffect, useState } from "react";
 import { OmegaMark } from "./OmegaMark";
 import { ease } from "@/lib/motion";
 
+/**
+ * Header navigation — five entries, the last is a styled action that
+ * leads to the Service Hub. Keeping a single accented item gives the
+ * header a clear primary call to action without adding visual weight.
+ */
 const links = [
   { label: "System", href: "#system" },
   { label: "Services", href: "#services" },
-  { label: "Intelligence", href: "#intelligence" },
+  { label: "OMEGA AI", href: "#intelligence" },
   { label: "Studio", href: "#studio" },
 ];
 
@@ -63,9 +68,9 @@ export function Navigation() {
             ))}
             <a
               href="#hub"
-              className="rounded-full border border-graphite/90 bg-graphite px-4 py-2 text-[0.8rem] font-medium text-warmwhite hover:bg-graphite/90 transition-colors duration-500 ease-elegant"
+              className="rounded-full border border-graphite/90 bg-graphite px-4 py-2 text-[0.8rem] font-medium text-warmwhite transition-all duration-500 ease-elegant hover:-translate-y-px hover:bg-graphite/90"
             >
-              OMEGA Service Hub
+              Service Hub
             </a>
           </nav>
         </div>

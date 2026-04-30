@@ -207,6 +207,22 @@ export function SplineJourney() {
             <div className="absolute left-1/2 top-1/2 h-[82%] w-[82%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-line/15" />
           </div>
 
+          {/* Outer orbit ring — slow continuous rotation with a single
+              orange satellite tick. Reads as "live system in motion"
+              without competing with the Spline. ~36s per revolution. */}
+          <motion.div
+            className="pointer-events-none absolute -inset-[6%]"
+            animate={reduceMotion ? undefined : { rotate: 360 }}
+            transition={{
+              duration: 36,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+          >
+            <div className="absolute inset-0 rounded-full border border-line/18" />
+            <span className="absolute left-1/2 top-0 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-omega/55 shadow-[0_0_10px_rgba(242,106,27,0.45)]" />
+          </motion.div>
+
           {/* Live Spline scene */}
           <SplineScene
             scene={SPLINE_SCENE}
