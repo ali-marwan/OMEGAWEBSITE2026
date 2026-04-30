@@ -13,7 +13,7 @@ import { ease } from "@/lib/motion";
 const links = [
   { label: "System", href: "#system" },
   { label: "Services", href: "#services" },
-  { label: "OMEGA AI", href: "#intelligence" },
+  { label: "OMEGA AI", href: "#ai" },
   { label: "Studio", href: "#studio" },
 ];
 

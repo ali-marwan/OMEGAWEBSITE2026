@@ -88,11 +88,10 @@ export function ServicePreview() {
             delay={0.1}
             className="col-span-12 lg:col-span-8 text-[2rem] md:text-[3rem] leading-[1.06] tracking-tightest text-graphite"
           >
-            {/* Two-line headline. `block` forces the line break, `mt-X`
-                supplies visible spacing, and the literal `{" "}` text
-                node between the two spans guarantees the underlying
-                textContent reads "Five Disciplines. One Property
-                System." instead of joining as "Disciplines.One". */}
+            {/* Two-line headline. `block` forces the line break,
+                `mt-X` supplies visible spacing, and a literal
+                whitespace text node between the two spans guarantees
+                the DOM textContent stays as two separate sentences. */}
             <span className="block font-semibold">Five Disciplines.</span>
             {" "}
             <span className="mt-1.5 md:mt-2 block font-light text-muted">

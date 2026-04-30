@@ -158,10 +158,17 @@ export function Hero() {
             <span>UAE</span>
           </div>
         </motion.div>
-        {/* Whitespace text node so the eyebrow row and the headline
-            never visually concatenate in textContent (e.g. "UAEOne
-            System for Property Care."). */}
-        {" "}
+        {/*
+          Real newline character between the eyebrow row and the
+          headline grid. A plain space would leave the last word of
+          the eyebrow sitting next to the first word of the headline
+          in flat textContent. The newline keeps the visual layout
+          identical (the grid block takes its own line anyway) and
+          inserts an actual newline character so the two pieces of
+          copy can never read as one sentence in any plain-text view
+          of the document.
+        */}
+        {"\n"}
 
         {/* Premium split: 45% text · 55% live 3D */}
         <div className="mt-12 md:mt-20 grid items-center gap-y-16 gap-x-6 lg:grid-cols-[45fr_55fr]">
@@ -172,18 +179,16 @@ export function Hero() {
           >
             {/*
               Two-line hero headline.
-              Line 1 — strong (font-bold) primary statement.
-              Line 2 — lighter (font-light, muted) supporting line.
+                Line 1 — strong (font-bold) primary statement.
+                Line 2 — lighter (font-light, muted) supporting line.
 
-              The two lines are forced onto separate rows three ways:
+              The two lines are kept apart three ways:
                 1. `block` on each span → CSS line break.
                 2. `mt-2 md:mt-3` on the second span → visible spacing.
-                3. The literal `{" "}` text node BETWEEN the spans →
-                   guarantees a whitespace character lands in the
-                   underlying textContent. Without that, copy-paste,
-                   screen readers, and any DOM textContent reader see
-                   "Care.Elevated" as one joined word, even though
-                   the visual layout shows two lines.
+                3. A literal whitespace text node between the spans →
+                   guarantees a real space character lands in the DOM
+                   textContent so copy-paste, screen readers, and any
+                   text audit see two separate sentences.
             */}
             <h1 className="font-sans text-[2.6rem] md:text-[3.6rem] lg:text-[4.4rem] leading-[1.04] tracking-tightest text-graphite">
               <motion.span
@@ -232,10 +237,9 @@ export function Hero() {
               engineering support, and AI-guided service assistance.
             </motion.p>
 
-            {/* CTA group — staggered children. The literal `{" "}` text
-                node between the two anchors guarantees their labels
-                never read as one joined word ("HubStart Diagnosis") in
-                copy-paste or accessibility text. The `flex gap-4`
+            {/* CTA group — staggered children. A literal whitespace
+                text node between the two anchors guarantees their
+                labels never join in DOM textContent. `flex gap-4`
                 handles the visual spacing. */}
             <motion.div
               initial="hidden"
@@ -276,7 +280,7 @@ export function Hero() {
                     transition: { duration: 0.7, ease },
                   },
                 }}
-                href="#intelligence"
+                href="#ai"
                 className="inline-flex items-center justify-center gap-2 rounded-full border border-graphite/15 bg-transparent px-7 py-3.5 text-sm font-medium text-graphite hover:border-graphite/40 transition-colors duration-500 ease-elegant"
               >
                 Start Diagnosis

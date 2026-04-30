@@ -12,7 +12,7 @@ const items = [
   },
   {
     label: "Start Diagnosis",
-    href: "#intelligence",
+    href: "#ai",
     icon: DiagIcon,
   },
   {
@@ -43,11 +43,8 @@ export function FloatingDock() {
           " " text node to every button after the first. The visual
           spacing is still produced by `flex` + `gap-1`, but the extra
           whitespace text node guarantees the rendered DOM textContent
-          reads as
-            "Open OMEGA Service Hub Start Diagnosis Speak to Our Team"
-          rather than the joined
-            "Open OMEGA Service HubStart DiagnosisSpeak to Our Team". */}
-      <div className="flex items-center gap-1 rounded-full border border-line/30 bg-warmwhite/45 px-1 py-1 shadow-dock backdrop-blur-3xl backdrop-saturate-150 transition-all duration-500 ease-elegant hover:-translate-y-0.5">
+          places real space characters between the three button labels. */}
+      <div className="flex items-center gap-3 rounded-full border border-line/30 bg-warmwhite/45 px-1.5 py-1 shadow-dock backdrop-blur-3xl backdrop-saturate-150 transition-all duration-500 ease-elegant hover:-translate-y-0.5">
         {items.map((item, i) => (
           <Fragment key={item.label}>
             {i > 0 && " "}

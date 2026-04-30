@@ -51,7 +51,7 @@ const stepItem = {
 };
 
 /**
- * OMEGA AI · Property Intelligence System.
+ * OMEGA AI · Property Diagnostics.
  *
  * Section composition:
  *   - Eyebrow + headline + supporting paragraph
@@ -70,7 +70,7 @@ const stepItem = {
 export function AISystem() {
   return (
     <section
-      id="intelligence"
+      id="ai"
       className="relative overflow-hidden bg-warmwhite py-32 md:py-44 text-graphite"
     >
       {/* Subtle architectural grid */}
@@ -88,7 +88,7 @@ export function AISystem() {
       <div className="relative mx-auto max-w-page px-6 lg:px-10">
         <Reveal className="flex items-center gap-3 font-mono text-[0.7rem] uppercase tracking-technical text-muted">
           <span className="inline-block h-1.5 w-1.5 rounded-full bg-omega" />
-          <span>Section 03 — OMEGA AI · Property Intelligence System</span>
+          <span>Section 03 — OMEGA AI · Property Diagnostics</span>
         </Reveal>
 
         <div className="mt-7 grid grid-cols-12 items-end gap-6">
@@ -97,7 +97,7 @@ export function AISystem() {
             delay={0.1}
             className="col-span-12 lg:col-span-8 text-[2rem] md:text-[3.2rem] leading-[1.05] tracking-tightest text-graphite font-semibold"
           >
-            OMEGA AI Property Intelligence System.
+            OMEGA AI Property Diagnostics.
           </Reveal>
           <Reveal
             as="p"

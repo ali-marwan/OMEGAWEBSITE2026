@@ -45,17 +45,17 @@ export function Footer() {
           />
         </div>
 
-        {/* Copyright row — two distinct stacked lines on every
-            breakpoint so the strapline never reads as one run-on
-            with the date. The `{" "}` text node between siblings
-            also guarantees a real whitespace character lands in the
-            rendered textContent, so copy-paste / screen readers /
-            DOM-textContent audits never see
-            "UAEOne System for Property Care · …". */}
+        {/* Copyright — two stacked paragraphs on every breakpoint.
+            Using `<p>` per the spec gives each line its own
+            block-level container; the literal `{"\n"}` text node
+            between them guarantees the DOM textContent contains a
+            real newline character (not a space) between the two
+            sentences, so a flat-text search will not see them as
+            one continuous run-on string. */}
         <div className="mt-16 flex flex-col items-start gap-2 border-t border-line/80 pt-6 font-mono text-[0.7rem] uppercase tracking-technical text-muted">
-          <span>© 2026 OMEGA · UAE</span>
-          {" "}
-          <span>One System for Property Care · Elevated by Engineering</span>
+          <p>© 2026 OMEGA · UAE</p>
+          {"\n"}
+          <p>One System for Property Care · Elevated by Engineering</p>
         </div>
       </div>
     </footer>
