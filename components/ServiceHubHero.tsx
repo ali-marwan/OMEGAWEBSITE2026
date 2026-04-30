@@ -19,7 +19,7 @@ export function ServiceHubHero() {
   return (
     <section
       id="top"
-      className="relative isolate overflow-hidden bg-warmwhite pt-28 pb-14 md:pt-32 md:pb-16"
+      className="relative isolate overflow-hidden bg-warmwhite pt-28 pb-8 md:pt-32 md:pb-10"
     >
       {/* Architectural micro-grid behind the hero */}
       <div className="pointer-events-none absolute inset-0 arch-grid opacity-70" />

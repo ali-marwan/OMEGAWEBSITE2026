@@ -1,7 +1,14 @@
 import Link from "next/link";
 import { Fragment } from "react";
 import type { Article } from "@/lib/insights";
+import { AcTechnicianResetBody } from "./articles/AcTechnicianResetBody";
+import { AiDiagnosticsRoutingBody } from "./articles/AiDiagnosticsRoutingBody";
 import { AnnualMaintenancePlanBody } from "./articles/AnnualMaintenancePlanBody";
+import { BuyingRentingChecklistBody } from "./articles/BuyingRentingChecklistBody";
+import { EngineeringReviewBody } from "./articles/EngineeringReviewBody";
+import { HealthReportBeforeRenovationBody } from "./articles/HealthReportBeforeRenovationBody";
+import { RenovationVsRepairBody } from "./articles/RenovationVsRepairBody";
+import { VillaMaintenanceSignsBody } from "./articles/VillaMaintenanceSignsBody";
 
 /**
  * Slugs that have a fully-written body component. Articles whose
@@ -22,6 +29,13 @@ import { AnnualMaintenancePlanBody } from "./articles/AnnualMaintenancePlanBody"
  */
 export const HAS_FULL_BODY: ReadonlySet<string> = new Set([
   "annual-maintenance-plan-uae-property",
+  "when-an-ac-issue-needs-a-technician",
+  "why-a-property-health-report-matters-before-renovation",
+  "common-signs-your-villa-needs-a-maintenance-review",
+  "renovation-vs-repair-choosing-the-right-path",
+  "why-engineering-review-matters-before-major-changes",
+  "how-omega-ai-diagnostics-helps-route-issues",
+  "what-to-check-before-buying-or-renting-uae",
 ]);
 
 const articleBodies: Record<
@@ -29,6 +43,16 @@ const articleBodies: Record<
   (props: { article: Article }) => React.ReactNode
 > = {
   "annual-maintenance-plan-uae-property": AnnualMaintenancePlanBody,
+  "when-an-ac-issue-needs-a-technician": AcTechnicianResetBody,
+  "why-a-property-health-report-matters-before-renovation":
+    HealthReportBeforeRenovationBody,
+  "common-signs-your-villa-needs-a-maintenance-review":
+    VillaMaintenanceSignsBody,
+  "renovation-vs-repair-choosing-the-right-path": RenovationVsRepairBody,
+  "why-engineering-review-matters-before-major-changes":
+    EngineeringReviewBody,
+  "how-omega-ai-diagnostics-helps-route-issues": AiDiagnosticsRoutingBody,
+  "what-to-check-before-buying-or-renting-uae": BuyingRentingChecklistBody,
 };
 
 /**

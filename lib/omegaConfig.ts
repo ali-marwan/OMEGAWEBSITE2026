@@ -120,29 +120,47 @@ export const OG_DEFAULT_IMAGE_ALT = "OMEGA — engineering-led property solution
 /* ── Operational contact placeholders ────────────────────────────── */
 
 /**
- * Phone number — placeholder. Swap to a real E.164 string (e.g.
- * `+971 4 000 0000`) for the operations team. Surfaces in the
- * direct-contact panel on /contact and any future tel: link.
+ * Operational contact values.
+ *
+ * Each value resolves in this priority order:
+ *   1. The matching `NEXT_PUBLIC_*` env var, when set.
+ *   2. The literal placeholder string ("TODO_PHONE", etc.) — visible
+ *      to users on /contact + footer so the gap is obvious in QA
+ *      until the operations team configures real values.
+ *
+ * Naming: the constants keep the `TODO_` prefix so existing
+ * importers don't have to rename. The prefix is documentary — the
+ * actual rendered value will be the env-set string when configured.
+ *
+ * TODO(launch): set the real `NEXT_PUBLIC_CONTACT_PHONE`,
+ * `NEXT_PUBLIC_CONTACT_EMAIL`, `NEXT_PUBLIC_WHATSAPP_LINK`, and
+ * `NEXT_PUBLIC_WHATSAPP_NUMBER` env vars in Vercel before launch.
+ * See `.env.example` for the full set.
  */
-export const TODO_PHONE = "TODO_PHONE";
 
-/** Email address — placeholder. */
-export const TODO_EMAIL = "TODO_EMAIL";
+/** Phone number — for the operational contact panel + future tel: links. */
+export const TODO_PHONE = process.env.NEXT_PUBLIC_CONTACT_PHONE ?? "TODO_PHONE";
+
+/** Email address — used in `mailto:` links across footer + contact panel. */
+export const TODO_EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "TODO_EMAIL";
 
 /**
  * WhatsApp number — E.164 digits only, no plus sign (e.g.
  * `971501234567`). Used by `buildWhatsAppLink` in `lib/leads.ts` to
  * compose `https://wa.me/<number>?text=<encoded>`.
  */
-export const TODO_WHATSAPP_NUMBER = "TODO_WHATSAPP_NUMBER";
+export const TODO_WHATSAPP_NUMBER =
+  process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "TODO_WHATSAPP_NUMBER";
 
 /**
  * Direct WhatsApp link override. If the operations team has a
  * branded short-link or QR target instead of a plain wa.me URL,
- * substitute it here. `lib/leads.ts` falls back to `wa.me` when this
- * is the placeholder.
+ * substitute it via the env var. `lib/leads.ts` falls back to
+ * composing a wa.me URL from `TODO_WHATSAPP_NUMBER` when this
+ * value is still the literal placeholder.
  */
-export const TODO_WHATSAPP_LINK = "TODO_WHATSAPP_LINK";
+export const TODO_WHATSAPP_LINK =
+  process.env.NEXT_PUBLIC_WHATSAPP_LINK ?? "TODO_WHATSAPP_LINK";
 
 /* ── Support channels ────────────────────────────────────────────── */
 

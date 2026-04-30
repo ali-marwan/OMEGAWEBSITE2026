@@ -23,7 +23,7 @@ export function DiagnosisHero() {
   return (
     <section
       id="top"
-      className="relative isolate overflow-hidden bg-warmwhite pt-28 pb-10 md:pt-32 md:pb-14"
+      className="relative isolate overflow-hidden bg-warmwhite pt-28 pb-8 md:pt-32 md:pb-10"
     >
       {/* Architectural micro-grid — same as every other hero */}
       <div
@@ -160,7 +160,7 @@ export function DiagnosisHero() {
         </div>
 
         {/* Bottom architectural rule */}
-        <div className="mt-10 h-px arch-rule" />
+        <div className="mt-8 h-px arch-rule" />
       </div>
     </section>
   );

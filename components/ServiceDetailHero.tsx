@@ -38,7 +38,7 @@ export function ServiceDetailHero({ service }: { service: Service }) {
       id="top"
       // Bottom padding tightened (`pb-10 md:pb-12`) so the hero
       // hands off cleanly to the next section without a dead zone.
-      className="relative isolate overflow-hidden bg-warmwhite pt-28 pb-10 md:pt-32 md:pb-12"
+      className="relative isolate overflow-hidden bg-warmwhite pt-28 pb-8 md:pt-32 md:pb-10"
     >
       {/* Architectural micro-grid */}
       <div
@@ -188,7 +188,7 @@ export function ServiceDetailHero({ service }: { service: Service }) {
         </div>
 
         {/* Bottom architectural rule */}
-        <div className="mt-10 h-px arch-rule" />
+        <div className="mt-8 h-px arch-rule" />
       </div>
     </section>
   );

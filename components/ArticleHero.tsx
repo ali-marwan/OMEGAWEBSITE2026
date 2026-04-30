@@ -136,7 +136,7 @@ export function ArticleHero({ article }: { article: Article }) {
         )}
 
         {/* Bottom architectural rule */}
-        <div className="mt-10 h-px arch-rule" />
+        <div className="mt-8 h-px arch-rule" />
       </div>
     </section>
   );

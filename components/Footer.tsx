@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Fragment } from "react";
+import { TODO_EMAIL, TODO_WHATSAPP_LINK } from "@/lib/omegaConfig";
 import { OmegaMark } from "./OmegaMark";
 
 /**
@@ -147,40 +148,43 @@ export function Footer() {
 
           {/* ── Studio column ──────────────────────────────────────── */}
           {/*
-            id="studio" makes Navigation's `/#studio` link resolve to a
-            real element. The studio sub-pages (About OMEGA, Engineering
-            Practice, etc.) don't exist as routes yet, so each item
-            self-anchors back to the column for now — clicking does NOT
-            jump the user to the top of the page (the previous broken
-            `href="#"` behaviour).
+            Studio column points at OMEGA's narrative + adjacent
+            product layers. Items now resolve to real routes — the
+            previous placeholders (Engineering Practice, Press,
+            Careers) self-anchored to `#studio` because those pages
+            didn't exist. With the Insights hub live and OMEGA AI
+            settled at /diagnosis, the column funnels to four real
+            destinations instead.
           */}
           <FooterCol
             id="studio"
             label="Studio"
             items={[
-              { label: "About OMEGA", href: "#studio" },
-              { label: "Engineering Practice", href: "#studio" },
-              { label: "Press", href: "#studio" },
-              { label: "Careers", href: "#studio" },
+              { label: "About OMEGA", href: "/studio" },
+              { label: "Insights", href: "/insights" },
+              { label: "OMEGA AI", href: "/diagnosis" },
+              { label: "Contact", href: "/contact" },
             ]}
             className="col-span-6 md:col-span-2"
           />
 
           {/* ── Connect column ─────────────────────────────────────── */}
           {/*
-            id="contact" makes every `#contact` link in the codebase
-            (Floating Dock, Service Hub Hero / CTA, Closing Paths,
-            ServiceDetailHero / DetailCTA) resolve to this column.
+            Connect column carries the operational contact channels.
+            WhatsApp + Email read from the centralised env-driven
+            placeholders in `lib/omegaConfig.ts` — when the env vars
+            are unset, the literal "TODO_*" strings render so QA
+            sees the gap; when set, the links resolve to real
+            destinations without code changes.
           */}
           <FooterCol
             id="contact"
             label="Connect"
             items={[
               { label: "Speak to Our Team", href: "/contact" },
-              { label: "OMEGA Insights", href: "/insights" },
               { label: "OMEGA Service Hub", href: "/service-hub" },
-              { label: "WhatsApp", href: "/contact" },
-              { label: "Email", href: "/contact" },
+              { label: "WhatsApp", href: TODO_WHATSAPP_LINK },
+              { label: "Email", href: `mailto:${TODO_EMAIL}` },
             ]}
             className="col-span-12 md:col-span-2"
           />
@@ -295,14 +299,21 @@ function FooterLinkItem({
     </>
   );
 
-  // External schemes + same-page anchors → plain <a>
+  // External schemes, same-page anchors, and unconfigured `TODO_*`
+  // placeholder values all render as plain `<a>`. The placeholder
+  // case matters because constants like `TODO_WHATSAPP_LINK` may be
+  // unset in env — sending the literal string through Next.js
+  // `<Link>` would treat it as a relative route and crash routing.
+  // Plain `<a href="TODO_WHATSAPP_LINK">` is a visible 404-on-click
+  // signal for QA, not a runtime crash.
   const isExternalScheme =
     href.startsWith("mailto:") ||
     href.startsWith("tel:") ||
     /^https?:\/\//.test(href);
   const isHashOnly = href.startsWith("#");
+  const isPlaceholder = href.startsWith("TODO_");
 
-  if (isExternalScheme || isHashOnly) {
+  if (isExternalScheme || isHashOnly || isPlaceholder) {
     return (
       <a href={href} className={linkClass}>
         {inner}

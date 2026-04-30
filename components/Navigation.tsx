@@ -25,9 +25,25 @@ import { ease } from "@/lib/motion";
  *     and `aria-controls`, the drawer is keyboard-focusable, and
  *     <Esc> + outside-click + nav-click all close the drawer.
  */
+/**
+ * Final header navigation:
+ *   System    → /              (homepage)
+ *   Services  → /service-hub   (service catalog — same destination
+ *                               as the OMEGA Service Hub CTA)
+ *   OMEGA AI  → /diagnosis     (single product layer; no separate
+ *                               OMEGA AI page)
+ *   Studio    → /studio
+ *   Insights  → /insights
+ *
+ * Every entry resolves to a real route — no homepage hash anchors
+ * in the primary nav anymore. The Service Hub CTA pill (rendered
+ * separately below) shares Services' destination but reads
+ * visually as a primary action; both surface as active when the
+ * user is on /service-hub or any /service-hub/[slug] sub-route.
+ */
 const links = [
-  { label: "System", href: "/#system" },
-  { label: "Services", href: "/#services" },
+  { label: "System", href: "/" },
+  { label: "Services", href: "/service-hub" },
   { label: "OMEGA AI", href: "/diagnosis" },
   { label: "Studio", href: "/studio" },
   { label: "Insights", href: "/insights" },
@@ -48,14 +64,18 @@ export function Navigation() {
   /**
    * Route-based active-state helper for the inline nav links.
    *
-   * Hash-anchor entries (System / Services etc. — `/#system`,
-   * `/#services`) always return false because they're scroll
-   * positions on the homepage, not destinations the visitor "is on".
-   * Route entries (Studio → `/studio`, OMEGA AI → `/diagnosis`)
-   * highlight when the user is on that route or any sub-route.
+   * Hash-anchor entries (any `href` containing `#`) always return
+   * false — they're scroll positions, not destinations the visitor
+   * "is on". Route entries highlight when the user is on that
+   * route or any sub-route.
+   *
+   * The homepage (`/`) is special-cased: a naive `pathname.startsWith("/")`
+   * check would mark System as active on every route. We require an
+   * exact match instead.
    */
   const isRouteActive = (href: string) => {
     if (!href.startsWith("/") || href.includes("#")) return false;
+    if (href === "/") return pathname === "/";
     return pathname === href || pathname?.startsWith(`${href}/`);
   };
 
