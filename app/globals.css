@@ -1,0 +1,172 @@
+@import url("https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --warmwhite: #f8f6f1;
+  --sand: #e8ded0;
+  --graphite: #1e1e1e;
+  --muted: #5f5a54;
+  --omega: #f26a1b;
+  --line: #d8cfc2;
+}
+
+html,
+body {
+  background: var(--warmwhite);
+  color: var(--graphite);
+  font-feature-settings: "ss01", "cv01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(242, 106, 27, 0.18);
+  color: var(--graphite);
+}
+
+/* Architectural micro grid used in hero / sections — kept very subtle */
+.arch-grid {
+  background-image: linear-gradient(
+      to right,
+      rgba(216, 207, 194, 0.18) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(216, 207, 194, 0.18) 1px,
+      transparent 1px
+    );
+  background-size: 96px 96px;
+  background-position: center top;
+  mask-image: radial-gradient(
+    ellipse 80% 70% at 50% 35%,
+    black 45%,
+    transparent 100%
+  );
+}
+
+.arch-grid-tight {
+  background-image: linear-gradient(
+      to right,
+      rgba(216, 207, 194, 0.22) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(216, 207, 194, 0.22) 1px,
+      transparent 1px
+    );
+  background-size: 32px 32px;
+  mask-image: radial-gradient(
+    ellipse 70% 60% at 50% 50%,
+    black 35%,
+    transparent 100%
+  );
+}
+
+.arch-rule {
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(216, 207, 194, 0.9) 18%,
+    rgba(216, 207, 194, 0.9) 82%,
+    transparent 100%
+  );
+}
+
+.tick {
+  width: 1px;
+  height: 8px;
+  background: var(--line);
+}
+
+/* Hairline border helper */
+.hairline {
+  box-shadow: inset 0 0 0 1px rgba(30, 30, 30, 0.06);
+}
+
+/* Subtle hover elevation */
+.elevate {
+  transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 600ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 1px 0 rgba(30, 30, 30, 0.02),
+    0 12px 32px -22px rgba(30, 30, 30, 0.18);
+}
+.elevate:hover {
+  transform: translateY(-3px);
+  border-color: rgba(216, 207, 194, 1);
+  box-shadow: 0 1px 0 rgba(30, 30, 30, 0.02),
+    0 28px 56px -28px rgba(30, 30, 30, 0.28);
+}
+
+/* Reduced-motion guard — disables continuous loops, transitions, and
+   transforms for users who request reduced motion. Framer Motion is
+   already gated via MotionConfig reducedMotion="user"; this catches
+   raw CSS transitions/animations on top of that. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Service System module card finish — premium light treatment */
+.module-card {
+  position: relative;
+  transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 600ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  /* Inner top highlight + soft baseline shadow */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    0 1px 0 rgba(30, 30, 30, 0.02),
+    0 14px 36px -24px rgba(30, 30, 30, 0.18);
+}
+.module-card::before {
+  /* Soft top-edge light gradient — gentle premium catch */
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 96px;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  border-radius: inherit;
+  z-index: 0;
+}
+.module-card > * {
+  position: relative;
+  z-index: 1;
+}
+.module-card:hover {
+  transform: translateY(-3px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75),
+    0 1px 0 rgba(30, 30, 30, 0.02),
+    0 30px 60px -28px rgba(30, 30, 30, 0.26);
+}
+
+/* Module variant — quieter support cards (04/05) */
+.module-card--quiet {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 1px 0 rgba(30, 30, 30, 0.015),
+    0 10px 28px -24px rgba(30, 30, 30, 0.14);
+}
+.module-card--quiet::before {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  height: 72px;
+}

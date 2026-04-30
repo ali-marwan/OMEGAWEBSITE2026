@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 458.07 137.73">
+  <defs>
+    <style>
+      .cls-1 {
+        font-family: Anurati-Regular, Anurati;
+        font-size: 75.41px;
+      }
+
+      .cls-1, .cls-2 {
+        fill: #231f20;
+        stroke: #231f20;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-4 {
+        font-family: Poppins-Light, 'Poppins Light';
+        font-weight: 300;
+      }
+
+      .cls-4, .cls-5 {
+        fill: #eb6c25;
+        font-size: 20.54px;
+        letter-spacing: .02em;
+      }
+
+      .cls-5 {
+        font-family: BunkenTechSansPro-Book, 'Bunken Tech Sans Pro';
+      }
+
+      .cls-2, .cls-3 {
+        stroke-width: 1.5px;
+      }
+
+      .cls-3 {
+        fill: none;
+        stroke: #eb6c25;
+      }
+    </style>
+  </defs>
+  <g>
+    <path class="cls-2" d="M101.11,118.3H.78V17.97h100.33v100.33ZM5.06,114.02h91.77V22.25H5.06v91.77Z"/>
+    <rect class="cls-2" x="2.92" y="65.99" width="96.05" height="4.28"/>
+    <rect class="cls-2" x="48.81" y="20.11" width="4.28" height="96.05"/>
+    <rect class="cls-2" x="21.27" y="65.99" width="107.39" height="4.28" transform="translate(-19.51 104.7) rotate(-63.43)"/>
+    <rect class="cls-2" x="24.8" y="14.44" width="4.28" height="107.39" transform="translate(-27.63 19.25) rotate(-26.57)"/>
+  </g>
+  <text class="cls-1" transform="translate(128.97 96.79)"><tspan x="0" y="0">OMEGA</tspan></text>
+  <line class="cls-3" x1="118.77" y1="136.27" x2="118.77"/>
+  <g>
+    <text class="cls-5" transform="translate(402.26 126.13) scale(1.36 1)"><tspan x="0" y="0">CF</tspan></text>
+    <text class="cls-4" transform="translate(434.76 126.14) scale(1.36 1)"><tspan x="0" y="0">M</tspan></text>
+  </g>
+</svg>
