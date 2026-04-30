@@ -152,7 +152,14 @@ export function Hero() {
             style={{ y: textY, opacity: textOpacity }}
             className="relative z-10 will-change-transform"
           >
-            <h1 className="font-sans text-[2.6rem] md:text-[3.6rem] lg:text-[4.4rem] leading-[1.02] tracking-tightest text-graphite">
+            {/* Two-line hero headline.
+                Line 1 — strong (font-bold) primary statement.
+                Line 2 — lighter (font-light, muted) supporting line.
+                The two lines are forced onto separate rows via `block`
+                spans, with an explicit `mt-2 md:mt-3` rhythm so the
+                break is visible at every breakpoint instead of relying
+                on leading alone. */}
+            <h1 className="font-sans text-[2.6rem] md:text-[3.6rem] lg:text-[4.4rem] leading-[1.04] tracking-tightest text-graphite">
               <motion.span
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -173,7 +180,7 @@ export function Hero() {
                   delay: heroTimeline.headlineLine2,
                   ease,
                 }}
-                className="mt-0.5 block font-light text-muted"
+                className="mt-2 md:mt-3 block font-light text-muted"
               >
                 Elevated by{" "}
                 <span className="relative inline-block text-graphite/90">

@@ -70,7 +70,7 @@ export function Navigation() {
               href="#hub"
               className="rounded-full border border-graphite/90 bg-graphite px-4 py-2 text-[0.8rem] font-medium text-warmwhite transition-all duration-500 ease-elegant hover:-translate-y-px hover:bg-graphite/90"
             >
-              Service Hub
+              OMEGA Service Hub
             </a>
           </nav>
         </div>

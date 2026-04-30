@@ -38,12 +38,12 @@ export function FloatingDock() {
       transition={{ duration: 0.95, delay: heroTimeline.dockFollows, ease }}
       className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2"
     >
-      <div className="flex items-center gap-0.5 rounded-full border border-line/30 bg-warmwhite/45 px-1 py-1 shadow-dock backdrop-blur-3xl backdrop-saturate-150 transition-all duration-500 ease-elegant hover:-translate-y-0.5">
+      <div className="flex items-center gap-1 rounded-full border border-line/30 bg-warmwhite/45 px-1 py-1 shadow-dock backdrop-blur-3xl backdrop-saturate-150 transition-all duration-500 ease-elegant hover:-translate-y-0.5">
         {items.map((item) => (
           <a
             key={item.label}
             href={item.href}
-            className="group relative flex items-center gap-2 rounded-full px-3 py-1.5 text-[0.74rem] font-medium text-graphite/85 transition-all duration-500 ease-elegant hover:-translate-y-px hover:bg-warmwhite/70 hover:text-graphite"
+            className="group relative flex items-center gap-2.5 whitespace-nowrap rounded-full px-3.5 py-1.5 text-[0.78rem] font-medium text-graphite/85 transition-all duration-500 ease-elegant hover:-translate-y-px hover:bg-warmwhite/70 hover:text-graphite"
           >
             <item.icon className="text-graphite/55 group-hover:text-graphite" />
             <span className="hidden sm:inline-block">{item.label}</span>

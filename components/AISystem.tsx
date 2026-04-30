@@ -14,22 +14,22 @@ type Step = {
 
 const steps: Step[] = [
   {
-    code: "I",
+    code: "01",
     label: "diagnose",
     title: "Diagnose",
-    body: "Describe the issue in plain language — the model interprets it through OMEGA service taxonomy.",
+    body: "Describe the issue or upload a photo.",
   },
   {
-    code: "II",
+    code: "02",
     label: "understand",
     title: "Understand",
-    body: "Receive a clear, engineering-informed explanation of likely causes and the right intervention.",
+    body: "Receive a clear explanation of likely causes and risk level.",
   },
   {
-    code: "III",
+    code: "03",
     label: "act",
     title: "Act",
-    body: "Move directly into the right OMEGA service — care, repair, assessment, renovation or engineering.",
+    body: "Get routed to DIY guidance, home service, property care, renovation, or engineering support.",
   },
 ];
 
@@ -136,13 +136,16 @@ export function AISystem() {
                 variants={stepItem}
                 className="group relative rounded-2xl border border-line/90 bg-warmwhite/85 p-7 backdrop-blur-sm transition-colors duration-500 ease-elegant hover:border-line"
               >
-                {/* Step technical label row */}
+                {/* Step technical label row — code + step name on the
+                    left, hairline progress indicator on the right.
+                    Removed the redundant `0X / 03` counter that
+                    duplicated the code badge. */}
                 <div className="flex items-center justify-between font-mono text-[0.68rem] uppercase tracking-technical text-muted">
                   <div className="flex items-baseline gap-3">
-                    <span className="text-omega">[{step.code}]</span>
-                    <span>step · {step.label}</span>
+                    <span className="text-omega">{step.code}</span>
+                    <span>{step.label}</span>
                   </div>
-                  <span className="opacity-70">0{i + 1} / 03</span>
+                  <span className="opacity-60">step {i + 1} of 3</span>
                 </div>
 
                 <div className="mt-4 h-px w-10 bg-graphite/30" />
@@ -236,18 +239,15 @@ function DiagnosticCanvas() {
         </div>
       </div>
 
-      {/* Corner labels — kept as technical markers */}
+      {/* Top label — single human-readable marker. Replaces the
+          previous fake telemetry (model code, lat/lon) so the canvas
+          reads as a real diagnostic tool, not a sci-fi dashboard. */}
       <div className="absolute top-5 left-5 font-mono text-[0.65rem] uppercase tracking-technical text-muted">
-        AI · Diagnostic Canvas
+        OMEGA AI · Diagnostic Canvas
       </div>
-      <div className="absolute top-5 right-5 font-mono text-[0.65rem] uppercase tracking-technical text-muted">
-        model · omega-1
-      </div>
-      <div className="absolute bottom-5 left-5 font-mono text-[0.65rem] uppercase tracking-technical text-muted">
-        lat · 25.2048° N
-      </div>
-      <div className="absolute bottom-5 right-5 font-mono text-[0.65rem] uppercase tracking-technical text-muted">
-        lon · 55.2708° E
+      <div className="absolute top-5 right-5 flex items-center gap-2 font-mono text-[0.65rem] uppercase tracking-technical text-muted">
+        <span className="inline-block h-1.5 w-1.5 rounded-full bg-omega shadow-[0_0_8px_rgba(242,106,27,0.6)]" />
+        <span>Live</span>
       </div>
     </div>
   );
@@ -459,30 +459,59 @@ function RecommendedActionGlyph() {
   );
 }
 
-/** Tiny module map: five service blocks on a horizontal rail, one
- *  highlighted as the routed destination, with a route label. */
+/**
+ * OMEGA Routing cell. Shows the five possible routing destinations
+ * (DIY guidance, Home Service, Property Care, Renovation, Engineering)
+ * as a horizontal rail with a small label under each node. The active
+ * route is highlighted in orange. Reads as a real routing UI rather
+ * than abstract telemetry.
+ */
 function OmegaRoutingGlyph() {
+  const routes = [
+    { short: "DIY", full: "DIY" },
+    { short: "Home", full: "Home Service" },
+    { short: "Care", full: "Property Care" },
+    { short: "Reno", full: "Renovation" },
+    { short: "Eng", full: "Engineering" },
+  ];
+  const activeIndex = 1; // Home Service
+
   return (
     <div className="flex w-full flex-col gap-2">
-      <div className="flex items-center justify-between font-mono text-[0.6rem] uppercase tracking-[0.12em]">
+      <div className="flex items-center justify-between gap-2 font-mono text-[0.6rem] uppercase tracking-[0.12em]">
         <span className="text-muted">route</span>
-        <span className="text-omega">→ 02 · home services</span>
+        <span className="text-omega">→ {routes[activeIndex].full}</span>
       </div>
       <div className="relative">
-        {/* horizontal rail */}
+        {/* horizontal rail behind the nodes */}
         <div className="absolute left-1 right-1 top-1/2 h-px -translate-y-1/2 bg-line/80" />
-        <div className="relative flex items-center justify-between">
-          {[0, 1, 2, 3, 4].map((i) => (
-            <span
-              key={i}
-              className={`h-2 w-2 rounded-sm border ${
-                i === 1
-                  ? "border-omega bg-omega shadow-[0_0_8px_rgba(242,106,27,0.55)]"
-                  : "border-graphite/35 bg-warmwhite"
-              }`}
-            />
+        <div className="relative grid grid-cols-5 items-center gap-1">
+          {routes.map((r, i) => (
+            <span key={r.short} className="flex justify-center">
+              <span
+                className={`h-2 w-2 rounded-sm border ${
+                  i === activeIndex
+                    ? "border-omega bg-omega shadow-[0_0_8px_rgba(242,106,27,0.55)]"
+                    : "border-graphite/35 bg-warmwhite"
+                }`}
+              />
+            </span>
           ))}
         </div>
+      </div>
+      {/* Per-node labels — the five OMEGA routing destinations spelled
+          out in compact form. Active one tinted orange. */}
+      <div className="grid grid-cols-5 gap-1 font-mono text-[0.55rem] uppercase tracking-[0.1em]">
+        {routes.map((r, i) => (
+          <span
+            key={r.short}
+            className={`text-center ${
+              i === activeIndex ? "text-omega" : "text-graphite/55"
+            }`}
+          >
+            {r.short}
+          </span>
+        ))}
       </div>
     </div>
   );
