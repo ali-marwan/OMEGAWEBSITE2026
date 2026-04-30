@@ -23,14 +23,28 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Smooth scroll for in-page anchor jumps. The detail page's hero +
+   closing CTA buttons all link to embedded action-centre tabs via
+   `#request`, `#diagnosis`, `#contact-panel` — smooth scroll keeps
+   those transitions calm rather than instant. The reduced-motion
+   guard at the bottom of this file forces `scroll-behavior: auto`
+   for users who request reduced motion. */
+html {
+  scroll-behavior: smooth;
+}
+
 /* Anchored sections must clear the fixed header when navigated via
-   #anchor links. The header pill plus its top margin sits ~70-80 px
-   from the page edge; 6 rem (~96 px) gives a comfortable buffer so
-   section eyebrows / titles always land below the chrome. Applies
-   to every element with an id, so we never have to remember to add
-   `scroll-mt-X` per section. */
+   #anchor links. The header pill is `top-0` + `mt-5` (20 px) +
+   `py-3` (24 px) + ~24 px content ≈ 68 px tall, plus a soft drop
+   shadow that extends another ~20 px below — roughly 90 px of
+   visual presence at the top of the viewport. We park anchors at
+   140 px so titles, eyebrows, filter bars, card grids, and the
+   detail page's Action Centre heading always land ~50 px below the
+   chrome — comfortable, never crowded. Applies to every element
+   with an id, so individual sections don't need their own
+   `scroll-mt-X` rule. */
 [id] {
-  scroll-margin-top: 6rem;
+  scroll-margin-top: 140px;
 }
 
 ::selection {

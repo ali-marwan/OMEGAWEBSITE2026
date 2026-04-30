@@ -50,7 +50,10 @@ export function ServiceHubCTA() {
   return (
     <section
       id="cta"
-      className="relative overflow-hidden bg-warmwhite pt-16 pb-20 md:pt-20 md:pb-24"
+      // Top padding raised to pt-20 / md:pt-24 so the section eyebrow
+      // and "Choose the right OMEGA path." headline clear the sticky
+      // header (~90 px of chrome at the top of the viewport).
+      className="relative overflow-hidden bg-warmwhite pt-20 pb-20 md:pt-24 md:pb-24"
     >
       {/* Soft warm radial — gentle ambient closer */}
       <div

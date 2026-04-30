@@ -64,7 +64,12 @@ export function GuidedPathSection() {
   return (
     <section
       id="guided"
-      className="relative overflow-hidden bg-warmwhite pt-16 pb-20 md:pt-20 md:pb-24"
+      // Top padding raised to pt-20 / md:pt-24 so the section eyebrow
+      // and "Not sure where to start?" headline always land below the
+      // ~90 px sticky header (see globals.css). Bottom padding stays
+      // at pb-20 / md:pb-24 — the next section (Closing CTA) carries
+      // its own pt-20+ so the visual rhythm is preserved.
+      className="relative overflow-hidden bg-warmwhite pt-20 pb-20 md:pt-24 md:pb-24"
     >
       {/* Subtle architectural grid */}
       <div

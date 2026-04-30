@@ -27,7 +27,14 @@ export function ServiceCatalog() {
   return (
     <section
       id="catalog"
-      className="relative mx-auto max-w-page px-6 lg:px-10 pt-12 pb-16 md:pt-16 md:pb-20"
+      // Top padding: pt-20 / md:pt-24 (80–96 px). The fixed nav pill
+      // is ~90 px of visual presence at the top of the viewport (see
+      // [id] { scroll-margin-top: 120px } in globals.css), so the
+      // eyebrow row, filter bar, and card grid all need to start
+      // visibly below that chrome. Anything tighter (pt-12/16) made
+      // the eyebrow look like it was sitting under the header during
+      // continuous scroll.
+      className="relative mx-auto max-w-page px-6 lg:px-10 pt-20 pb-16 md:pt-24 md:pb-20"
     >
       {/* Section eyebrow */}
       <Reveal>
