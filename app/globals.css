@@ -8,9 +8,9 @@
   --warmwhite: #f8f6f1;
   --sand: #e8ded0;
   --graphite: #1e1e1e;
-  --muted: #5f5a54;
+  --muted: #4f4a44;
   --omega: #f26a1b;
-  --line: #d8cfc2;
+  --line: #cfc4b2;
 }
 
 html,
@@ -60,16 +60,19 @@ html {
   color: var(--graphite);
 }
 
-/* Architectural micro grid used in hero / sections — kept very subtle */
+/* Architectural micro grid used in hero / sections — kept very subtle.
+   Slight alpha bump from 0.18 to 0.24 so the grid registers as a
+   deliberate technical contour against the white surface instead of
+   reading as flat noise. */
 .arch-grid {
   background-image: linear-gradient(
       to right,
-      rgba(216, 207, 194, 0.18) 1px,
+      rgba(207, 196, 178, 0.24) 1px,
       transparent 1px
     ),
     linear-gradient(
       to bottom,
-      rgba(216, 207, 194, 0.18) 1px,
+      rgba(207, 196, 178, 0.24) 1px,
       transparent 1px
     );
   background-size: 96px 96px;
@@ -84,12 +87,12 @@ html {
 .arch-grid-tight {
   background-image: linear-gradient(
       to right,
-      rgba(216, 207, 194, 0.22) 1px,
+      rgba(207, 196, 178, 0.28) 1px,
       transparent 1px
     ),
     linear-gradient(
       to bottom,
-      rgba(216, 207, 194, 0.22) 1px,
+      rgba(207, 196, 178, 0.28) 1px,
       transparent 1px
     );
   background-size: 32px 32px;
@@ -100,12 +103,15 @@ html {
   );
 }
 
+/* Section divider — visibly architectural without dirty-grey muddiness.
+   Uses the new (slightly darker) line tone at full alpha across the
+   centre, fading at the edges so it still feels engraved. */
 .arch-rule {
   background: linear-gradient(
     to right,
     transparent 0%,
-    rgba(216, 207, 194, 0.9) 18%,
-    rgba(216, 207, 194, 0.9) 82%,
+    rgba(207, 196, 178, 1) 18%,
+    rgba(207, 196, 178, 1) 82%,
     transparent 100%
   );
 }
@@ -163,6 +169,33 @@ html {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* ── Wave-canvas background opt-in ────────────────────────────────
+   Activated by `<main data-wave-bg>` on the homepage only. Makes the
+   homepage's TOP-LEVEL light section backgrounds fully transparent
+   so the fixed `<WaveCanvas />` behind `<main>` is what the visitor
+   sees as the page background. The canvas paints its own warmwhite
+   (`#F8F6F1`) base every frame, so the page still reads as flat
+   white — just with the faint moving sand/amber/orange waves on it.
+
+   IMPORTANT scoping: the selector targets ONLY direct-child
+   sections / footer of `<main data-wave-bg>` — nested `.bg-warmwhite`
+   surfaces (cards inside ServicePreview, AISystem, etc.) keep their
+   opaque fill so card text always sits on a solid backing.
+   Dark interior panels (e.g. the Spline `bg-[#0c0b0a]` div inside
+   `<SplineFeatureSection>`) carry their own opaque dark surface and
+   are unaffected.
+
+   To revert: remove this block, the `data-wave-bg` attribute on
+   `app/page.tsx`, and `<WaveCanvas />`. */
+[data-wave-bg] > section.bg-warmwhite,
+[data-wave-bg] > footer.bg-warmwhite {
+  background-color: transparent;
+}
+[data-wave-bg] > section.bg-sand-gradient {
+  background-image: none;
+  background-color: transparent;
 }
 
 /* Service System module card finish — premium light treatment */

@@ -59,7 +59,7 @@ export function Footer() {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(60% 50% at 50% 0%, rgba(242,106,27,0.05) 0%, rgba(242,106,27,0.02) 35%, transparent 70%)",
+            "radial-gradient(60% 50% at 50% 0%, rgba(242,106,27,0.03) 0%, rgba(242,106,27,0.01) 35%, transparent 70%)",
         }}
       />
 

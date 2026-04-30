@@ -234,7 +234,7 @@ export function HeroJourney() {
           className="pointer-events-none absolute inset-0"
           style={{
             background:
-              "radial-gradient(closest-side, rgba(242,106,27,0.10) 0%, rgba(242,106,27,0.03) 22%, rgba(232,222,208,0.16) 42%, rgba(232,222,208,0) 78%)",
+              "radial-gradient(closest-side, rgba(242,106,27,0.06) 0%, rgba(242,106,27,0.02) 22%, rgba(232,222,208,0.12) 42%, rgba(232,222,208,0) 78%)",
           }}
         />
 

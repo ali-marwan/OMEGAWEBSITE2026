@@ -11,9 +11,20 @@ const config: Config = {
         warmwhite: "#F8F6F1",
         sand: "#E8DED0",
         graphite: "#1E1E1E",
-        muted: "#5F5A54",
+        // Slightly darker than the previous #5F5A54 — at 4.7:1 vs
+        // warmwhite the secondary copy now reads as deliberately
+        // "off-graphite" instead of borderline pale grey, while
+        // preserving the warm undertone that ties to sand/line.
+        muted: "#4F4A44",
+        // Stronger variant for body copy in places where the previous
+        // muted felt too pale (footer descriptions, paragraph leads).
+        mutedStrong: "#3F3B36",
         omega: "#F26A1B",
-        line: "#D8CFC2",
+        // Tighter than the previous #D8CFC2 — borders, dividers and
+        // the architectural hairlines now have presence without
+        // looking like washed-out grey, but still register as a warm
+        // sand line rather than a hard charcoal stroke.
+        line: "#CFC4B2",
       },
       fontFamily: {
         sans: [

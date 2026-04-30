@@ -315,6 +315,7 @@ export function Hero() {
           </motion.div>
         </div>
       </div>
+
     </section>
   );
 }
@@ -367,8 +368,10 @@ function LogoStage() {
       <div
         className="pointer-events-none absolute inset-0 lg:hidden"
         style={{
+          // Quieter halo — the warm orange tint reads as a subtle
+          // backlight rather than colouring the page surface.
           background:
-            "radial-gradient(closest-side, rgba(242,106,27,0.09) 0%, rgba(242,106,27,0.03) 22%, rgba(232,222,208,0.16) 42%, rgba(232,222,208,0) 78%)",
+            "radial-gradient(closest-side, rgba(242,106,27,0.05) 0%, rgba(242,106,27,0.02) 22%, rgba(232,222,208,0.12) 42%, rgba(232,222,208,0) 78%)",
         }}
       />
 
