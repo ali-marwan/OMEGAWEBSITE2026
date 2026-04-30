@@ -162,7 +162,7 @@ export function DiagnosisExperience() {
   return (
     <section
       id="diagnosis-flow"
-      className="relative bg-warmwhite pt-8 pb-16 md:pt-12 md:pb-20"
+      className="relative bg-warmwhite pt-6 pb-12 md:pt-10 md:pb-16"
     >
       {/* Subtle grid backdrop — quieter than the hero */}
       <div

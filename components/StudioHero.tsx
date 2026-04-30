@@ -2,30 +2,27 @@ import Link from "next/link";
 import { Fragment } from "react";
 
 /**
- * Top hero for `/diagnosis`.
+ * `/studio` — Section 01: Hero.
  *
- * Mirrors the visual language of every other OMEGA hero (mono
- * eyebrow, large display headline, descriptor strap, supporting
- * paragraph, CTA row) so the diagnostic experience reads as part of
- * the same product family — not a chatbot detour.
+ * Mirrors the architectural language of every other OMEGA hero
+ * (mono eyebrow row, large display headline, descriptor strap,
+ * supporting paragraph + secondary line, CTA row, top + bottom
+ * arch-rule) so the Studio page reads as a peer of /service-hub and
+ * /diagnosis — not a different marketing layer.
  *
- * The primary CTA is an in-page anchor to `#diagnosis-flow` so the
- * page scrolls down to the guided experience without ever leaving
- * the route. The secondary CTA opens the Service Hub for visitors who
- * already know what they want and just need the catalog.
- *
- * Plain `<a>` is used for `#diagnosis-flow` (not Next.js `<Link>`)
- * because Next's `<Link>` uses `history.pushState` for hash-only
- * navigation, which silently updates the URL without firing the
- * `hashchange` event the browser native scroll behaviour relies on.
+ * The two CTAs match the brief: "Open Service Hub" routes to the
+ * catalog and "Start Diagnosis" routes to /diagnosis (the OMEGA AI
+ * Property Diagnostics module). Both are real Next.js routes — the
+ * Diagnosis CTA does NOT use a hash anchor here because there is no
+ * in-page diagnosis experience on the Studio page.
  */
-export function DiagnosisHero() {
+export function StudioHero() {
   return (
     <section
       id="top"
       className="relative isolate overflow-hidden bg-warmwhite pt-28 pb-10 md:pt-32 md:pb-14"
     >
-      {/* Architectural micro-grid — same as every other hero */}
+      {/* Architectural micro-grid */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 arch-grid opacity-70"
@@ -59,70 +56,65 @@ export function DiagnosisHero() {
           {" "}
           <span aria-hidden>·</span>
           {" "}
-          <span className="text-graphite/85">OMEGA AI</span>
-          {" "}
-          <span aria-hidden>·</span>
-          {" "}
-          <span className="text-omega">Diagnostics</span>
+          <span className="text-omega">Studio</span>
         </nav>
 
-        {/* Eyebrow row — technical label per the brief */}
+        {/* Eyebrow row — instrument-panel cue per the brief */}
         <div className="mt-7 flex flex-wrap items-center gap-3 font-mono text-[0.7rem] uppercase tracking-technical text-muted">
           <span
             aria-hidden
             className="inline-block h-1.5 w-1.5 rounded-full bg-omega"
           />
           {" "}
-          <span>AI Diagnostics</span>
+          <span>Studio</span>
           {" "}
           <span aria-hidden className="h-3 w-px bg-line" />
           {" "}
-          <span>UAE Property Support</span>
+          <span>OMEGA</span>
           {" "}
           <span aria-hidden className="h-3 w-px bg-line" />
           {" "}
-          <span>Guided Intake</span>
+          <span>UAE</span>
         </div>
 
         {/* Headline */}
         <h1 className="mt-6 max-w-4xl font-sans font-bold text-[2.2rem] md:text-[2.9rem] lg:text-[3.5rem] leading-[1.04] tracking-tightest text-graphite">
-          OMEGA AI Property Diagnostics
+          Engineering-led property solutions.
         </h1>
 
-        {/* Descriptor — instrument-panel mono caps */}
+        {/* Descriptor — mono caps */}
         <p className="mt-3 max-w-3xl font-mono text-[0.78rem] uppercase tracking-[0.14em] text-muted">
-          Property Intelligence System · UAE
+          One coordinated system · UAE
         </p>
 
-        {/* Supporting paragraphs — primary subtitle + positioning line.
-            Both reinforce that OMEGA AI Property Diagnostics is one
-            structured intake (not a separate chatbot). */}
+        {/* Subtitle + supporting line */}
         <div className="mt-6 max-w-3xl space-y-4 text-base md:text-lg leading-[1.7] text-muted">
           <p>
-            Describe the issue, upload photos, and get routed to the
-            right OMEGA service — guided by OMEGA's UAE property
-            experience.
+            OMEGA brings property care, home services, assessments,
+            renovation, and engineering support into one coordinated
+            system for UAE properties.
           </p>
           {"\n"}
           <p>
-            Not a generic chatbot. A structured property diagnosis
-            flow built around real maintenance, renovation, and
-            engineering cases.
+            Built for clients who need clear responsibility, technical
+            judgment, and organized execution.
           </p>
         </div>
 
-        {/* What-you-get strip — quiet trust cues, mono chips */}
+        {/* What-you-get strip — quiet trust cues, mono chips. Mirrors
+            the chip strip on /service-hub and /diagnosis so the page
+            inherits the same product family. */}
         <div className="mt-7">
           <div className="font-mono text-[0.66rem] uppercase tracking-[0.14em] text-graphite/70">
-            What You Get
+            How OMEGA Operates
           </div>
           {" "}
           <ul className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-2">
             {[
-              "Guided diagnosis",
-              "Photo-based intake",
-              "Suggested OMEGA route",
-              "Human review where needed",
+              "Engineering-led",
+              "Coordinated execution",
+              "Clear responsibility",
+              "Long-term value",
             ].map((c, i) => (
               <Fragment key={c}>
                 {i > 0 && " "}
@@ -139,23 +131,23 @@ export function DiagnosisHero() {
           </ul>
         </div>
 
-        {/* CTA row — Primary scrolls to flow, secondary goes to hub */}
+        {/* CTA row — Open Service Hub (primary) + Start Diagnosis */}
         <div className="mt-9 flex flex-wrap items-stretch gap-3 md:gap-4">
-          <a
-            href="#diagnosis-flow"
-            data-action="START_DIAGNOSIS"
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-graphite px-7 py-3.5 text-sm font-medium text-warmwhite transition-all duration-500 ease-elegant hover:-translate-y-px hover:bg-graphite/90"
-          >
-            <span>Start Diagnosis</span>
-            {" "}
-            <Arrow />
-          </a>
-          {" "}
           <Link
             href="/service-hub"
-            className="inline-flex items-center justify-center gap-2 rounded-full border border-graphite/15 bg-transparent px-7 py-3.5 text-sm font-medium text-graphite transition-all duration-500 ease-elegant hover:-translate-y-px hover:border-graphite/40"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-graphite px-7 py-3.5 text-sm font-medium text-warmwhite transition-all duration-500 ease-elegant hover:-translate-y-px hover:bg-graphite/90"
           >
             <span>Open Service Hub</span>
+            {" "}
+            <Arrow />
+          </Link>
+          {" "}
+          <Link
+            href="/diagnosis"
+            data-action="START_DIAGNOSIS"
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-graphite/15 bg-transparent px-7 py-3.5 text-sm font-medium text-graphite transition-all duration-500 ease-elegant hover:-translate-y-px hover:border-graphite/40"
+          >
+            <span>Start Diagnosis</span>
           </Link>
         </div>
 

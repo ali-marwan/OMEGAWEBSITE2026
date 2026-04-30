@@ -61,7 +61,7 @@ export function DiagnosisSummaryPanel({
             className="inline-block h-1.5 w-1.5 rounded-full bg-omega shadow-[0_0_8px_rgba(242,106,27,0.55)]"
           />
           {" "}
-          <span>Live Summary</span>
+          <span>Diagnosis Summary</span>
         </div>
         {" "}
         <span className="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-muted">
@@ -72,7 +72,7 @@ export function DiagnosisSummaryPanel({
       {/* Suggested-route hero block */}
       <div className="mt-5 rounded-[14px] border border-line/70 bg-warmwhite/85 p-4">
         <div className="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-muted">
-          Likely Route
+          Suggested Route
         </div>
         <div className="mt-2 flex items-center gap-2">
           {route ? (
@@ -164,7 +164,7 @@ export function DiagnosisSummaryPanel({
 
       {/* Footnote */}
       <p className="mt-5 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-muted">
-        Initial guidance · OMEGA team confirms after review
+        Initial route only · OMEGA confirms where required
       </p>
     </aside>
   );

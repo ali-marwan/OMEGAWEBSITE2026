@@ -64,7 +64,7 @@ export function SuggestedPathCard({
           className="inline-block h-1.5 w-1.5 rounded-full bg-omega shadow-[0_0_8px_rgba(242,106,27,0.6)]"
         />
         {" "}
-        <span>Suggested OMEGA Path</span>
+        <span>Suggested OMEGA Route</span>
       </div>
 
       {/* Suggested route name */}
@@ -90,7 +90,7 @@ export function SuggestedPathCard({
           {" "}
           <div>
             <div className="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-muted">
-              Recommended next action
+              Recommended next move
             </div>
             <p className="mt-1 text-[0.95rem] leading-[1.6] text-graphite/90">
               {action}
@@ -127,6 +127,17 @@ export function SuggestedPathCard({
         </ul>
       </div>
 
+      {/* Accuracy note — explicit boundary on what this result is.
+          Surfaces *inside* the result card so users see it before
+          they decide to submit, not buried at the bottom of the
+          page. Mirrors the longer Safety Note panel in DiagnosisCTA
+          for consistency. */}
+      <p className="mt-6 text-[0.82rem] leading-[1.65] text-muted">
+        This is an initial route based on your inputs. OMEGA may
+        adjust the scope after review, inspection, or technical
+        verification.
+      </p>
+
       {/* CTA stack — exactly the three actions the brief asks for.
           The third action is contextual: it points to the suggested
           route's hub page when one was computed, otherwise it falls
@@ -158,7 +169,7 @@ export function SuggestedPathCard({
             data-action={route ? "OPEN_SUGGESTED_ROUTE" : "OPEN_SERVICE_HUB"}
             className="inline-flex items-center justify-center gap-2 rounded-full border border-graphite/15 bg-transparent px-7 py-3.5 text-sm font-medium text-graphite transition-all duration-500 ease-elegant hover:-translate-y-px hover:border-graphite/40"
           >
-            <span>{route ? `Open ${route}` : "Open Service Hub"}</span>
+            <span>Open Related Service</span>
           </Link>
         </div>
       ) : (
@@ -209,7 +220,7 @@ function SubmittedBlock({
           href={routeHref}
           className="inline-flex items-center justify-center gap-2 rounded-full border border-graphite/15 bg-transparent px-7 py-3.5 text-sm font-medium text-graphite transition-all duration-500 ease-elegant hover:-translate-y-px hover:border-graphite/40"
         >
-          <span>{route ? `Open ${route}` : "Open Service Hub"}</span>
+          <span>Open Related Service</span>
         </Link>
         {" "}
         <button

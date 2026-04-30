@@ -24,7 +24,7 @@ export function DiagnosisCTA() {
   return (
     <section
       id="diagnosis-cta"
-      className="relative overflow-hidden bg-warmwhite pt-12 pb-16 md:pt-16 md:pb-20"
+      className="relative overflow-hidden bg-warmwhite pt-10 pb-14 md:pt-14 md:pb-16"
     >
       {/* Soft warm radial closing accent */}
       <div
@@ -47,30 +47,37 @@ export function DiagnosisCTA() {
             className="inline-block h-1.5 w-1.5 rounded-full bg-omega"
           />
           {" "}
-          <span>Accuracy & Next Steps</span>
+          <span>Initial guidance. Confirmed by OMEGA.</span>
         </div>
 
-        {/* Headline + supporting paragraph row */}
+        {/* Headline + supporting paragraph row.
+            Headline mirrors the eyebrow's positioning ("OMEGA AI
+            helps route the issue. People confirm the scope.") so
+            the visitor reads one consistent message about what the
+            tool is — and is not. */}
         <div className="mt-6 grid grid-cols-12 items-end gap-x-6 gap-y-6">
           <h2 className="col-span-12 lg:col-span-7 text-[2rem] md:text-[2.6rem] leading-[1.06] tracking-tightest text-graphite">
             <span className="block font-semibold">
-              Initial guidance, verified by people.
+              OMEGA AI helps route the issue.
             </span>
             {" "}
             <span className="mt-1.5 block font-light text-muted">
-              Inspection and technical review confirm the path.
+              People confirm the scope.
             </span>
           </h2>
           {" "}
           <p className="col-span-12 lg:col-span-5 text-base text-muted leading-[1.75]">
-            OMEGA AI Diagnostics gives you a preliminary route based
-            on what you described. Where required, the OMEGA team
-            confirms scope on site before any work begins.
+            OMEGA AI Property Diagnostics gives an initial route
+            based on your answers and photos. Where required, OMEGA
+            confirms the condition, scope, and technical solution
+            before work begins.
           </p>
         </div>
 
-        {/* Safety / accuracy note — explicit panel per the brief */}
-        <div className="mt-9 rounded-[18px] border border-line/80 bg-warmwhite/80 p-5 md:p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_1px_0_rgba(30,30,30,0.02),0_14px_36px_-24px_rgba(30,30,30,0.18)]">
+        {/* Safety note — explicit panel per the brief. Tightened
+            margin (`mt-8`) so the panel sits closer to the
+            headline + paragraph row above. */}
+        <div className="mt-8 rounded-[18px] border border-line/80 bg-warmwhite/80 p-5 md:p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_1px_0_rgba(30,30,30,0.02),0_14px_36px_-24px_rgba(30,30,30,0.18)]">
           <div className="flex items-start gap-3">
             <span
               aria-hidden
@@ -84,18 +91,16 @@ export function DiagnosisCTA() {
                 Safety Note
               </div>
               <p className="mt-1.5 text-[0.95rem] leading-[1.7] text-muted">
-                This guidance is preliminary and does not replace
-                site inspection or technical verification where
-                required. For active leaks, electrical hazards, or
-                anything that puts people or property at risk,
-                contact OMEGA directly.
+                For active leaks, electrical hazards, AC shutdowns,
+                structural concerns, or anything that may damage
+                property or affect safety, contact OMEGA directly.
               </p>
             </div>
           </div>
         </div>
 
         {/* CTA row */}
-        <div className="mt-9 flex flex-wrap items-stretch gap-3 md:gap-4">
+        <div className="mt-8 flex flex-wrap items-stretch gap-3 md:gap-4">
           <a
             href="/#contact"
             data-action="CONTACT_TEAM"
@@ -115,7 +120,7 @@ export function DiagnosisCTA() {
         </div>
 
         {/* Bottom architectural rule */}
-        <div className="mt-12 h-px arch-rule" />
+        <div className="mt-10 h-px arch-rule" />
       </div>
     </section>
   );

@@ -103,35 +103,40 @@ export const diagnosisSteps: readonly StepDef[] = [
     index: "01",
     label: "Property Type",
     question: "What type of property is this?",
-    helper: "Pick the closest match — we use this to scope inspection and access.",
+    helper:
+      "Choose the property type so OMEGA can understand access, common systems, and service scope.",
   },
   {
     code: "ISSUE_CATEGORY",
     index: "02",
     label: "Issue Category",
     question: "What area needs attention?",
-    helper: "If you are unsure, choose the closest area or pick 'Not Sure'.",
+    helper:
+      "Select the closest issue area. If unclear, choose 'Not Sure' and OMEGA AI will route it based on your description.",
   },
   {
     code: "ISSUE_DESCRIPTION",
     index: "03",
     label: "Issue Description",
     question: "Describe what is happening.",
-    helper: "Photos help us route faster. Anything unclear can be resolved on site.",
+    helper:
+      "Describe what you see. Photos help OMEGA understand visible symptoms before site review.",
   },
   {
     code: "PROPERTY_CONTEXT",
     index: "04",
     label: "Property Context",
     question: "What helps us understand the issue?",
-    helper: "Quick context — recurring patterns, access, and any cross-system signals.",
+    helper:
+      "Add context that affects routing — recurrence, access, affected areas, and risk signals.",
   },
   {
     code: "SUGGESTED_PATH",
     index: "05",
-    label: "Suggested Path",
-    question: "Suggested OMEGA Path",
-    helper: "Initial guidance based on what you described. The OMEGA team can confirm after review.",
+    label: "Suggested Route",
+    question: "Suggested OMEGA Route",
+    helper:
+      "OMEGA AI suggests the most relevant next route. Final scope is confirmed by the OMEGA team where required.",
   },
 ] as const;
 

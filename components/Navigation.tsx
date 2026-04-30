@@ -28,8 +28,8 @@ import { ease } from "@/lib/motion";
 const links = [
   { label: "System", href: "/#system" },
   { label: "Services", href: "/#services" },
-  { label: "OMEGA AI", href: "/#ai" },
-  { label: "Studio", href: "/#studio" },
+  { label: "OMEGA AI", href: "/diagnosis" },
+  { label: "Studio", href: "/studio" },
 ];
 
 const SERVICE_HUB_HREF = "/service-hub";
