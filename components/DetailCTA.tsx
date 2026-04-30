@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Fragment } from "react";
 import type { Service } from "@/lib/services";
 
@@ -97,17 +96,20 @@ export function DetailCTA({ service }: { service: Service }) {
         </div>
 
         {/*
-          Three inline buttons. Literal `{" "}` text nodes between
-          siblings so labels never read as one run-on string in flat
-          textContent. Each link is a hash anchor so smooth-scroll
-          + the action-centre's hashchange listener take care of the
-          rest.
+          Three inline buttons. Plain `<a>` (not Next.js `<Link>`)
+          for hash navigation: Next's Link uses `history.pushState`
+          for hash-only changes which silently updates the URL but
+          does NOT fire a `hashchange` event. The Embedded Action
+          Centre depends on `hashchange` to switch tabs and scroll,
+          so plain anchors are required here. Literal `{" "}` text
+          nodes between siblings keep labels apart in flat
+          textContent.
         */}
         <div className="mt-9 flex flex-wrap items-stretch gap-3 md:gap-4">
           {buttons.map((btn, i) => (
             <Fragment key={btn.code}>
               {i > 0 && " "}
-              <Link
+              <a
                 href={btn.href}
                 data-action={btn.code}
                 className={
@@ -119,7 +121,7 @@ export function DetailCTA({ service }: { service: Service }) {
                 <span>{btn.label}</span>
                 {" "}
                 <Arrow />
-              </Link>
+              </a>
             </Fragment>
           ))}
         </div>

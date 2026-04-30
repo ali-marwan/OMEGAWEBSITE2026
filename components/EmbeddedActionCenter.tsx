@@ -108,7 +108,10 @@ function scrollToActionCenter(behavior: ScrollBehavior = "smooth") {
 export function EmbeddedActionCenter({ service }: { service: Service }) {
   const [activeTab, setActiveTab] = useState<TabKey>("request");
 
-  // Hash → tab sync, on mount and on hashchange.
+  // Hash → tab sync, on mount and on hashchange. The mount-time
+  // sync() catches direct loads like `/service-hub/foo#diagnosis`
+  // (hashes are client-only and never reach Vercel's server, so
+  // this code path is identical on localhost and production).
   useEffect(() => {
     const sync = () => {
       if (typeof window === "undefined") return;
@@ -121,6 +124,49 @@ export function EmbeddedActionCenter({ service }: { service: Service }) {
     sync();
     window.addEventListener("hashchange", sync);
     return () => window.removeEventListener("hashchange", sync);
+  }, []);
+
+  // Delegated click listener — catches clicks on ANY anchor in the
+  // page whose href is `#request`, `#diagnosis`, or `#contact`, and
+  // handles the activation + scroll in JS regardless of whether the
+  // URL hash actually changed.
+  //
+  // This covers the edge case the `hashchange` listener can't:
+  // browsers do NOT fire `hashchange` when the new hash equals the
+  // current hash. So if a user opens the page with `#request` (sync
+  // runs, tab activates, page scrolls), then scrolls back to the
+  // hero and clicks "Request Service" again, the URL hash doesn't
+  // change → no hashchange event → without this delegator the click
+  // would feel dead. With it, every click reliably scrolls back to
+  // the action centre and re-activates the tab.
+  useEffect(() => {
+    const onAnchorClick = (e: MouseEvent) => {
+      // Honour modifier keys (cmd/ctrl/shift/alt-click should still
+      // open in a new tab) and non-primary mouse buttons.
+      if (e.defaultPrevented || e.button !== 0) return;
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+      const a = target.closest("a[href]") as HTMLAnchorElement | null;
+      if (!a) return;
+      const href = a.getAttribute("href") || "";
+      if (!href.startsWith("#")) return;
+
+      const tab = href.slice(1);
+      if (!(VALID_TABS as readonly string[]).includes(tab)) return;
+
+      // We own this navigation — skip the browser's anchor scroll
+      // (which would fight our manual scroll) and run our own logic.
+      e.preventDefault();
+      setActiveTab(tab as TabKey);
+      if (typeof window !== "undefined" && window.history) {
+        window.history.replaceState(null, "", `#${tab}`);
+      }
+      scrollToActionCenter("smooth");
+    };
+    document.addEventListener("click", onAnchorClick);
+    return () => document.removeEventListener("click", onAnchorClick);
   }, []);
 
   // Tab click handler — switches state, updates the URL hash without

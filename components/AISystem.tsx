@@ -159,8 +159,14 @@ export function AISystem() {
               </motion.div>
             ))}
 
+            {/*
+              Routes to the Property Care detail page's Diagnosis
+              action-centre tab. The previous `#diagnose` target had
+              no matching id anywhere in the codebase, so the click
+              just scrolled the user back to the top of the page.
+            */}
             <motion.a
-              href="#diagnose"
+              href="/service-hub/property-care-system#diagnosis"
               variants={stepItem}
               className="group mt-1.5 inline-flex items-center justify-between rounded-full bg-omega px-6 py-4 text-sm font-medium text-warmwhite transition-all duration-500 ease-elegant hover:-translate-y-px hover:bg-omega/90"
             >

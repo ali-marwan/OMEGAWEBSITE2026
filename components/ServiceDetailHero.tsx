@@ -151,12 +151,16 @@ export function ServiceDetailHero({ service }: { service: Service }) {
         </div>
 
         {/*
-          CTA row — three in-page anchors. The Embedded Action Centre
-          listens for the matching hash and activates the right tab.
-          Literal `{" "}` between each Link so labels never join.
+          CTA row — three in-page anchors. Plain `<a>` tags (not
+          Next.js `<Link>`) so the browser fires a real `hashchange`
+          event. Next's `<Link>` uses `history.pushState` for hash-only
+          navigation, which silently updates the URL without firing
+          hashchange — and our Embedded Action Centre depends on that
+          event to switch tabs and scroll. The literal `{" "}` between
+          each anchor keeps labels apart in flat textContent.
         */}
         <div className="mt-9 flex flex-wrap items-stretch gap-3 md:gap-4">
-          <Link
+          <a
             href="#request"
             data-action="SERVICE_REQUEST"
             className="inline-flex items-center justify-center gap-2 rounded-full bg-graphite px-7 py-3.5 text-sm font-medium text-warmwhite transition-all duration-500 ease-elegant hover:-translate-y-px hover:bg-graphite/90"
@@ -164,23 +168,23 @@ export function ServiceDetailHero({ service }: { service: Service }) {
             <span>Request Service</span>
             {" "}
             <Arrow />
-          </Link>
+          </a>
           {" "}
-          <Link
+          <a
             href="#diagnosis"
             data-action="START_DIAGNOSIS"
             className="inline-flex items-center justify-center gap-2 rounded-full border border-graphite/15 bg-transparent px-7 py-3.5 text-sm font-medium text-graphite transition-all duration-500 ease-elegant hover:-translate-y-px hover:border-graphite/40"
           >
             <span>Start Diagnosis</span>
-          </Link>
+          </a>
           {" "}
-          <Link
+          <a
             href="#contact"
             data-action="CONTACT_TEAM"
             className="inline-flex items-center justify-center gap-2 rounded-full border border-graphite/15 bg-transparent px-7 py-3.5 text-sm font-medium text-graphite transition-all duration-500 ease-elegant hover:-translate-y-px hover:border-graphite/40"
           >
             <span>Speak to Team</span>
-          </Link>
+          </a>
         </div>
 
         {/* Bottom architectural rule */}
