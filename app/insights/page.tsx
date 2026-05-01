@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Footer } from "@/components/Footer";
 import { Navigation } from "@/components/Navigation";
 import { FloatingDock } from "@/components/FloatingDock";
-import { InsightsHero } from "@/components/InsightsHero";
+import { GrassFieldHero } from "@/components/insights/GrassFieldHero";
 import { InsightsFeaturedArticle } from "@/components/InsightsFeaturedArticle";
 import { InsightsExperience } from "@/components/InsightsExperience";
 import { InsightsCTA } from "@/components/InsightsCTA";
@@ -48,7 +48,11 @@ export default function InsightsPage() {
   return (
     <main className="relative">
       <Navigation />
-      <InsightsHero />
+      {/* SANDBOX: WebGPU grass-field hero (Verdana-demo port, OMEGA
+          warm palette). Active on /insights only — not on the
+          homepage or any other route. To revert, swap the import +
+          tag back to <InsightsHero />. */}
+      <GrassFieldHero />
       <InsightsFeaturedArticle article={featured} />
       <InsightsExperience articles={rest.length > 0 ? rest : articles} />
       <InsightsCTA />
