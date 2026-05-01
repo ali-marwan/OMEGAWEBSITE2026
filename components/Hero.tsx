@@ -198,7 +198,7 @@ export function Hero() {
                 }}
                 className="block font-bold"
               >
-                One System for Property Care.
+                AI-Guided Property Intelligence.
               </motion.span>
               {" "}
               <motion.span
@@ -211,9 +211,9 @@ export function Hero() {
                 }}
                 className="mt-2 md:mt-3 block font-light text-muted"
               >
-                Elevated by{" "}
+                Executed by{" "}
                 <span className="relative inline-block text-graphite/90">
-                  Engineering.
+                  OMEGA.
                   <span className="absolute -bottom-1.5 left-0 right-0 h-px bg-omega/70" />
                 </span>
               </motion.span>
@@ -229,9 +229,9 @@ export function Hero() {
               }}
               className="mt-9 max-w-xl text-base md:text-lg leading-[1.75] text-muted"
             >
-              Integrated property solutions across the UAE — from home
-              services and property health reports to renovation,
-              engineering support, and AI-guided intake and routing.
+              Assess property issues, plan renovations, understand risks,
+              generate reports, and move from diagnosis to execution
+              through OMEGA's UAE technical team.
             </motion.p>
 
             {/* CTA group — staggered children. A literal whitespace
@@ -261,10 +261,11 @@ export function Hero() {
                     transition: { duration: 0.7, ease },
                   },
                 }}
-                href="#hub"
+                href="/diagnosis"
+                data-action="START_DIAGNOSIS"
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-graphite px-7 py-3.5 text-sm font-medium text-warmwhite hover:bg-graphite/90 transition-colors duration-500 ease-elegant"
               >
-                Open OMEGA Service Hub
+                Start OMEGA AI Scan
                 <Arrow />
               </motion.a>
               {" "}
@@ -277,11 +278,25 @@ export function Hero() {
                     transition: { duration: 0.7, ease },
                   },
                 }}
-                href="/diagnosis"
-                data-action="START_DIAGNOSIS"
+                href="/service-hub"
                 className="inline-flex items-center justify-center gap-2 rounded-full border border-graphite/15 bg-transparent px-7 py-3.5 text-sm font-medium text-graphite hover:border-graphite/40 transition-colors duration-500 ease-elegant"
               >
-                Start Diagnosis
+                Explore Services
+              </motion.a>
+              {" "}
+              <motion.a
+                variants={{
+                  hidden: { opacity: 0, y: 10 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { duration: 0.7, ease },
+                  },
+                }}
+                href="/contact"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-graphite/15 bg-transparent px-7 py-3.5 text-sm font-medium text-graphite hover:border-graphite/40 transition-colors duration-500 ease-elegant"
+              >
+                Request Inspection
               </motion.a>
             </motion.div>
           </motion.div>

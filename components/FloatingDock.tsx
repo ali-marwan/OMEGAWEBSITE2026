@@ -24,23 +24,23 @@ import { ease, heroTimeline } from "@/lib/motion";
  */
 const items = [
   {
-    aria: "Open OMEGA Service Hub",
-    desktopLabel: "Open OMEGA Service Hub",
+    aria: "Start OMEGA AI Property Scan",
+    desktopLabel: "Start OMEGA AI Scan",
+    mobileLabel: "Scan",
+    href: "/diagnosis",
+    icon: DiagIcon,
+  },
+  {
+    aria: "Explore OMEGA Services",
+    desktopLabel: "Explore Services",
     mobileLabel: "Hub",
     href: "/service-hub",
     icon: HubIcon,
   },
   {
-    aria: "Start Diagnosis",
-    desktopLabel: "Start Diagnosis",
-    mobileLabel: "Diagnose",
-    href: "/diagnosis",
-    icon: DiagIcon,
-  },
-  {
-    aria: "Speak to Our Team",
-    desktopLabel: "Speak to Our Team",
-    mobileLabel: "Contact",
+    aria: "Request OMEGA Inspection",
+    desktopLabel: "Request Inspection",
+    mobileLabel: "Inspect",
     href: "/contact",
     icon: TalkIcon,
   },

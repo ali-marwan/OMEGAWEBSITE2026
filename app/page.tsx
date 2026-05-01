@@ -5,6 +5,10 @@ import { SystemBand } from "@/components/SystemBand";
 import { ServicePreview } from "@/components/ServicePreview";
 import { SplineFeatureSection } from "@/components/SplineFeatureSection";
 import { AISystem } from "@/components/AISystem";
+import { PhotoToReport } from "@/components/PhotoToReport";
+import { ComplianceLayer } from "@/components/ComplianceLayer";
+import { PropertyUseCases } from "@/components/PropertyUseCases";
+import { ExecutionMoat } from "@/components/ExecutionMoat";
 import { ClosingPaths } from "@/components/ClosingPaths";
 import { Footer } from "@/components/Footer";
 import { FloatingDock } from "@/components/FloatingDock";
@@ -13,14 +17,14 @@ import { WaveCanvas } from "@/components/WaveCanvas";
 import { buildPageMetadata } from "@/lib/seo";
 
 /**
- * Homepage metadata. Brief-specified title + description verbatim;
- * `buildPageMetadata` adds the canonical URL, Open Graph + Twitter
- * card scaffolding around it.
+ * Homepage metadata. New positioning: OMEGA AI as UAE Property
+ * Intelligence + Execution Platform. `buildPageMetadata` adds the
+ * canonical URL, Open Graph + Twitter card scaffolding around it.
  */
 export const metadata: Metadata = buildPageMetadata({
-  title: "OMEGA | One System for Property Care",
+  title: "OMEGA | AI-Guided Property Intelligence. Executed by OMEGA.",
   description:
-    "Engineering-led property solutions across the UAE — property care, home services, health reports, renovation, engineering support, and AI-guided diagnosis.",
+    "AI property assessment for UAE repairs, renovations, and fit-outs. Photograph the issue, understand the risk, plan the work, and execute through OMEGA's UAE technical team.",
   path: "/",
 });
 
@@ -69,11 +73,29 @@ export default function HomePage() {
             fallback and never download the 3D runtime. */}
         <SplineFeatureSection />
         <AISystem />
-        {/* Closing-CTA section — three premium "next steps" (Service
-            Hub · AI Diagnostics · Speak to Our Team) so the page
+        {/* From Photo to Property Report — the report-output layer.
+            Surfaces OMEGA AI's structured property-report deliverable
+            (the monetisable, defensible artefact a landlord, tenant,
+            PM, or engineer can act on or share). */}
+        <PhotoToReport />
+        {/* UAE Compliance Layer — "Built for UAE Property Execution".
+            Surfaces authority-, NOC-, and approval-related risks that
+            OMEGA AI flags before work begins. Includes the explicit
+            disclaimer that AI doesn't replace authority approval or
+            engineering review. */}
+        <ComplianceLayer />
+        {/* Property Intelligence Use Cases — concrete scenarios
+            (AC, leak, cracks, snagging, move-in/out, fit-out, etc.)
+            where OMEGA AI Property Scan applies. */}
+        <PropertyUseCases />
+        {/* Execution Moat — "AI is only the starting point. Execution
+            is the advantage." Stacks the seven OMEGA-owned layers
+            downstream of the AI scan. */}
+        <ExecutionMoat />
+        {/* Closing-CTA section — three premium "next steps" (Property
+            Scan · OMEGA Inspection · Speak to Our Team) so the page
             resolves into a clear next action before the footer rather
-            than dropping in abruptly. Section anchor is `#hub`, which
-            matches the existing nav-CTA and floating-dock targets. */}
+            than dropping in abruptly. Section anchor is `#hub`. */}
         <ClosingPaths />
         <Footer />
         <FloatingDock />

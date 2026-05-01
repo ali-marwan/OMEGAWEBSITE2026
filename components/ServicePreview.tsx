@@ -18,47 +18,47 @@ type Service = {
 const services: Service[] = [
   {
     index: "01",
-    category: "CARE SYSTEM",
-    title: "OMEGA Property Care System",
-    subtitle: "Annual Maintenance & Ongoing Property Support",
+    category: "INTELLIGENCE",
+    title: "Property Intelligence",
+    subtitle: "AI Scans · Property Reports · Risk Assessment",
     description:
-      "Annual maintenance and ongoing support to keep property systems operating reliably.",
+      "OMEGA AI scans, property health reports, condition records, and risk classification — the intelligent entry point into every OMEGA service.",
     tier: "primary",
   },
   {
     index: "02",
-    category: "ON-DEMAND",
-    title: "OMEGA Home Services",
-    subtitle: "On-Demand Repairs & Property Support",
+    category: "REPAIR & RESPONSE",
+    title: "Repair & Response",
+    subtitle: "On-Demand Technical Service After Diagnosis",
     description:
-      "On-demand response for everyday repairs, faults, and service needs.",
+      "On-demand technical response for everyday repairs, faults, and service needs — dispatched after AI diagnosis or direct request.",
     tier: "entry",
   },
   {
     index: "03",
-    category: "DIAGNOSTIC",
-    title: "OMEGA Property Health Report",
-    subtitle: "Property Assessment & Technical Report",
+    category: "RENOVATION & FIT-OUT",
+    title: "Renovation & Fit-Out",
+    subtitle: "Upgrade Planning · Scope · BOQ Preparation",
     description:
-      "Structured assessment of condition, risk, and required action.",
+      "Renovation planning, scope development, and BOQ preparation — moving from AI-generated drafts to controlled execution.",
     tier: "entry",
   },
   {
     index: "04",
-    category: "RENOVATE",
-    title: "OMEGA Renovation",
-    subtitle: "Upgrades, Fit-Out & Property Enhancements",
+    category: "ENGINEERING & COMPLIANCE",
+    title: "Engineering & Compliance",
+    subtitle: "Authority-Sensitive Review · Drawings · UAE Approvals",
     description:
-      "Controlled upgrades and fit-out improvements for existing spaces.",
+      "Engineering review, drawings, MEP coordination, and DCD / DEWA / building-management approval awareness across UAE properties.",
     tier: "support",
   },
   {
     index: "05",
-    category: "ENGINEER",
-    title: "OMEGA Engineering Solutions",
-    subtitle: "Drawings, Design & Authority Coordination",
+    category: "PROPERTY HISTORY",
+    title: "Long-Term Property History",
+    subtitle: "Service Records · Before / After · Warranties",
     description:
-      "Drawings, design coordination, MEP coordination, and authority-related support where applicable.",
+      "Service history, before/after documentation, warranties, and an ongoing property record that compounds intelligence over time.",
     tier: "support",
   },
 ];
@@ -77,7 +77,7 @@ export function ServicePreview() {
               <span className="inline-block h-1.5 w-1.5 rounded-full bg-omega" />
               <span>Section 02 — Service System</span>
             </div>
-            <span className="hidden md:inline">5 Modules · Connected</span>
+            <span className="hidden md:inline">5 Modules · OMEGA AI connects all</span>
           </div>
         </Reveal>
 
@@ -92,10 +92,10 @@ export function ServicePreview() {
                 `mt-X` supplies visible spacing, and a literal
                 whitespace text node between the two spans guarantees
                 the DOM textContent stays as two separate sentences. */}
-            <span className="block font-semibold">Five Disciplines.</span>
+            <span className="block font-semibold">Five Modules.</span>
             {" "}
             <span className="mt-1.5 md:mt-2 block font-light text-muted">
-              One Property System.
+              One Intelligent Property System.
             </span>
           </Reveal>
           <Reveal
@@ -103,8 +103,9 @@ export function ServicePreview() {
             delay={0.15}
             className="col-span-12 lg:col-span-4 text-base text-muted leading-[1.75]"
           >
-            Care, repair, assessment, renovation, and engineering —
-            connected into one OMEGA service structure.
+            Intelligence, repair, renovation, engineering, and
+            long-term property history — connected by OMEGA AI as the
+            intelligent layer across every module.
           </Reveal>
         </div>
 

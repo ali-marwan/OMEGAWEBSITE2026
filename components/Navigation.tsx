@@ -50,6 +50,7 @@ const links = [
 ];
 
 const SERVICE_HUB_HREF = "/service-hub";
+const AI_SCAN_HREF = "/diagnosis";
 const MOBILE_DRAWER_ID = "mobile-nav-drawer";
 
 export function Navigation() {
@@ -57,9 +58,9 @@ export function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-  const onServiceHub =
-    pathname === SERVICE_HUB_HREF ||
-    pathname?.startsWith(`${SERVICE_HUB_HREF}/`);
+  const onAIScan =
+    pathname === AI_SCAN_HREF ||
+    pathname?.startsWith(`${AI_SCAN_HREF}/`);
 
   /**
    * Route-based active-state helper for the inline nav links.
@@ -184,28 +185,28 @@ export function Navigation() {
               );
             })}
             {" "}
-            {/* OMEGA Service Hub CTA. When the user is already on
-                /service-hub the button surfaces an active-state
-                indicator (a small omega-orange dot with a soft glow)
-                inside the pill, so the navigation tells the visitor
-                where they are without hiding the link entirely. */}
+            {/* Start OMEGA AI Scan CTA — primary action surfaced in
+                the header so OMEGA AI reads as the entry point into
+                every OMEGA service. Active-state dot when the user is
+                on /diagnosis. */}
             <Link
-              href={SERVICE_HUB_HREF}
-              aria-current={onServiceHub ? "page" : undefined}
+              href={AI_SCAN_HREF}
+              data-action="START_DIAGNOSIS"
+              aria-current={onAIScan ? "page" : undefined}
               className={`group/cta inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[0.8rem] font-medium transition-all duration-500 ease-elegant hover:-translate-y-px ${
-                onServiceHub
+                onAIScan
                   ? "border-omega/70 bg-graphite text-warmwhite shadow-[0_0_0_1px_rgba(242,106,27,0.18)]"
                   : "border-graphite/90 bg-graphite text-warmwhite hover:bg-graphite/90"
               }`}
             >
-              {onServiceHub && (
+              {onAIScan && (
                 <span
                   aria-hidden
                   className="inline-block h-1.5 w-1.5 rounded-full bg-omega shadow-[0_0_8px_rgba(242,106,27,0.7)]"
                 />
               )}
-              {onServiceHub && " "}
-              <span>OMEGA Service Hub</span>
+              {onAIScan && " "}
+              <span>Start OMEGA AI Scan</span>
             </Link>
           </nav>
 
@@ -284,24 +285,25 @@ export function Navigation() {
             })}
             <li className="mt-2 border-t border-line/70 pt-3">
               <Link
-                href={SERVICE_HUB_HREF}
-                aria-current={onServiceHub ? "page" : undefined}
+                href={AI_SCAN_HREF}
+                data-action="START_DIAGNOSIS"
+                aria-current={onAIScan ? "page" : undefined}
                 onClick={() => setOpen(false)}
                 className={`flex items-center justify-between gap-2 rounded-full border px-4 py-3 text-[0.88rem] font-medium transition-all duration-500 ease-elegant ${
-                  onServiceHub
+                  onAIScan
                     ? "border-omega/70 bg-graphite text-warmwhite shadow-[0_0_0_1px_rgba(242,106,27,0.18)]"
                     : "border-graphite/90 bg-graphite text-warmwhite"
                 }`}
               >
                 <span className="inline-flex items-center gap-2">
-                  {onServiceHub && (
+                  {onAIScan && (
                     <span
                       aria-hidden
                       className="inline-block h-1.5 w-1.5 rounded-full bg-omega shadow-[0_0_8px_rgba(242,106,27,0.7)]"
                     />
                   )}
                   {" "}
-                  <span>OMEGA Service Hub</span>
+                  <span>Start OMEGA AI Scan</span>
                 </span>
                 {" "}
                 <ArrowGlyph />

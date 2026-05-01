@@ -15,21 +15,39 @@ type Step = {
 const steps: Step[] = [
   {
     code: "01",
-    label: "diagnose",
-    title: "Diagnose",
-    body: "Describe the issue or upload a photo.",
+    label: "upload",
+    title: "Upload Issue",
+    body: "Photograph any property issue. Add videos, voice notes, and details.",
   },
   {
     code: "02",
-    label: "understand",
-    title: "Understand",
-    body: "Receive a clear explanation of likely causes and risk level.",
+    label: "assessment",
+    title: "AI Assessment",
+    body: "OMEGA AI converts the inputs into a preliminary assessment with possible causes.",
   },
   {
     code: "03",
-    label: "act",
-    title: "Act",
-    body: "Get routed to DIY guidance, home service, property care, renovation, or engineering support.",
+    label: "risk",
+    title: "Risk + Urgency",
+    body: "Severity classification with a clear view of what happens if the issue is ignored.",
+  },
+  {
+    code: "04",
+    label: "uae compliance",
+    title: "UAE Compliance Flags",
+    body: "Building approvals, NOCs, DCD/DEWA impact, fit-out and access risks surfaced early.",
+  },
+  {
+    code: "05",
+    label: "scope",
+    title: "Scope / BOQ Draft",
+    body: "Structured scope and bill-of-quantities draft ready for engineer review.",
+  },
+  {
+    code: "06",
+    label: "execution",
+    title: "OMEGA Execution Route",
+    body: "Inspection, quotation, and verified UAE execution teams — connected through OMEGA.",
   },
 ];
 
@@ -88,7 +106,7 @@ export function AISystem() {
       <div className="relative mx-auto max-w-page px-6 lg:px-10">
         <Reveal className="flex items-center gap-3 font-mono text-[0.7rem] uppercase tracking-technical text-muted">
           <span className="inline-block h-1.5 w-1.5 rounded-full bg-omega" />
-          <span>Section 03 — OMEGA AI · Property Diagnostics</span>
+          <span>Section 03 — OMEGA AI · Property Scan</span>
         </Reveal>
 
         <div className="mt-7 grid grid-cols-12 items-end gap-6">
@@ -97,16 +115,22 @@ export function AISystem() {
             delay={0.1}
             className="col-span-12 lg:col-span-8 text-[2rem] md:text-[3.2rem] leading-[1.05] tracking-tightest text-graphite font-semibold"
           >
-            OMEGA AI Property Diagnostics.
+            Photograph any property issue.
+            <span className="block font-light text-muted mt-2">
+              Get an AI-powered assessment before you repair, renovate,
+              approve, or execute work.
+            </span>
           </Reveal>
           <Reveal
             as="p"
             delay={0.15}
             className="col-span-12 lg:col-span-4 text-base text-muted leading-relaxed"
           >
-            Describe issues. Get routed to the right OMEGA path.
-            Confirmed by the team where required — guided by OMEGA's
-            UAE property experience.
+            OMEGA AI converts photos, videos, voice notes, and property
+            details into a preliminary assessment with possible causes,
+            severity level, repair direction, compliance flags, and
+            recommended next steps — then connects the case to OMEGA
+            for inspection, quotation, and execution.
           </Reveal>
         </div>
 
@@ -146,7 +170,7 @@ export function AISystem() {
                     <span className="text-omega">{step.code}</span>
                     <span>{step.label}</span>
                   </div>
-                  <span className="opacity-60">step {i + 1} of 3</span>
+                  <span className="opacity-60">step {i + 1} of 6</span>
                 </div>
 
                 <div className="mt-4 h-px w-10 bg-graphite/30" />
@@ -173,7 +197,7 @@ export function AISystem() {
               variants={stepItem}
               className="group mt-1.5 inline-flex items-center justify-between rounded-full bg-omega px-6 py-4 text-sm font-medium text-warmwhite transition-all duration-500 ease-elegant hover:-translate-y-px hover:bg-omega/90"
             >
-              <span>Start Diagnosis</span>
+              <span>Start Property Scan</span>
               <span className="flex items-center gap-2 font-mono text-[0.7rem] uppercase tracking-technical opacity-90">
                 begin
                 <svg

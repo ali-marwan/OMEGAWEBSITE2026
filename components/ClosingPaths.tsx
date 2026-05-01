@@ -21,24 +21,27 @@ type Path = {
 const paths: Path[] = [
   {
     code: "01",
-    title: "OMEGA Service Hub",
-    description: "For browsing structured property services.",
-    cta: "Open Service Hub",
-    href: "/service-hub",
-  },
-  {
-    code: "02",
-    title: "OMEGA AI Property Diagnostics",
-    description: "For understanding issues before deciding.",
-    cta: "Start Diagnosis",
+    title: "OMEGA AI Property Scan",
+    description:
+      "Photograph the issue. Get a structured assessment before you act.",
+    cta: "Start Property Scan",
     href: "/diagnosis",
   },
   {
-    code: "03",
-    title: "Speak to Our Team",
-    description: "For direct support and project discussions.",
-    cta: "Contact Team",
+    code: "02",
+    title: "Request OMEGA Inspection",
+    description:
+      "Move from AI assessment to a UAE site visit, BOQ, and quotation.",
+    cta: "Request OMEGA Inspection",
     href: "/contact",
+  },
+  {
+    code: "03",
+    title: "Generate Property Assessment",
+    description:
+      "Produce a shareable, PDF-ready report for owners, tenants, or PM.",
+    cta: "Generate Property Assessment",
+    href: "/diagnosis",
   },
 ];
 
@@ -114,7 +117,7 @@ export function ClosingPaths() {
                 className="inline-block h-1.5 w-1.5 rounded-full bg-omega"
               />
               {" "}
-              <span>Section 04 — Choose Your Path</span>
+              <span>Section 08 — Choose Your Path</span>
             </div>
             {" "}
             <span className="hidden md:inline">3 Routes · OMEGA Start</span>
@@ -133,11 +136,11 @@ export function ClosingPaths() {
             className="col-span-12 lg:col-span-7 text-[2rem] md:text-[3rem] leading-[1.06] tracking-tightest text-graphite"
           >
             <span className="block font-semibold">
-              Start with the right
+              From assessment
             </span>
             {" "}
             <span className="mt-1.5 md:mt-2 block font-light text-muted">
-              OMEGA path.
+              to OMEGA execution.
             </span>
           </Reveal>
           <Reveal
@@ -145,8 +148,9 @@ export function ClosingPaths() {
             delay={0.15}
             className="col-span-12 lg:col-span-5 text-base text-muted leading-[1.75]"
           >
-            Choose the route that matches your property need — service
-            hub, diagnosis, or direct team support.
+            Start with an AI property scan, request a UAE site
+            inspection, or generate a structured property assessment —
+            every route resolves through OMEGA execution.
           </Reveal>
         </div>
 
