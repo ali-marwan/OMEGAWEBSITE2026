@@ -66,7 +66,7 @@ export default function HomePage() {
         <ServicePreview />
         {/* Premium dark "Engineering-Led Experience" interruption — one
             controlled dark moment between the light Service System
-            (above) and the light AI Property Diagnostics section
+            (above) and the light OMEGA AI Property Scan section
             (below). Houses the Spline cursor-following light wall as
             the visual; lazy-loaded behind a viewport + media-query
             gate so mobile / reduced-motion users get a static dark
@@ -93,7 +93,7 @@ export default function HomePage() {
             downstream of the AI scan. */}
         <ExecutionMoat />
         {/* Closing-CTA section — three premium "next steps" (Property
-            Scan · OMEGA Inspection · Speak to Our Team) so the page
+            Scan · OMEGA Inspection · Property Assessment) so the page
             resolves into a clear next action before the footer rather
             than dropping in abruptly. Section anchor is `#hub`. */}
         <ClosingPaths />

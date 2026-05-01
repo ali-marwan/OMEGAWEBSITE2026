@@ -69,7 +69,7 @@ const stepItem = {
 };
 
 /**
- * OMEGA AI · Property Diagnostics.
+ * OMEGA AI · Property Scan.
  *
  * Section composition:
  *   - Eyebrow + headline + supporting paragraph
@@ -186,10 +186,8 @@ export function AISystem() {
 
             {/*
               Routes to the dedicated `/diagnosis` page — the OMEGA
-              AI Property Diagnostics module. Replaces the previous
-              link to a service-detail action-centre tab so this CTA
-              opens the full guided diagnostic experience instead of
-              a service-scoped quick form.
+              AI Property Scan module. Opens the full guided
+              assessment experience.
             */}
             <motion.a
               href="/diagnosis"

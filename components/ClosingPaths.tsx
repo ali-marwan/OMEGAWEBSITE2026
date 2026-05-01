@@ -64,8 +64,8 @@ const cardItem = {
 
 /**
  * Closing-CTA section — the final block of the landing page before
- * the footer. Presents three premium "paths" (Service Hub, AI
- * Diagnostics, Speak to Our Team) so the page resolves into a clear
+ * the footer. Presents three premium "paths" (Property Scan, OMEGA
+ * Inspection, Property Assessment) so the page resolves into a clear
  * next action rather than dropping straight into the footer.
  *
  * Design language matches the rest of the page exactly:
@@ -77,11 +77,8 @@ const cardItem = {
  *     feel like a continuation of the Service System modules without
  *     repeating the asymmetric grid
  *
- * The section's `id="hub"` matches the existing `#hub` anchors on
- * the nav CTA, the floating dock's primary action, and the closing
- * card itself — so all "Open Service Hub" links route here. When a
- * dedicated marketplace page lands later, the in-section card can
- * point to that route while the section anchor itself stays.
+ * The section's `id="hub"` matches the existing `#hub` anchors used
+ * by the floating dock and footer.
  */
 export function ClosingPaths() {
   return (
